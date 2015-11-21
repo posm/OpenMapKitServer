@@ -1,0 +1,556 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head><!-- ODK Aggregate upload time: 2015-10-09T00:40:24.705+0000 on https://opendatakit.appspot.com -->
+    <h:title>sample</h:title>
+    <model>
+      <itext>
+        <translation default="true()" lang="default">
+          <text id="/sample_xlsform/labeled_select_group/list-nolabel_test/yes:label">
+            <value>Yes</value>
+          </text>
+          <text id="/sample_xlsform/compact_test/b:label">
+            <value form="image">jr://images/b.jpg</value>
+            <value>b</value>
+          </text>
+          <text id="/sample_xlsform/compact_test/a:label">
+            <value form="image">jr://images/a.jpg</value>
+            <value>a</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/table_list_question_1/yes:label">
+            <value>Yes</value>
+          </text>
+          <text id="/sample_xlsform/text_image_audio_video_test:label">
+            <value form="image">jr://images/img_test.jpg</value>
+            <value form="audio">jr://audio/audio_test.wav</value>
+            <value form="video">jr://video/test.mov</value>
+            <value>This question shows how to use translations and media types.</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/table_list_question_2/yes:label">
+            <value>Yes</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/table_list_question_1/no:label">
+            <value>No</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/table_list_question_2/no:label">
+            <value>No</value>
+          </text>
+          <text id="/sample_xlsform/select_example/no:label">
+            <value>No</value>
+          </text>
+          <text id="/sample_xlsform/text_image_audio_video_test:hint">
+            <value>In order to select a different translation press your phone's menu button and you should see a &quot;Change Language&quot; button. In order to add mediafiles put them in your phone's odk/forms/[formname]-media folder.</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/reserved_name_for_field_list_labels_22/yes:label">
+            <value>Yes</value>
+          </text>
+          <text id="/sample_xlsform/group_test/select_multiple_1/yes:label">
+            <value>Yes</value>
+          </text>
+          <text id="/sample_xlsform/skip_example/yes:label">
+            <value>Yes</value>
+          </text>
+          <text id="/sample_xlsform/group_test/select_multiple_2/b:label">
+            <value form="image">jr://images/b.jpg</value>
+            <value>b</value>
+          </text>
+          <text id="/sample_xlsform/labeled_select_group/label_test/yes:label">
+            <value>Yes</value>
+          </text>
+          <text id="/sample_xlsform/select_example/yes:label">
+            <value>Yes</value>
+          </text>
+          <text id="/sample_xlsform/labeled_select_group/list-nolabel_test/no:label">
+            <value>No</value>
+          </text>
+          <text id="/sample_xlsform/group_test/select_multiple_2/a:label">
+            <value form="image">jr://images/a.jpg</value>
+            <value>a</value>
+          </text>
+          <text id="/sample_xlsform/group_test/select_multiple_1/no:label">
+            <value>No</value>
+          </text>
+          <text id="/sample_xlsform/skip_example/no:label">
+            <value>No</value>
+          </text>
+          <text id="/sample_xlsform/labeled_select_group/label_test/no:label">
+            <value>No</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/reserved_name_for_field_list_labels_22/no:label">
+            <value>No</value>
+          </text>
+        </translation>
+        <translation lang="chinese">
+          <text id="/sample_xlsform/labeled_select_group/list-nolabel_test/yes:label">
+            <value>是</value>
+          </text>
+          <text id="/sample_xlsform/compact_test/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/compact_test/a:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/table_list_question_1/yes:label">
+            <value>是</value>
+          </text>
+          <text id="/sample_xlsform/text_image_audio_video_test:label">
+            <value form="image">jr://images/-</value>
+            <value form="audio">jr://audio/chinese_audio.wav</value>
+            <value form="video">jr://video/-</value>
+            <value>您好</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/table_list_question_2/yes:label">
+            <value>是</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/table_list_question_1/no:label">
+            <value>没有</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/table_list_question_2/no:label">
+            <value>没有</value>
+          </text>
+          <text id="/sample_xlsform/select_example/no:label">
+            <value>没有</value>
+          </text>
+          <text id="/sample_xlsform/text_image_audio_video_test:hint">
+            <value>ni hao</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/reserved_name_for_field_list_labels_22/yes:label">
+            <value>是</value>
+          </text>
+          <text id="/sample_xlsform/group_test/select_multiple_1/yes:label">
+            <value>是</value>
+          </text>
+          <text id="/sample_xlsform/skip_example/yes:label">
+            <value>是</value>
+          </text>
+          <text id="/sample_xlsform/group_test/select_multiple_2/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/labeled_select_group/label_test/yes:label">
+            <value>是</value>
+          </text>
+          <text id="/sample_xlsform/select_example/yes:label">
+            <value>是</value>
+          </text>
+          <text id="/sample_xlsform/labeled_select_group/list-nolabel_test/no:label">
+            <value>没有</value>
+          </text>
+          <text id="/sample_xlsform/group_test/select_multiple_2/a:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/group_test/select_multiple_1/no:label">
+            <value>没有</value>
+          </text>
+          <text id="/sample_xlsform/skip_example/no:label">
+            <value>没有</value>
+          </text>
+          <text id="/sample_xlsform/labeled_select_group/label_test/no:label">
+            <value>没有</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/reserved_name_for_field_list_labels_22/no:label">
+            <value>没有</value>
+          </text>
+        </translation>
+        <translation lang="english">
+          <text id="/sample_xlsform/labeled_select_group/list-nolabel_test/yes:label">
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/compact_test/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/compact_test/a:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/table_list_question_1/yes:label">
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/text_image_audio_video_test:label">
+            <value form="image">jr://images/img_test_2.jpg</value>
+            <value form="audio">jr://audio/-</value>
+            <value form="video">jr://video/-</value>
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/table_list_question_2/yes:label">
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/table_list_question_1/no:label">
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/table_list_question_2/no:label">
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/select_example/no:label">
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/text_image_audio_video_test:hint">
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/reserved_name_for_field_list_labels_22/yes:label">
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/group_test/select_multiple_1/yes:label">
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/skip_example/yes:label">
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/group_test/select_multiple_2/b:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/labeled_select_group/label_test/yes:label">
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/select_example/yes:label">
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/skip_example/no:label">
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/group_test/select_multiple_2/a:label">
+            <value form="image">jr://images/-</value>
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/group_test/select_multiple_1/no:label">
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/labeled_select_group/list-nolabel_test/no:label">
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/labeled_select_group/label_test/no:label">
+            <value>-</value>
+          </text>
+          <text id="/sample_xlsform/table_list_example/reserved_name_for_field_list_labels_22/no:label">
+            <value>-</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <sample_xlsform id="sample">
+          <some_text/>
+          <text_image_audio_video_test/>
+          <a_integer>123</a_integer>
+          <a_decimal/>
+          <calculate/>
+          <calculate_test_output/>
+          <select_example/>
+          <required_text/>
+          <acknowledge_test/>
+          <skip_example/>
+          <skipable_question/>
+          <repeat_test jr:template="">
+            <repeating_question/>
+          </repeat_test>
+          <group_test>
+            <field_list_note/>
+            <select_multiple_1/>
+            <select_multiple_2/>
+          </group_test>
+          <table_list_example>
+            <generated_table_list_label_21/>
+            <reserved_name_for_field_list_labels_22/>
+            <table_list_question_1/>
+            <table_list_question_2/>
+          </table_list_example>
+          <select_appearance_note/>
+          <labeled_select_group>
+            <label_test/>
+            <list-nolabel_test/>
+          </labeled_select_group>
+          <compact_test/>
+          <data_types_note/>
+          <date_test/>
+          <time_test/>
+          <datetime_test/>
+          <geopoint_test/>
+          <barcode_test/>
+          <image_test/>
+          <audio_test/>
+          <video_test/>
+          <metadata_note/>
+          <start/>
+          <start_test_output/>
+          <end/>
+          <end_test_output/>
+          <today/>
+          <today_test_output/>
+          <deviceid/>
+          <deviceid_test_output/>
+          <simserial/>
+          <simserial_test_output/>
+          <phonenumber/>
+          <phonenumber_test_output/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </sample_xlsform>
+      </instance>
+      <bind nodeset="/sample_xlsform/some_text" type="string"/>
+      <bind nodeset="/sample_xlsform/text_image_audio_video_test" readonly="true()" type="string"/>
+      <bind nodeset="/sample_xlsform/a_integer" type="int"/>
+      <bind constraint=". &lt;=  /sample_xlsform/a_integer " jr:constraintMsg="You can set the toast that appears when a constraint is violated." nodeset="/sample_xlsform/a_decimal" type="decimal"/>
+      <bind calculate=" /sample_xlsform/a_integer + /sample_xlsform/a_decimal " nodeset="/sample_xlsform/calculate" type="string"/>
+      <bind nodeset="/sample_xlsform/calculate_test_output" readonly="true()" type="string"/>
+      <bind nodeset="/sample_xlsform/select_example" type="select1"/>
+      <bind nodeset="/sample_xlsform/required_text" required="true()" type="string"/>
+      <bind nodeset="/sample_xlsform/acknowledge_test" type="string"/>
+      <bind nodeset="/sample_xlsform/skip_example" type="select1"/>
+      <bind nodeset="/sample_xlsform/skipable_question" relevant="selected( /sample_xlsform/skip_example , 'no')" type="string"/>
+      <bind nodeset="/sample_xlsform/repeat_test/repeating_question" type="string"/>
+      <bind nodeset="/sample_xlsform/group_test/field_list_note" readonly="true()" type="string"/>
+      <bind constraint="not(selected(., 'yes') and selected (., 'no'))" jr:constraintMsg="You can't select yes and no." nodeset="/sample_xlsform/group_test/select_multiple_1" required="false()" type="select"/>
+      <bind nodeset="/sample_xlsform/group_test/select_multiple_2" type="select"/>
+      <bind nodeset="/sample_xlsform/table_list_example/generated_table_list_label_21" readonly="true()" type="string"/>
+      <bind nodeset="/sample_xlsform/table_list_example/reserved_name_for_field_list_labels_22" type="select1"/>
+      <bind nodeset="/sample_xlsform/table_list_example/table_list_question_1" type="select1"/>
+      <bind nodeset="/sample_xlsform/table_list_example/table_list_question_2" type="select1"/>
+      <bind nodeset="/sample_xlsform/select_appearance_note" readonly="true()" type="string"/>
+      <bind nodeset="/sample_xlsform/labeled_select_group/label_test" type="select1"/>
+      <bind nodeset="/sample_xlsform/labeled_select_group/list-nolabel_test" type="select1"/>
+      <bind nodeset="/sample_xlsform/compact_test" type="select1"/>
+      <bind nodeset="/sample_xlsform/data_types_note" readonly="true()" type="string"/>
+      <bind nodeset="/sample_xlsform/date_test" type="date"/>
+      <bind nodeset="/sample_xlsform/time_test" type="time"/>
+      <bind nodeset="/sample_xlsform/datetime_test" type="dateTime"/>
+      <bind nodeset="/sample_xlsform/geopoint_test" type="geopoint"/>
+      <bind nodeset="/sample_xlsform/barcode_test" type="barcode"/>
+      <bind nodeset="/sample_xlsform/image_test" type="binary"/>
+      <bind nodeset="/sample_xlsform/audio_test" type="binary"/>
+      <bind nodeset="/sample_xlsform/video_test" type="binary"/>
+      <bind nodeset="/sample_xlsform/metadata_note" readonly="true()" type="string"/>
+      <bind jr:preload="timestamp" jr:preloadParams="start" nodeset="/sample_xlsform/start" type="dateTime"/>
+      <bind nodeset="/sample_xlsform/start_test_output" readonly="true()" type="string"/>
+      <bind jr:preload="timestamp" jr:preloadParams="end" nodeset="/sample_xlsform/end" type="dateTime"/>
+      <bind nodeset="/sample_xlsform/end_test_output" readonly="true()" type="string"/>
+      <bind jr:preload="date" jr:preloadParams="today" nodeset="/sample_xlsform/today" type="date"/>
+      <bind nodeset="/sample_xlsform/today_test_output" readonly="true()" type="string"/>
+      <bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/sample_xlsform/deviceid" type="string"/>
+      <bind nodeset="/sample_xlsform/deviceid_test_output" readonly="true()" type="string"/>
+      <bind jr:preload="property" jr:preloadParams="simserial" nodeset="/sample_xlsform/simserial" type="string"/>
+      <bind nodeset="/sample_xlsform/simserial_test_output" readonly="true()" type="string"/>
+      <bind jr:preload="property" jr:preloadParams="phonenumber" nodeset="/sample_xlsform/phonenumber" type="string"/>
+      <bind nodeset="/sample_xlsform/phonenumber_test_output" readonly="true()" type="string"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/sample_xlsform/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/sample_xlsform/some_text">
+      <label>This is a basic fill in the blank question.</label>
+      <hint>Hints provide additional information about a question that is displayed less prominently.</hint>
+    </input>
+    <input ref="/sample_xlsform/text_image_audio_video_test">
+      <label ref="jr:itext('/sample_xlsform/text_image_audio_video_test:label')"/>
+      <hint ref="jr:itext('/sample_xlsform/text_image_audio_video_test:hint')"/>
+    </input>
+    <input ref="/sample_xlsform/a_integer">
+      <label>Enter a integer:</label>
+    </input>
+    <input ref="/sample_xlsform/a_decimal">
+      <label>Enter a decimal:</label>
+      <hint>This question has a constraint so that the decimal must be less that the integer.</hint>
+    </input>
+    <input ref="/sample_xlsform/calculate_test_output">
+      <label>The sum of the integer and decimal: <output value=" /sample_xlsform/calculate "/></label></input>
+    <select1 ref="/sample_xlsform/select_example">
+      <label>This is a select_one type question.</label>
+      <hint>In the type column you must include the name of a choices list that sets the available options. Choices lists are specified on the choices sheet.</hint>
+      <item>
+        <label ref="jr:itext('/sample_xlsform/select_example/yes:label')"/>
+        <value>yes</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/sample_xlsform/select_example/no:label')"/>
+        <value>no</value>
+      </item>
+    </select1>
+    <input ref="/sample_xlsform/required_text">
+      <label>Required field</label>
+      <hint>You have to enter something to continue.</hint>
+    </input>
+    <trigger ref="/sample_xlsform/acknowledge_test">
+      <label>Acknowledge prompts can be used to indicate some action was completed. For example, a real prompt might read, &quot;Inform the subject how the data collected on them will be used.&quot;</label>
+    </trigger>
+    <select1 ref="/sample_xlsform/skip_example">
+      <label>Skip the next question?</label>
+      <item>
+        <label ref="jr:itext('/sample_xlsform/skip_example/yes:label')"/>
+        <value>yes</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/sample_xlsform/skip_example/no:label')"/>
+        <value>no</value>
+      </item>
+    </select1>
+    <input ref="/sample_xlsform/skipable_question">
+      <label>This question will be skipped if its &quot;relevant&quot; column is false.</label>
+      <hint>You can also have skip logic for groups.</hint>
+    </input>
+    <group ref="/sample_xlsform/repeat_test">
+      <label>A repeat</label>
+      <repeat nodeset="/sample_xlsform/repeat_test">
+        <input ref="/sample_xlsform/repeat_test/repeating_question">
+          <label>This is a repeating question.</label>
+          <hint>You can also repeat groups of questions.</hint>
+        </input>
+      </repeat>
+    </group>
+    <group appearance="field-list" ref="/sample_xlsform/group_test">
+      <label>A group</label>
+      <input ref="/sample_xlsform/group_test/field_list_note">
+        <label>Using a group with a field-list appearance you can make multiple promps appear on the same screen.</label>
+      </input>
+      <select appearance="minimal" ref="/sample_xlsform/group_test/select_multiple_1">
+        <label>Select multiple 1</label>
+        <item>
+          <label ref="jr:itext('/sample_xlsform/group_test/select_multiple_1/yes:label')"/>
+          <value>yes</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/sample_xlsform/group_test/select_multiple_1/no:label')"/>
+          <value>no</value>
+        </item>
+      </select>
+      <select ref="/sample_xlsform/group_test/select_multiple_2">
+        <label>select multiple 2</label>
+        <item>
+          <label ref="jr:itext('/sample_xlsform/group_test/select_multiple_2/a:label')"/>
+          <value>a</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/sample_xlsform/group_test/select_multiple_2/b:label')"/>
+          <value>b</value>
+        </item>
+      </select>
+    </group>
+    <group appearance="field-list" ref="/sample_xlsform/table_list_example">
+      <input ref="/sample_xlsform/table_list_example/generated_table_list_label_21">
+        <label>table-list group</label>
+      </input>
+      <select1 appearance="label" ref="/sample_xlsform/table_list_example/reserved_name_for_field_list_labels_22">
+        <label></label>
+        <item>
+          <label ref="jr:itext('/sample_xlsform/table_list_example/reserved_name_for_field_list_labels_22/yes:label')"/>
+          <value>yes</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/sample_xlsform/table_list_example/reserved_name_for_field_list_labels_22/no:label')"/>
+          <value>no</value>
+        </item>
+      </select1>
+      <select1 appearance="list-nolabel" ref="/sample_xlsform/table_list_example/table_list_question_1">
+        <label>Table list question 1</label>
+        <hint>A hint</hint>
+        <item>
+          <label ref="jr:itext('/sample_xlsform/table_list_example/table_list_question_1/yes:label')"/>
+          <value>yes</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/sample_xlsform/table_list_example/table_list_question_1/no:label')"/>
+          <value>no</value>
+        </item>
+      </select1>
+      <select1 appearance="list-nolabel" ref="/sample_xlsform/table_list_example/table_list_question_2">
+        <label>Table list question 2</label>
+        <hint>A hint</hint>
+        <item>
+          <label ref="jr:itext('/sample_xlsform/table_list_example/table_list_question_2/yes:label')"/>
+          <value>yes</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/sample_xlsform/table_list_example/table_list_question_2/no:label')"/>
+          <value>no</value>
+        </item>
+      </select1>
+    </group>
+    <input ref="/sample_xlsform/select_appearance_note">
+      <label>The following questions demo different appearance attributes for select type questions</label>
+    </input>
+    <group appearance="field-list" ref="/sample_xlsform/labeled_select_group">
+      <label>labeled select group test</label>
+      <select1 appearance="label" ref="/sample_xlsform/labeled_select_group/label_test">
+        <label>label-test</label>
+        <item>
+          <label ref="jr:itext('/sample_xlsform/labeled_select_group/label_test/yes:label')"/>
+          <value>yes</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/sample_xlsform/labeled_select_group/label_test/no:label')"/>
+          <value>no</value>
+        </item>
+      </select1>
+      <select1 appearance="list-nolabel" ref="/sample_xlsform/labeled_select_group/list-nolabel_test">
+        <label>list-nolabel-test</label>
+        <item>
+          <label ref="jr:itext('/sample_xlsform/labeled_select_group/list-nolabel_test/yes:label')"/>
+          <value>yes</value>
+        </item>
+        <item>
+          <label ref="jr:itext('/sample_xlsform/labeled_select_group/list-nolabel_test/no:label')"/>
+          <value>no</value>
+        </item>
+      </select1>
+    </group>
+    <select1 appearance="compact" ref="/sample_xlsform/compact_test">
+      <label>Compact appearance</label>
+      <hint>Requires images</hint>
+      <item>
+        <label ref="jr:itext('/sample_xlsform/compact_test/a:label')"/>
+        <value>a</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/sample_xlsform/compact_test/b:label')"/>
+        <value>b</value>
+      </item>
+    </select1>
+    <input ref="/sample_xlsform/data_types_note">
+      <label>The following prompts demo some of the other types of information you can collect with ODK Collect.</label>
+    </input>
+    <input ref="/sample_xlsform/date_test">
+      <label>Enter a date:</label>
+    </input>
+    <input ref="/sample_xlsform/time_test">
+      <label>Enter a time:</label>
+    </input>
+    <input ref="/sample_xlsform/datetime_test">
+      <label>Enter a date and a time:</label>
+    </input>
+    <input ref="/sample_xlsform/geopoint_test">
+      <label>Record your location:</label>
+      <hint>GPS coordinates can only be collected when outside.</hint>
+    </input>
+    <input ref="/sample_xlsform/barcode_test">
+      <label>Scan a barcode:</label>
+    </input>
+    <upload mediatype="image/*" ref="/sample_xlsform/image_test">
+      <label>Take a picture:</label>
+    </upload>
+    <upload mediatype="audio/*" ref="/sample_xlsform/audio_test">
+      <label>Record audio:</label>
+    </upload>
+    <upload mediatype="video/*" ref="/sample_xlsform/video_test">
+      <label>Capture video:</label>
+    </upload>
+    <input ref="/sample_xlsform/metadata_note">
+      <label>The following prompts show some of the metadata that you can gather during a survey.</label>
+    </input>
+    <input ref="/sample_xlsform/start_test_output">
+      <label>Survey start time: <output value=" /sample_xlsform/start "/></label></input>
+    <input ref="/sample_xlsform/end_test_output">
+      <label>Survey end time: <output value=" /sample_xlsform/end "/></label></input>
+    <input ref="/sample_xlsform/today_test_output">
+      <label>Today: <output value=" /sample_xlsform/today "/></label></input>
+    <input ref="/sample_xlsform/deviceid_test_output">
+      <label>deviceid: <output value=" /sample_xlsform/deviceid "/></label></input>
+    <input ref="/sample_xlsform/simserial_test_output">
+      <label>simserial: <output value=" /sample_xlsform/simserial "/></label><hint>Depending on your device and carrier this might not be recordable.</hint>
+    </input>
+    <input ref="/sample_xlsform/phonenumber_test_output">
+      <label>phonenumber: <output value=" /sample_xlsform/phonenumber "/></label><hint>Depending on your device and carrier this might not be recordable.</hint>
+    </input>
+  </h:body>
+</h:html>
