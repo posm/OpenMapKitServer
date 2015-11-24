@@ -23,7 +23,7 @@ Install dependencies, start the server.
 
 ```
 npm install
-node app.js
+npm start
 ```
 
 We are using node version 4.2.*. If you are having problems with another

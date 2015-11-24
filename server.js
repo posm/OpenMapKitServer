@@ -1,8 +1,12 @@
+try {
+    const settings = require('./settings');
+} catch (e) {
+    console.error("You must have a settings.js file. Take a look at settings.js.example. https://github.com/AmericanRedCross/OpenMapKitServer/blob/master/settings.js.example");
+    process.exit();
+}
+
 const express = require('express');
 const directory = require('serve-index');
-
-const settings = require('./settings');
-
 const fs = require('./ODK/routes/fs');
 const error = require('./ODK/controllers/error-handler');
 
@@ -25,5 +29,6 @@ app.use('/fs', fs);
 // Handle errors
 app.use(error);
 
-app.listen(settings.port);
-console.log('OpenMapKit Server listening on port %s', settings.port);
+const port = process.env.PORT || settings.port;
+app.listen(port);
+console.log('OpenMapKit Server is listening on port %s.', port);
