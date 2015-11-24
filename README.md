@@ -25,3 +25,11 @@ Install dependencies, start the server.
 npm install
 node app.js
 ```
+
+We are using node version 4.2.*. If you are having problems with another
+version, use [node version manager](https://github.com/creationix/nvm).
+
+```
+nvm install
+nvm use
+```
