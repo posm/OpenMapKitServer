@@ -6,5 +6,5 @@ serving and ingesting ODK XForm data.
 
 This API persists data either in SQLite or directly on the filesystem.
 
-This API is inspired from and directly uses some of [SimpleODK]()
+This API is inspired from and directly uses some of [SimpleODK](https://github.com/digidem/simple-odk)
 as well as several assocaited node modules.

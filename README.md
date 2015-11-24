@@ -13,3 +13,15 @@
  __ODK__ is the OpenMapKit ODK API. This is a NodeJS REST API that handles
  all of the ODK business logic, including communicating with ODK Collect,
  as well as serving and ingesting ODK XForm data.
+
+## Installation
+
+Create a `settings.js` file in this directory. You can use `settings.js.example`
+as an example.
+
+Install dependencies, start the server.
+
+```
+npm install
+node app.js
+```
