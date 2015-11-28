@@ -30,7 +30,7 @@ function SaveMedia (options) {
                 filename: req.submission.instanceId + '/' + file.originalFilename,
                 file: file,
                 filesystem: {
-                    path: 'public/media/' // NH FIXME: We dont want a standalone media dir
+                    path: 'public/submissions/' + req.submission.formId + '/'
                 }
             };
 

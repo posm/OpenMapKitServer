@@ -8,9 +8,9 @@ module.exports = function (req, res, next) {
     var json = JSON.stringify(submission.json, null, '  ');
     var xml = submission.xml; // Original XML for debug purposes is nice.
 
-    var dir = 'public/submissions/' + submission.formId + '/';
-    var jsonFileName = dir + submission.instanceId + ext;
-    var xmlFileName = dir + submission.instanceId + '.xml';
+    var dir = 'public/submissions/' + submission.formId + '/' + submission.instanceId;
+    var jsonFileName = dir + '/data' + ext;
+    var xmlFileName = dir + '/data' + '.xml';
 
     mkdirp(path.dirname(jsonFileName), function (err) {
         if (err) {
