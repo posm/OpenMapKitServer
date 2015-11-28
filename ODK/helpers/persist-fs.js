@@ -6,7 +6,7 @@ const mkdirp = require('mkdirp');
 const stream = require('stream');
 
 module.exports = function (data, options, callback) {
-    var filename = options.filesystem.path + options.filename;
+    const filename = options.filesystem.path + options.filename;
     mkdirp(path.dirname(filename), function (err) {
         if (err) console.error(err);
         if (data instanceof stream.Readable) {

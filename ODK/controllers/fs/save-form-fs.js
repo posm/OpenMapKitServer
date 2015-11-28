@@ -3,14 +3,14 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 
 module.exports = function (req, res, next) {
-    var submission = req.submission;
-    var ext = submission.geojson ? '.geojson' : '.json';
-    var json = JSON.stringify(submission.json, null, '  ');
-    var xml = submission.xml; // Original XML for debug purposes is nice.
+    const submission = req.submission;
+    const ext = submission.geojson ? '.geojson' : '.json';
+    const json = JSON.stringify(submission.json, null, '  ');
+    const xml = submission.xml; // Original XML for debug purposes is nice.
 
-    var dir = 'public/submissions/' + submission.formId + '/' + submission.instanceId;
-    var jsonFileName = dir + '/data' + ext;
-    var xmlFileName = dir + '/data' + '.xml';
+    const dir = 'public/submissions/' + submission.formId + '/' + submission.instanceId;
+    const jsonFileName = dir + '/data' + ext;
+    const xmlFileName = dir + '/data' + '.xml';
 
     mkdirp(path.dirname(jsonFileName), function (err) {
         if (err) {

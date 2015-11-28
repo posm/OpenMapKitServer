@@ -15,7 +15,7 @@ var defaults = {
  * This middleware saves each file to the chosen storage.
  */
 function SaveMedia (options) {
-    var store = persistFs;
+    const store = persistFs;
 
     options = extend(defaults, options);
 
