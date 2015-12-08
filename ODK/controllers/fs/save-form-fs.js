@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
+const settings = require('../../../settings.js');
 
 module.exports = function (req, res, next) {
     const submission = req.submission;
@@ -8,7 +9,7 @@ module.exports = function (req, res, next) {
     const json = JSON.stringify(submission.json, null, '  ');
     const xml = submission.xml; // Original XML for debug purposes is nice.
 
-    const dir = 'public/submissions/' + submission.formId + '/' + submission.instanceId;
+    const dir = settings.publicDir + '/submissions/' + submission.formId + '/' + submission.instanceId;
     const jsonFileName = dir + '/data' + ext;
     const xmlFileName = dir + '/data' + '.xml';
 
