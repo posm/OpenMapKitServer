@@ -79,5 +79,49 @@ function findOsmFilesInDir(dirStat, osmFiles, res) {
  * @param res - the http response that needs to get resolved
  */
 function concatOsm(files, res) {
-    console.log(files);
+    const firstFile = files.shift();
+    fs.readFile(firstFile, 'utf-8', function (err, data) {
+        if (err) {
+            res.status(500).json(err);
+            return;
+        }
+        var osmAggregation = data.replace('</osm>', '');
+
+        var numFilesLeft = files.length;
+        var nextFile = files.shift();
+        while (nextFile) {
+            fs.readFile(nextFile, 'utf-8', function (err, data) {
+                if (err) {
+                    res.status(500).json(err);
+                    return;
+                }
+                --numFilesLeft;
+                var osmFile = data.replace('</osm>', '');
+
+                /**
+                 * Finding the index of the first node, way, relation tag.
+                 */
+                var startIdx = osmFile.indexOf('<node');
+                var wayIdx = osmFile.indexOf('<way');
+                var relationIdx = osmFile.indexOf('<relation');
+
+                if (wayIdx !== -1 && wayIdx < startIdx) {
+                    startIdx = wayIdx;
+                }
+                if (relationIdx !== -1 && relationIdx < startIdx) {
+                    startIdx = relationIdx;
+                }
+
+                var innerOsmElements = osmFile.slice(startIdx);
+                osmAggregation += innerOsmElements;
+
+                if (numFilesLeft === 0) {
+                    osmAggregation += '</osm>';
+                    res.status(200).end(osmAggregation);
+                }
+            });
+            nextFile = files.shift();
+        }
+
+    });
 }
