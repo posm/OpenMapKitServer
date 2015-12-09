@@ -19,22 +19,22 @@ module.exports = function (req, res, next) {
     const dir = settings.publicDir + '/submissions/' + formName;
     const aggregate = [];
 
-    // All of the submissions in the form directory
-    fs.readdir(dir, function (err, files) {
+    // All of the submission dirs in the form directory
+    fs.readdir(dir, function (err, submissionDirs) {
         if (err) res.status(500).json(err);
-        const len = files.length;
-        if (files.length === 0) res.status(200).json([]);
+        const len = submissionDirs.length;
+        if (submissionDirs.length === 0) res.status(200).json([]);
         var count = 0;
         for (var i = 0; i < len; i++) {
-            var file = files[i];
-            if (file[0] === '.') {
+            var submissionDir = submissionDirs[i];
+            if (submissionDir[0] === '.') {
                 ++count;
                 if (len === count) {
                     res.status(200).json(aggregate);
                 }
                 continue;
             }
-            const dataFile = dir + '/' + file + '/data.json';
+            const dataFile = dir + '/' + submissionDir + '/data.json';
             fs.readFile(dataFile, function (err, data) {
                 ++count;
                 if (err) res.status(500).json(err);

@@ -14,7 +14,9 @@ module.exports = function (req, res, next) {
         for (var i = 0, len = files.length; i < len; i++) {
             var file = files[i];
             if (file[0] === '.') continue;
-            urls.push(req.protocol + '://' + req.headers.host + req.originalUrl + '/' + file + '.json');
+            var originalUrl = req.originalUrl;
+            if (originalUrl[originalUrl.length-1] !== '/') originalUrl += '/';
+            urls.push(req.protocol + '://' + req.headers.host + originalUrl + file + '.json');
         }
         res.status(200).json(urls);
     });
