@@ -10,7 +10,7 @@ module.exports = function (req, res, next) {
         headers: {
             'User-Agent': 'OpenMapKitServer'
         },
-        baseUrl: 'http://' + req.headers.host + '/public/forms'
+        baseUrl: req.protocol + '://' + req.headers.host + '/public/forms'
     };
 
     getFormUrls(options, function (err, formUrls) {
