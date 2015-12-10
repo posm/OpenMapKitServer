@@ -117,7 +117,7 @@ function concatOsm(files, res) {
 
                 if (numFilesLeft === 0) {
                     osmAggregation += '</osm>';
-                    res.status(200).end(osmAggregation);
+                    res.set('Content-Type', 'text/xml').status(200).end(osmAggregation);
                 }
             });
             nextFile = files.shift();
