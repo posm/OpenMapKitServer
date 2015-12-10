@@ -19,6 +19,12 @@
 Create a `settings.js` file in this directory. You can use `settings.js.example`
 as an example.
 
+If you are on Debian or Ubuntu, you may have to install `build-essential`:
+
+```
+sudo apt-get install build-essential
+```
+
 Install dependencies, start the server.
 
 ```
