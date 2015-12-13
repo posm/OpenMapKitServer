@@ -25,9 +25,25 @@ If you are on Debian or Ubuntu, you may have to install `build-essential`:
 sudo apt-get install build-essential
 ```
 
+The ODK component requires python dependencies that are installed via pip.
+The best way to install pip on a mac is through [Homebrew](http://brew.sh/):
+
+```
+brew install python
+```
+
+On a Linux machine:
+
+```
+easy_install pip
+```
+
 Install dependencies, start the server.
 
 ```
+git submodule init
+git submodule update
+pip install -r requirements.txt
 npm install
 npm start
 ```
