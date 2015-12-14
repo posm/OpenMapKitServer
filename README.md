@@ -35,7 +35,7 @@ brew install python
 On a Linux machine:
 
 ```
-easy_install pip
+sudo apt-get install python-pip
 ```
 
 Install dependencies, start the server.
