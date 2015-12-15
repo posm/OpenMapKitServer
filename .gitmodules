@@ -1,0 +1,3 @@
+[submodule "ODK/pyxform"]
+	path = ODK/pyxform
+	url = https://github.com/spatialdev/pyxform
