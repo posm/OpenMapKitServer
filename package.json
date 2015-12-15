@@ -30,9 +30,11 @@
   "dependencies": {
     "express": "^4.13.3",
     "mkdirp": "^0.5.1",
+    "multiparty": "^4.1.2",
     "openrosa-form-submission-middleware": "^1.0.4",
     "openrosa-formlist": "^1.0.1",
     "openrosa-request-middleware": "^1.0.1",
+    "python-shell": "^0.2.0",
     "serve-index": "^1.7.2",
     "traverse": "^0.6.6",
     "xform-to-json": "^1.1.1",
