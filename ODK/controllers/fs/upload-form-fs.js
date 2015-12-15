@@ -26,19 +26,21 @@ module.exports = function (req, res, next) {
         }
 
         // We move the XLSForm from temp to the forms directory.
-        var xlsPath = formsDir + file[0].originalFilename;
+        var xlsFilename = file[0].originalFilename;
+        var xlsPath = formsDir + xlsFilename;
         fs.rename(file[0].path, xlsPath, function(err) {
             if (err) {
                 res.status(400).json({
                     status: 400,
                     error: err,
-                    msg: 'Unable to move ' + file[0].originalFilename + ' to the forms directory.'
+                    msg: 'Unable to move ' + xlsFilename + ' to the forms directory.'
                 });
                 return;
             }
 
             // Convert XLS to XForm with pyxform
-            var xFormPath = formsDir + file[0].originalFilename.replace('.xlsx', '.xml');
+            var xFormFilename = xlsFilename.replace('.xlsx', '.xml');
+            var xFormPath = formsDir + xFormFilename;
             var options = {
                 scriptPath: __dirname + '/../../pyxform/pyxform/',
                 args: [xlsPath, xFormPath],
@@ -49,7 +51,7 @@ module.exports = function (req, res, next) {
                     res.status(400).json({
                         status: 400,
                         error: err,
-                        msg: 'Unable to convert ' + file[0].originalFilename + ' to an XForm.'
+                        msg: 'Unable to convert ' + xlsFilename + ' to an XForm.'
                     });
                     return;
                 }
@@ -57,8 +59,8 @@ module.exports = function (req, res, next) {
                 res.status(201).json({
                     status: 201,
                     msg: 'Converted ' + file[0].originalFilename + 'to an XForm and saved both to the forms directory.',
-                    xFormUrl: '',
-                    xlsFormUrl: ''
+                    xFormUrl: req.protocol + '://' + req.headers.host + '/public/forms/' + xFormFilename,
+                    xlsFormUrl: req.protocol + '://' + req.headers.host + '/public/forms/' + xlsFilename
                 });
 
             });
