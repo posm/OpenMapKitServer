@@ -1,5 +1,6 @@
 const fs = require('fs');
 const settings = require('../../../settings');
+const Url = require('../../../Util/url');
 
 /**
  * Provides metadata as JSON of the public directories of
@@ -27,7 +28,8 @@ module.exports = function (req, res, next) {
             if (file[0] === '.') continue;
             var originalUrl = req.originalUrl;
             if (originalUrl[originalUrl.length-1] !== '/') originalUrl += '/';
-            urls.push(req.protocol + '://' + req.headers.host + originalUrl + file + '.json');
+            var url = Url.apiUrl(req, originalUrl + file + '.json');
+            urls.push(url);
         }
         res.status(200).json(urls);
     });

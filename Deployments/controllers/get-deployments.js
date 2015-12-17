@@ -1,35 +1,56 @@
 const fs = require('fs');
-const settings = require('../../../settings');
+const Url = require('../../Util/url');
+const settings = require('../../settings');
 
 module.exports = function (req, res, next) {
-    const dir = settings.publicDir + '/deployments';
-    const deployments = [];
+    var dir = settings.publicDir + '/deployments';
+    var deployments = [];
 
     fs.readdir(dir, function (err, deploymentDirs) {
-        if (err) res.status(500).json(err);
+        if (err) {
+            // if no deployments directory yet...
+            if (err.errno === -2) {
+                res.status(200).json([]);
+                return;
+            }
+            res.status(500).json(err);
+            return;
+        }
         const len = deploymentDirs.length;
         if (deploymentDirs.length === 0) {
             res.status(200).json([]);
             return;
         }
         var count = 0;
-        for (var i = 0; i < len; i++) {
-            var deploymentDir = deploymentDirs[i];
+        deploymentDirs.forEach(function(deploymentDir) {
             if (deploymentDir[0] === '.') {
                 ++count;
                 if (len === count) {
-                    res.status(200).json(deployments);
+                    res.status(200).json(deploymentsSorted(deployments));
                 }
-                continue;
+                return;
             }
-            var manifestFile = dir + '/' + deploymentDir + '/manifest.json';
-            var deploymentObj = {};
-            fs.readdir(deploymentDir, function (err, deploymentFiles) {
+            var deploymentDirFullPath = dir + '/' + deploymentDir;
+            var manifestFile = deploymentDirFullPath + '/manifest.json';
+            fs.readdir(deploymentDirFullPath, function (err, deploymentFiles) {
                 if (err) {
                     res.status(500).json(err);
                     return;
                 }
-                deploymentObj.files = deploymentFiles;
+
+                var fileUrls = [];
+                for (var i = 0, length = deploymentFiles.length; i < length; i++) {
+                    var deploymentFile = deploymentFiles[i];
+                    var fileUrl = Url.publicDirFileUrl(req, 'deployments/' + deploymentDir, deploymentFile);
+                    fileUrls.push(fileUrl);
+                }
+
+                var deploymentObj = {
+                    name: deploymentDir,
+                    files: fileUrls,
+                    url: Url.publicDirFileUrl(req, 'deployments', deploymentDir)
+                };
+
                 fs.readFile(manifestFile, function (err, manifest) {
                     ++count;
                     if (err) {
@@ -40,10 +61,18 @@ module.exports = function (req, res, next) {
                     deploymentObj.manifest = manifestObj;
                     deployments.push(deploymentObj);
                     if (len === count) {
-                        res.status(200).json(deployments);
+                        res.status(200).json(deploymentsSorted(deployments));
                     }
                 });
             });
-        }
+        });
     });
 };
+
+function deploymentsSorted(deployments) {
+    return deployments.sort(function (a, b) {
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+        return 0;
+    });
+}

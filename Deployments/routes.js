@@ -5,6 +5,7 @@ const getDeployments = require('./controllers/get-deployments');
 /**
  * Retrieve the list of deployments areas of interest.
  */
-router.route('/', getDeployments);
+router.route('/').get(getDeployments);
+
 
 module.exports = router;
