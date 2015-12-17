@@ -10,7 +10,18 @@ module.exports = function (req, res, next) {
     const dir = settings.publicDir + '/submissions/';
     fs.readdir(dir, function (err, files) {
         const urls = [];
-        if (err) res.status(500).json(err);
+        if (err) {
+            // Submissions directory doesn't exist if submissions have not yet been made.
+            // This is a normal situation, so we should just send back an array showing
+            // that we just don't have any submissions yet.
+            if (err.errno === -2) {
+                res.status(200).json([]);
+                return;
+            }
+            // This is some other error state...
+            res.status(500).json(err);
+            return;
+        }
         for (var i = 0, len = files.length; i < len; i++) {
             var file = files[i];
             if (file[0] === '.') continue;
