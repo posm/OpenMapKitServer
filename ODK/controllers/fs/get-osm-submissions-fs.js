@@ -23,7 +23,10 @@ module.exports = function (req, res, next) {
     fs.readdir(dir, function (err, submissionDirs) {
         if (err) res.status(500).json(err);
         const len = submissionDirs.length;
-        if (len === 0) res.status(200).json([]);
+        if (len === 0) {
+            res.status(200).json([]);
+            return;
+        }
 
         // A structure to keep track of where we are while traversing directories
         // to find OSM files.

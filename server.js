@@ -8,7 +8,7 @@ try {
 const express = require('express');
 const directory = require('serve-index');
 const fs = require('./ODK/routes/fs');
-const deployment = require('./Deployment/routes');
+const deployments = require('./Deployments/routes');
 const error = require('./ODK/controllers/error-handler');
 const package = require('./package');
 const app = express();
@@ -29,8 +29,8 @@ app.use('/public', directory(settings.publicDir));
 // Public File System Endpoint
 app.use('/fs', fs);
 
-// Deployment
-app.use('/deployment', deployment);
+// Deployments
+app.use('/deployments', deployments);
 
 // Handle errors
 app.use(error);

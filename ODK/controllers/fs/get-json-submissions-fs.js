@@ -23,7 +23,10 @@ module.exports = function (req, res, next) {
     fs.readdir(dir, function (err, submissionDirs) {
         if (err) res.status(500).json(err);
         const len = submissionDirs.length;
-        if (submissionDirs.length === 0) res.status(200).json([]);
+        if (submissionDirs.length === 0) {
+            res.status(200).json([]);
+            return;
+        }
         var count = 0;
         for (var i = 0; i < len; i++) {
             var submissionDir = submissionDirs[i];
@@ -37,7 +40,10 @@ module.exports = function (req, res, next) {
             const dataFile = dir + '/' + submissionDir + '/data.json';
             fs.readFile(dataFile, function (err, data) {
                 ++count;
-                if (err) res.status(500).json(err);
+                if (err) {
+                    res.status(500).json(err);
+                    return;
+                }
                 const dataObj = JSON.parse(data);
                 aggregate.push(dataObj);
                 if (len === count) {
