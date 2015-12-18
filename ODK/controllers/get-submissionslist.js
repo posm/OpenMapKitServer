@@ -1,6 +1,6 @@
 const fs = require('fs');
-const settings = require('../../../settings');
-const Url = require('../../../Util/url');
+const settings = require('../../settings');
+const Url = require('../../util/url');
 
 /**
  * Provides metadata as JSON of the public directories of

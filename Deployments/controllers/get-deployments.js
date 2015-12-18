@@ -1,5 +1,5 @@
 const fs = require('fs');
-const Url = require('../../Util/url');
+const Url = require('../../util//url');
 const settings = require('../../settings');
 
 module.exports = function (req, res, next) {

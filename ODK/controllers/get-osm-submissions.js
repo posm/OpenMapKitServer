@@ -1,5 +1,5 @@
 const fs = require('fs');
-const settings = require('../../../settings');
+const settings = require('../../settings');
 
 /**
  * Aggregates together all of the OSM submissions
@@ -13,7 +13,7 @@ module.exports = function (req, res, next) {
             status: 400,
             err: 'MISSING_PARAM',
             msg: 'You must specify a parameter for the formName in this end point.',
-            path: '/fs/submissions/:formName.osm'
+            path: '/odk/submissions/:formName.osm'
         });
     }
     const dir = settings.publicDir + '/submissions/' + formName;

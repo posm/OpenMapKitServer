@@ -2,16 +2,16 @@ const router = require('express').Router({ mergeParams: true });
 const FormSubmissionMiddleware = require('openrosa-form-submission-middleware');
 const OpenRosaHeaders = require('openrosa-request-middleware');
 
-const ProcessSubmission = require('../middlewares/process-submission');
-const SaveMedia = require('../middlewares/save-media');
+const ProcessSubmission = require('./middlewares/process-submission');
+const SaveMedia = require('./middlewares/save-media');
 
-const saveForm = require('../controllers/fs/save-form-fs');
-const getFormlist = require('../controllers/fs/get-formlist-fs');
+const saveForm = require('./controllers/save-form');
+const getFormlist = require('./controllers/get-formlist');
 
-const getSubmissionsList = require('../controllers/fs/get-submissionslist-fs');
-const getJsonSubmissions = require('../controllers/fs/get-json-submissions-fs');
-const getOsmSubmissions = require('../controllers/fs/get-osm-submissions-fs');
-const uploadForm = require('../controllers/fs/upload-form-fs');
+const getSubmissionsList = require('./controllers/get-submissionslist');
+const getJsonSubmissions = require('./controllers/get-json-submissions');
+const getOsmSubmissions = require('./controllers/get-osm-submissions');
+const uploadForm = require('./controllers/upload-form');
 
 /**
  * OpenRosa Endpoints that ODK Collect uses.
@@ -24,7 +24,7 @@ router.route('/formList')
 router.route('/submission')
     .all(FormSubmissionMiddleware())
     .post(ProcessSubmission())
-    .post(SaveMedia({store: 'fs'}))
+    .post(SaveMedia({store: 'odk'}))
     .post(saveForm);
 
 /**

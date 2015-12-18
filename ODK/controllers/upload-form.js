@@ -2,7 +2,7 @@ const fs = require('fs');
 const multiparty = require('multiparty');
 const PythonShell = require('python-shell');
 
-const settings = require('../../../settings');
+const settings = require('../../settings');
 const formsDir = settings.publicDir + '/forms/';
 
 /**

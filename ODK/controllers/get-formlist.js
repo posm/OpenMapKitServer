@@ -1,5 +1,5 @@
 const createFormList = require('openrosa-formlist');
-const getFormUrls = require('../../helpers/get-form-urls-fs');
+const getFormUrls = require('../helpers/get-form-urls');
 
 /**
  * Searches for XForm XML Files on the file system and

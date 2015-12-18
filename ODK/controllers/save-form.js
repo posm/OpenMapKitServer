@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
-const settings = require('../../../settings.js');
+const settings = require('../../settings.js');
 
 module.exports = function (req, res, next) {
     const submission = req.submission;
