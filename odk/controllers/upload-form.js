@@ -2,7 +2,7 @@ const fs = require('fs');
 const multiparty = require('multiparty');
 const PythonShell = require('python-shell');
 
-const settings = require('../../../settings');
+const settings = require('../../settings');
 const formsDir = settings.publicDir + '/forms/';
 
 /**
@@ -32,7 +32,7 @@ module.exports = function (req, res, next) {
             if (err) {
                 res.status(400).json({
                     status: 400,
-                    error: err,
+                    err: err,
                     msg: 'Unable to move ' + xlsFilename + ' to the forms directory.'
                 });
                 return;
@@ -50,7 +50,7 @@ module.exports = function (req, res, next) {
                 if (err) {
                     res.status(400).json({
                         status: 400,
-                        error: err,
+                        err: err,
                         msg: 'Unable to convert ' + xlsFilename + ' to an XForm.'
                     });
                     return;

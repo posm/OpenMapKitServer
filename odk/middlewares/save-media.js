@@ -1,6 +1,6 @@
 const extend = require('xtend');
 const fs = require('fs');
-const persistFs = require('../helpers/persist-fs');
+const persistFs = require('../helpers/persist');
 const updateFileRef = require('../helpers/update-file-ref');
 
 var defaults = {

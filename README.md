@@ -1,18 +1,29 @@
 # OpenMapKit Server
 
- OpenMapKit Server is the lightweight server component of OpenMapKit that
- handles the collection and aggregation of OpenStreetMap and OpenDataKit data.
+OpenMapKit Server is the lightweight NodeJS server component of OpenMapKit that
+handles the collection and aggregation of OpenStreetMap and OpenDataKit data.
 
- This software is intended to run both on low-power embedded Linux systems,
- as well as on higher powered, cloud-based servers.
+This software is intended to run both on low-power embedded Linux systems,
+as well as on higher powered, cloud-based servers.
 
- __OSMSpatialite__ handles ingestion of OSM data and is ultimately responsible
- for creating changesets that can be submitted to the primary OSM 0.6 Editing
- API.
+OpenMapKit Server is 100% database free! All data is persisted on the file system.
 
- __ODK__ is the OpenMapKit ODK API. This is a NodeJS REST API that handles
- all of the ODK business logic, including communicating with ODK Collect,
- as well as serving and ingesting ODK XForm data.
+[__deployments__](https://github.com/AmericanRedCross/OpenMapKitServer/tree/master/deployments) is the OpenMapKit 
+deployment API. This services deployment data in the 
+[deployments public directory](https://github.com/AmericanRedCross/OpenMapKitServer/tree/master/public/deployments).
+Manifest files in this directory work with [posm-deployment](https://github.com/AmericanRedCross/posm-deployment)
+to provision deployment data that is fetched by OpenMapKit Android.
+
+[__odk__](https://github.com/AmericanRedCross/OpenMapKitServer/tree/master/odk) is the OpenMapKit ODK API. 
+This is a REST API that handles all of the ODK business logic, including communicating with ODK Collect,
+as well as serving and ingesting ODK XForm data.
+
+[__public__](https://github.com/AmericanRedCross/OpenMapKitServer/tree/master/public) is the public directory where 
+you store data and static assets. You can set an alternate public directory in `settings.js`.
+
+[__util__](https://github.com/AmericanRedCross/OpenMapKitServer/tree/master/util) has utility functions 
+useful to OpenMapKit Server as a whole.
+
 
 ## Installation
 
@@ -26,13 +37,13 @@ sudo apt-get install build-essential
 ```
 
 The ODK component requires python dependencies that are installed via pip.
-The best way to install pip on a mac is through [Homebrew](http://brew.sh/):
+The best way to install pip on a Mac is through [Homebrew](http://brew.sh/):
 
 ```
 brew install python
 ```
 
-On a Linux machine:
+On a Debian or Ubuntu machine:
 
 ```
 sudo apt-get install python-pip
