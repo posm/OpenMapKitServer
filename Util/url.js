@@ -8,9 +8,11 @@ const Url = module.exports = {};
  *
  * @param req
  * @param path
- * @param fileName
+ * @param fileName (optional)
  */
 Url.publicDirFileUrl = function (req, path, fileName) {
+    path = encodeURIComponent(path).replace(/%2F/g, '/'); // keep slashes
+    fileName = encodeURIComponent(fileName).replace(/%2F/g, '/'); // keep slashes
     var url = base = req.protocol + '://' + req.headers.host + '/public';
     path[0] === '/' ? url += path : url += '/' + path;
     if (typeof fileName === 'undefined' || fileName === null) return url;
@@ -26,6 +28,17 @@ Url.publicDirFileUrl = function (req, path, fileName) {
  * @returns {string} - the full URL to the endpoint
  */
 Url.apiUrl = function (req, path) {
+    path = encodeURIComponent(path).replace(/%2F/g, '/'); // keep slashes
     const base = req.protocol + '://' + req.headers.host;
     return path[0] === '/' ? base + path : base + '/' + path;
+};
+
+/**
+ * Just makes sure a string ends with a /
+ *
+ * @param str - any string
+ * @returns {string} - string with / ending
+ */
+Url.endWithSlash = function (str) {
+    return str[str.length -1] === '/' ? str : str + '/';
 };

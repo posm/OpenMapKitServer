@@ -16,7 +16,7 @@ module.exports = function (req, res, next) {
     mkdirp(path.dirname(jsonFileName), function (err) {
         if (err) {
             console.error(err);
-            res.status(500).json({status: 500, error: err});
+            res.status(500).json({status: 500, err: err});
         }
         fs.writeFile(xmlFileName, xml, function(err) {
             if (err) console.error(err);
@@ -24,7 +24,7 @@ module.exports = function (req, res, next) {
         fs.writeFile(jsonFileName, json, function (err) {
             if (err) {
                 console.error(err);
-                res.status(500).json({status: 500, error: err});
+                res.status(500).json({status: 500, err: err});
                 return;
             }
             res.status(201).json({saved: jsonFileName});

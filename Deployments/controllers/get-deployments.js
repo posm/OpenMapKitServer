@@ -3,9 +3,8 @@ const Url = require('../../util//url');
 const settings = require('../../settings');
 
 module.exports = function (req, res, next) {
-    var dir = settings.publicDir + '/deployments';
-    var deployments = [];
-
+    const dir = settings.publicDir + '/deployments';
+    const deployments = [];
     fs.readdir(dir, function (err, deploymentDirs) {
         if (err) {
             // if no deployments directory yet...
@@ -37,28 +36,29 @@ module.exports = function (req, res, next) {
                     res.status(500).json(err);
                     return;
                 }
-
                 var fileUrls = [];
                 for (var i = 0, length = deploymentFiles.length; i < length; i++) {
                     var deploymentFile = deploymentFiles[i];
                     var fileUrl = Url.publicDirFileUrl(req, 'deployments/' + deploymentDir, deploymentFile);
                     fileUrls.push(fileUrl);
                 }
-
                 var deploymentObj = {
                     name: deploymentDir,
                     files: fileUrls,
-                    url: Url.publicDirFileUrl(req, 'deployments', deploymentDir)
+                    url: Url.apiUrl(req, 'deployments/' + deploymentDir),
+                    listingUrl: Url.publicDirFileUrl(req, 'deployments', deploymentDir)
                 };
-
                 fs.readFile(manifestFile, function (err, manifest) {
                     ++count;
                     if (err) {
-                        res.status(500).json(err);
+                        res.status(500).json({
+                            status: 500,
+                            msg: 'Unable to find manifest file.',
+                            err: err
+                        });
                         return;
                     }
-                    var manifestObj = JSON.parse(manifest);
-                    deploymentObj.manifest = manifestObj;
+                    deploymentObj.manifest = JSON.parse(manifest);
                     deployments.push(deploymentObj);
                     if (len === count) {
                         res.status(200).json(deploymentsSorted(deployments));

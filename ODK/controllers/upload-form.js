@@ -32,7 +32,7 @@ module.exports = function (req, res, next) {
             if (err) {
                 res.status(400).json({
                     status: 400,
-                    error: err,
+                    err: err,
                     msg: 'Unable to move ' + xlsFilename + ' to the forms directory.'
                 });
                 return;
@@ -50,7 +50,7 @@ module.exports = function (req, res, next) {
                 if (err) {
                     res.status(400).json({
                         status: 400,
-                        error: err,
+                        err: err,
                         msg: 'Unable to convert ' + xlsFilename + ' to an XForm.'
                     });
                     return;
