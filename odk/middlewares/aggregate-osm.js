@@ -44,6 +44,7 @@ module.exports = function (files, filter, cb) {
             for (var j = 0, len = osmElements.length; j < len; j++) {
                 var osmElement = osmElements[j];
                 rewriteNegativeId(negIdRewriteHash, osmElement);
+                rewriteNegativeRef(negIdRewriteHash, osmElement);
                 mainOsmElement.addChild(osmElement);
             }
             ++filesCompleted;
@@ -69,4 +70,17 @@ function rewriteNegativeId(negIdRewriteHash, osmElement) {
     if (id >= 0) return;
     negIdRewriteHash[id] = negIdRewriteHash.counter;
     idAttr.value(negIdRewriteHash.counter--);
+}
+
+/**
+ * Ways and relation members may have references to negative
+ * IDs that have just been rewritten to assure uniqueness.
+ * We look at the negIdRewriteHash and reassign the ref
+ * value so that it contains a reference to the new ID value.
+ *
+ * @param negIdRewriteHash - lookup table where key is old ID, and value is new ID
+ * @param osmElement - the OSM XML Element we are processing
+ */
+function rewriteNegativeRef(negIdRewriteHash, osmElement) {
+
 }

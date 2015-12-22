@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-754' action='modify' visible='true' lat='66.8955227196' lon='-146.33743826058' />
+  <node id='-752' action='modify' visible='true' lat='66.89552243568' lon='-146.33737893185' />
+  <node id='-750' action='modify' visible='true' lat='66.89554145806' lon='-146.33737965537' />
+  <node id='-749' action='modify' visible='true' lat='66.89554145806' lon='-146.33743970762' />
+  <node id='-738' action='modify' visible='true' lat='66.89552697834' lon='-146.33753955353' />
+  <node id='-735' action='modify' visible='true' lat='66.89553294058' lon='-146.3374939717' />
+  <node id='-732' action='modify' visible='true' lat='66.89554230981' lon='-146.33755836507' />
+  <way id='-751' action='modify' visible='true'>
+    <nd ref='-749' />
+    <nd ref='-750' />
+    <nd ref='-752' />
+    <nd ref='-754' />
+    <nd ref='-749' />
+    <tag k='name' v='square1' />
+  </way>
+  <way id='-736' action='modify' visible='true'>
+    <nd ref='-732' />
+    <nd ref='-735' />
+    <nd ref='-738' />
+    <nd ref='-732' />
+    <tag k='name' v='triangle1' />
+  </way>
+</osm>

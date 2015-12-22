@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6">
+ <node id="-1" visible="true" version="3" changeset="8307694" timestamp="2011-06-01T07:00:35Z" user="Wim L" uid="223681" lat="48.5938413" lon="-122.6807876">
+  <tag k="ele" v="16"/>
+  <tag k="gnis:county_id" v="057"/>
+  <tag k="gnis:created" v="09/10/1979"/>
+  <tag k="gnis:feature_id" v="1504100"/>
+  <tag k="gnis:state_id" v="53"/>
+  <tag k="name" v="Cone Islands"/>
+  <tag k="place" v="island"/>
+ </node>
+ <node id="-114" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:35Z" user="HokiePilot" uid="155066" lat="48.5909648" lon="-122.6831758"/>
+ <node id="-115" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:35Z" user="HokiePilot" uid="155066" lat="48.5909661" lon="-122.6831077"/>
+ <node id="-116" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:35Z" user="HokiePilot" uid="155066" lat="48.5910027" lon="-122.6833137"/>
+ <node id="-117" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:35Z" user="HokiePilot" uid="155066" lat="48.5910182" lon="-122.6830861"/>
+ <node id="-120" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:35Z" user="HokiePilot" uid="155066" lat="48.5910499" lon="-122.6830941"/>
+ <node id="-121" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:35Z" user="HokiePilot" uid="155066" lat="48.5910514" lon="-122.6833839"/>
+ <node id="-123" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:35Z" user="HokiePilot" uid="155066" lat="48.5910828" lon="-122.6833919"/>
+ <node id="-124" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:35Z" user="HokiePilot" uid="155066" lat="48.5911234" lon="-122.6834003"/>
+ <node id="-125" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:35Z" user="HokiePilot" uid="155066" lat="48.5911274" lon="-122.6831826"/>
+ <node id="-126" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:35Z" user="HokiePilot" uid="155066" lat="48.5911479" lon="-122.6832996"/>
+ <node id="-127" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:35Z" user="HokiePilot" uid="155066" lat="48.5911515" lon="-122.6833473"/>
+ <node id="-130" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:35Z" user="HokiePilot" uid="155066" lat="48.5912329" lon="-122.6839175"/>
+ <node id="-132" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:35Z" user="HokiePilot" uid="155066" lat="48.5912482" lon="-122.6839801"/>
+ <node id="-133" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5912621" lon="-122.6755544"/>
+ <node id="-137" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5912984" lon="-122.6757056"/>
+ <node id="-138" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5912969" lon="-122.6839946"/>
+ <node id="-139" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5913078" lon="-122.6759023"/>
+ <node id="-140" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5913275" lon="-122.6762862"/>
+ <node id="-141" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5913252" lon="-122.6837980"/>
+ <node id="-142" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5913330" lon="-122.6752753"/>
+ <node id="-143" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5913302" lon="-122.6839712"/>
+ <node id="-144" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5913621" lon="-122.6760419"/>
+ <node id="-146" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5913635" lon="-122.6764138"/>
+ <node id="-148" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5913778" lon="-122.6836029"/>
+ <node id="-151" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5913867" lon="-122.6751464"/>
+ <node id="-152" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5913979" lon="-122.6838506"/>
+ <node id="-153" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5914133" lon="-122.6750432"/>
+ <node id="-154" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5914124" lon="-122.6835057"/>
+ <node id="-156" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5914361" lon="-122.6764953"/>
+ <node id="-157" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5914377" lon="-122.6834572"/>
+ <node id="-159" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5914764" lon="-122.6749260"/>
+ <node id="-160" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5914910" lon="-122.6832373"/>
+ <node id="-161" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5914926" lon="-122.6838235"/>
+ <node id="-163" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5915129" lon="-122.6840403"/>
+ <node id="-164" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5915149" lon="-122.6839355"/>
+ <node id="-165" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5915158" lon="-122.6832136"/>
+ <node id="-166" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5915256" lon="-122.6765424"/>
+ <node id="-167" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5915456" lon="-122.6840540"/>
+ <node id="-168" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5915920" lon="-122.6746013"/>
+ <node id="-169" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5916071" lon="-122.6766232"/>
+ <node id="-170" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5916142" lon="-122.6832053"/>
+ <node id="-172" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5916613" lon="-122.6844291"/>
+ <node id="-173" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5916731" lon="-122.6744725"/>
+ <node id="-174" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5916721" lon="-122.6831710"/>
+ <node id="-175" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5916885" lon="-122.6767392"/>
+ <node id="-177" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5917336" lon="-122.6769363"/>
+ <node id="-178" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5917479" lon="-122.6846181"/>
+ <node id="-180" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5917961" lon="-122.6846816"/>
+ <node id="-182" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5918514" lon="-122.6771219"/>
+ <node id="-184" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5918970" lon="-122.6774016"/>
+ <node id="-185" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5919065" lon="-122.6742973"/>
+ <node id="-186" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5919076" lon="-122.6828473"/>
+ <node id="-187" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:36Z" user="HokiePilot" uid="155066" lat="48.5919171" lon="-122.6847729"/>
+ <node id="-188" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5919490" lon="-122.6828123"/>
+ <node id="-189" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5919696" lon="-122.6775524"/>
+ <node id="-191" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5919747" lon="-122.6827514"/>
+ <node id="-192" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5919873" lon="-122.6742635"/>
+ <node id="-194" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5920311" lon="-122.6848148"/>
+ <node id="-195" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5920685" lon="-122.6775410"/>
+ <node id="-197" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5920733" lon="-122.6827189"/>
+ <node id="-198" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5921253" lon="-122.6850160"/>
+ <node id="-199" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5921265" lon="-122.6849546"/>
+ <node id="-200" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5921388" lon="-122.6827335"/>
+ <node id="-201" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5921436" lon="-122.6849182"/>
+ <node id="-203" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5922348" lon="-122.6744618"/>
+ <node id="-204" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5922390" lon="-122.6773198"/>
+ <node id="-206" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5922482" lon="-122.6850212"/>
+ <node id="-208" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5922523" lon="-122.6827878"/>
+ <node id="-209" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5922924" lon="-122.6828391"/>
+ <node id="-211" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5923658" lon="-122.6746572"/>
+ <node id="-212" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5923635" lon="-122.6829778"/>
+ <node id="-213" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5923970" lon="-122.6849411"/>
+ <node id="-215" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5924027" lon="-122.6846331"/>
+ <node id="-216" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5924478" lon="-122.6748207"/>
+ <node id="-218" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5924624" lon="-122.6769470"/>
+ <node id="-219" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5924600" lon="-122.6841784"/>
+ <node id="-220" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5924733" lon="-122.6843520"/>
+ <node id="-222" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5925158" lon="-122.6836008"/>
+ <node id="-223" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:37Z" user="HokiePilot" uid="155066" lat="48.5925246" lon="-122.6837928"/>
+ <node id="-224" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5925268" lon="-122.6834536"/>
+ <node id="-225" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5925427" lon="-122.6767499"/>
+ <node id="-226" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5925862" lon="-122.6761682"/>
+ <node id="-228" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5925800" lon="-122.6863805"/>
+ <node id="-230" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5925890" lon="-122.6864677"/>
+ <node id="-234" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5926250" lon="-122.6863747"/>
+ <node id="-235" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5926328" lon="-122.6866213"/>
+ <node id="-236" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5926409" lon="-122.6867730"/>
+ <node id="-237" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5926551" lon="-122.6750989"/>
+ <node id="-238" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5926460" lon="-122.6864024"/>
+ <node id="-239" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5926577" lon="-122.6760059"/>
+ <node id="-240" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5927007" lon="-122.6752268"/>
+ <node id="-241" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5926925" lon="-122.6864100"/>
+ <node id="-242" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5926969" lon="-122.6868621"/>
+ <node id="-243" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5927192" lon="-122.6753433"/>
+ <node id="-244" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5927197" lon="-122.6755406"/>
+ <node id="-245" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5927358" lon="-122.6868854"/>
+ <node id="-248" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5928046" lon="-122.6868506"/>
+ <node id="-249" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5928515" lon="-122.6863516"/>
+ <node id="-250" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5928971" lon="-122.6864237"/>
+ <node id="-251" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5929062" lon="-122.6866002"/>
+ <node id="-297" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5951876" lon="-122.6849245"/>
+ <node id="-298" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5952163" lon="-122.6846484"/>
+ <node id="-299" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5952204" lon="-122.6849662"/>
+ <node id="-300" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5952241" lon="-122.6845785"/>
+ <node id="-301" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5952530" lon="-122.6844583"/>
+ <node id="-302" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5952944" lon="-122.6843893"/>
+ <node id="-304" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5953331" lon="-122.6850215"/>
+ <node id="-305" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5953351" lon="-122.6843709"/>
+ <node id="-307" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5954212" lon="-122.6844049"/>
+ <node id="-309" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5954833" lon="-122.6852194"/>
+ <node id="-310" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5955507" lon="-122.6842895"/>
+ <node id="-312" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5955836" lon="-122.6843110"/>
+ <node id="-313" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5955992" lon="-122.6851034"/>
+ <node id="-315" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5956346" lon="-122.6844443"/>
+ <node id="-320" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5957006" lon="-122.6850472"/>
+ <node id="-321" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5957074" lon="-122.6844876"/>
+ <node id="-322" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5957721" lon="-122.6846215"/>
+ <node id="-324" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5958107" lon="-122.6848901"/>
+ <node id="-327" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5958318" lon="-122.6848203"/>
+ <node id="-328" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5958509" lon="-122.6846951"/>
+ <node id="-330" visible="true" version="2" changeset="19137644" timestamp="2013-11-27T02:16:38Z" user="HokiePilot" uid="155066" lat="48.5958692" lon="-122.6848017"/>
+ <node id="-23" visible="true" version="3" changeset="33087484" timestamp="2015-08-04T05:13:38Z" user="sctrojan79" uid="2601744" lat="48.5920233" lon="-122.6775763"/>
+ <way id="-5" visible="true" version="1" changeset="11101549" timestamp="2012-03-26T02:04:59Z" user="pnorman_mechanical" uid="392827">
+  <nd ref="-117"/>
+  <nd ref="-120"/>
+  <nd ref="-125"/>
+  <nd ref="-126"/>
+  <nd ref="-127"/>
+  <nd ref="-124"/>
+  <nd ref="-123"/>
+  <nd ref="-121"/>
+  <nd ref="-116"/>
+  <nd ref="-114"/>
+  <nd ref="-115"/>
+  <nd ref="-117"/>
+  <tag k="natural" v="coastline"/>
+  <tag k="source" v="GeoBase"/>
+ </way>
+ <way id="-8" visible="true" version="1" changeset="11101549" timestamp="2012-03-26T02:05:01Z" user="pnorman_mechanical" uid="392827">
+  <nd ref="-238"/>
+  <nd ref="-241"/>
+  <nd ref="-249"/>
+  <nd ref="-250"/>
+  <nd ref="-251"/>
+  <nd ref="-248"/>
+  <nd ref="-245"/>
+  <nd ref="-242"/>
+  <nd ref="-236"/>
+  <nd ref="-235"/>
+  <nd ref="-230"/>
+  <nd ref="-228"/>
+  <nd ref="-234"/>
+  <nd ref="-238"/>
+  <tag k="natural" v="coastline"/>
+  <tag k="source" v="GeoBase"/>
+ </way>
+ <way id="-2" visible="true" version="1" changeset="11101549" timestamp="2012-03-26T02:05:03Z" user="pnorman_mechanical" uid="392827">
+  <nd ref="-298"/>
+  <nd ref="-300"/>
+  <nd ref="-301"/>
+  <nd ref="-302"/>
+  <nd ref="-305"/>
+  <nd ref="-307"/>
+  <nd ref="-310"/>
+  <nd ref="-312"/>
+  <nd ref="-315"/>
+  <nd ref="-321"/>
+  <nd ref="-322"/>
+  <nd ref="-328"/>
+  <nd ref="-330"/>
+  <nd ref="-327"/>
+  <nd ref="-324"/>
+  <nd ref="-320"/>
+  <nd ref="-313"/>
+  <nd ref="-309"/>
+  <nd ref="-304"/>
+  <nd ref="-299"/>
+  <nd ref="-297"/>
+  <nd ref="-298"/>
+  <tag k="natural" v="coastline"/>
+  <tag k="source" v="GeoBase"/>
+ </way>
+ <way id="-3" visible="true" version="1" changeset="11101549" timestamp="2012-03-26T02:05:20Z" user="pnorman_mechanical" uid="392827">
+  <nd ref="-148"/>
+  <nd ref="-154"/>
+  <nd ref="-157"/>
+  <nd ref="-160"/>
+  <nd ref="-165"/>
+  <nd ref="-170"/>
+  <nd ref="-174"/>
+  <nd ref="-186"/>
+  <nd ref="-188"/>
+  <nd ref="-191"/>
+  <nd ref="-197"/>
+  <nd ref="-200"/>
+  <nd ref="-208"/>
+  <nd ref="-209"/>
+  <nd ref="-212"/>
+  <nd ref="-224"/>
+  <nd ref="-222"/>
+  <nd ref="-223"/>
+  <nd ref="-219"/>
+  <nd ref="-220"/>
+  <nd ref="-215"/>
+  <nd ref="-213"/>
+  <nd ref="-206"/>
+  <nd ref="-198"/>
+  <nd ref="-199"/>
+  <nd ref="-201"/>
+  <nd ref="-194"/>
+  <nd ref="-187"/>
+  <nd ref="-180"/>
+  <nd ref="-178"/>
+  <nd ref="-172"/>
+  <nd ref="-167"/>
+  <nd ref="-163"/>
+  <nd ref="-164"/>
+  <nd ref="-161"/>
+  <nd ref="-152"/>
+  <nd ref="-143"/>
+  <nd ref="-138"/>
+  <nd ref="-132"/>
+  <nd ref="-130"/>
+  <nd ref="-141"/>
+  <nd ref="-148"/>
+  <tag k="natural" v="coastline"/>
+  <tag k="source" v="GeoBase"/>
+ </way>
+ <way id="-9" visible="true" version="2" changeset="33087484" timestamp="2015-08-04T05:12:49Z" user="sctrojan79" uid="2601744">
+  <nd ref="-142"/>
+  <nd ref="-151"/>
+  <nd ref="-153"/>
+  <nd ref="-159"/>
+  <nd ref="-168"/>
+  <nd ref="-173"/>
+  <nd ref="-185"/>
+  <nd ref="-192"/>
+  <nd ref="-203"/>
+  <nd ref="-211"/>
+  <nd ref="-216"/>
+  <nd ref="-237"/>
+  <nd ref="-240"/>
+  <nd ref="-243"/>
+  <nd ref="-244"/>
+  <nd ref="-239"/>
+  <nd ref="-226"/>
+  <nd ref="-225"/>
+  <nd ref="-218"/>
+  <nd ref="-204"/>
+  <nd ref="-195"/>
+  <nd ref="-23"/>
+  <nd ref="-189"/>
+  <nd ref="-184"/>
+  <nd ref="-182"/>
+  <nd ref="-177"/>
+  <nd ref="-175"/>
+  <nd ref="-169"/>
+  <nd ref="-166"/>
+  <nd ref="-156"/>
+  <nd ref="-146"/>
+  <nd ref="-140"/>
+  <nd ref="-144"/>
+  <nd ref="-139"/>
+  <nd ref="-137"/>
+  <nd ref="-133"/>
+  <nd ref="-142"/>
+  <tag k="natural" v="coastline"/>
+  <tag k="source" v="GeoBase"/>
+ </way>
+ <relation id="3722612" visible="true" version="2" changeset="33087484" timestamp="2015-08-04T05:12:32Z" user="sctrojan79" uid="2601744">
+  <member type="way" ref="-2" role="outer"/>
+  <member type="way" ref="-8" role="outer"/>
+  <member type="way" ref="-3" role="outer"/>
+  <member type="way" ref="-5" role="outer"/>
+  <member type="way" ref="-9" role="outer"/>
+  <tag k="ele" v="16"/>
+  <tag k="gnis:county_id" v="057"/>
+  <tag k="gnis:created" v="09/10/1979"/>
+  <tag k="gnis:feature_id" v="1513087"/>
+  <tag k="gnis:state_id" v="53"/>
+  <tag k="leisure" v="nature_reserve"/>
+  <tag k="name" v="Cone Islands State Park"/>
+  <tag k="type" v="multipolygon"/>
+ </relation>
+</osm>
