@@ -18,7 +18,7 @@ module.exports = function (files, filter, cb) {
 
     // Empty OSM XML if no files.
     if (numFiles === 0) {
-        cb('<?xml version="1.0" encoding="UTF-8" ?><osm version="0.6" generator="OpenMapKit Server"></osm>');
+        cb('<?xml version="1.0" encoding="UTF-8" ?><osm version="0.6" generator="OpenMapKit Server ' + appVersion + '"></osm>');
     }
 
     var filesCompleted = 0;
@@ -27,8 +27,11 @@ module.exports = function (files, filter, cb) {
         version: '0.6',
         generator: 'OpenMapKit Server ' + appVersion
     });
-
     const mainOsmElement = mainXmlDoc.root();
+
+    const negIdRewriteHash = {
+        counter: -1
+    };
 
     for (var i = 0; i < numFiles; i++) {
         fs.readFile(files[i], 'utf-8', function (err, xml) {
@@ -36,11 +39,11 @@ module.exports = function (files, filter, cb) {
                 cb(err);
                 return;
             }
-
             var doc = libxml.parseXmlString(xml);
             var osmElements = doc.root().childNodes();
             for (var j = 0, len = osmElements.length; j < len; j++) {
                 var osmElement = osmElements[j];
+                rewriteNegativeId(negIdRewriteHash, osmElement);
                 mainOsmElement.addChild(osmElement);
             }
             ++filesCompleted;
@@ -50,4 +53,20 @@ module.exports = function (files, filter, cb) {
         });
     }
 
+
 };
+
+/**
+ * Rewrites the id attribute with a fresh negative ID for
+ * OSM Elements with a negative ID.
+ *
+ * @param negIdRewriteHash - lookup table where key is old ID, and value is new ID
+ * @param osmElement - the OSM XML Element we are processing
+ */
+function rewriteNegativeId(negIdRewriteHash, osmElement) {
+    var idAttr = osmElement.attr('id');
+    var id = parseInt(idAttr.value());
+    if (id >= 0) return;
+    negIdRewriteHash[id] = negIdRewriteHash.counter;
+    idAttr.value(negIdRewriteHash.counter--);
+}
