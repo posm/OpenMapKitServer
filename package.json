@@ -4,7 +4,7 @@
   "description": "OpenMapKit Server is the lightweight server component of OpenMapKit that handles the collection and aggregation of OpenStreetMap and OpenDataKit data.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tape test/**/**/*.test.js | faucet"
   },
   "repository": {
     "type": "git",
