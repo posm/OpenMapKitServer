@@ -1,5 +1,6 @@
 const fs = require('fs');
 const settings = require('../../settings');
+const aggregateOsm = require('../middlewares/aggregate-osm');
 
 /**
  * Aggregates together all of the OSM submissions
@@ -21,7 +22,13 @@ module.exports = function (req, res, next) {
 
     // All of the submission dirs in the form directory
     fs.readdir(dir, function (err, submissionDirs) {
-        if (err) res.status(500).json(err);
+        if (err) {
+            res.status(500).json({
+                status: 500,
+                msg: 'Problem reading submissionDirs.',
+                err: err
+            });
+        }
         const len = submissionDirs.length;
         if (len === 0) {
             res.status(200).json([]);
@@ -41,11 +48,11 @@ module.exports = function (req, res, next) {
             if (dirStat.submissionDir[0] === '.') {
                 ++dirStat.count;
                 if (len === dirStat.count) {
-                    concatOsm(osmFiles, res);
+                    aggregate(osmFiles, req, res);
                 }
                 continue;
             }
-            findOsmFilesInDir(dirStat, osmFiles, res);
+            findOsmFilesInDir(dirStat, osmFiles, req, res);
         }
     });
 };
@@ -54,11 +61,12 @@ module.exports = function (req, res, next) {
  * Reads through all of the files in a submission directory and
  * appends the full OSM file path to the osmFiles array.
  *
- * @param dirStat - the counters and paths of the directory we are async iterating through
+ * @param dirStat  - the counters and paths of the directory we are async iterating through
  * @param osmFiles - all of the osm files we've found so far
- * @param res - the http response that needs to get resolved
+ * @param req      = the http request
+ * @param res      - the http response that needs to get resolved
  */
-function findOsmFilesInDir(dirStat, osmFiles, res) {
+function findOsmFilesInDir(dirStat, osmFiles, req, res) {
     var fullPath = dirStat.fullPath;
     fs.readdir(dirStat.fullPath, function (err, files) {
         ++dirStat.count;
@@ -69,8 +77,30 @@ function findOsmFilesInDir(dirStat, osmFiles, res) {
             osmFiles.push(longFilePath);
         }
         if (dirStat.len === dirStat.count) {
-            concatOsm(osmFiles, res);
+            aggregate(osmFiles, req, res);
         }
+    });
+}
+
+/**
+ * Calls aggregate-osm middleware to read OSM edit files
+ * and concatenate into a single OSM XML aggregation.
+ *
+ * @param osmFiles  - the JOSM OSM XML edits to aggregate
+ * @param req       - the http request
+ * @param res       - the http response
+ */
+function aggregate(osmFiles, req, res) {
+    aggregateOsm(osmFiles, null, function (err, osmXml) {
+        if (err) {
+            res.status(500).json({
+                status: 500,
+                msg: 'There was a problem with aggregating OSM JOSM editor files in the submissions directory.',
+                err: err
+            });
+            return;
+        }
+        res.set('Content-Type', 'text/xml').status(200).end(osmXml);
     });
 }
 
