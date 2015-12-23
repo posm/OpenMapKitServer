@@ -24,11 +24,6 @@ for (var j = 0, len2 = conflictingIdFiles.length; j < len2; j++) {
 }
 
 /**
- * Test file just to see if refs are rewritten properly in a given file with ways and relations.
- */
-const coneIslandsFile = './test/fixtures/osm/rewrite-negative-refs/cone-islands.osm';
-
-/**
  * Several OSM files with conflicting negative IDs as well as corresponding way and relation
  * references that also need to be rewritten.
  */
@@ -46,7 +41,7 @@ test('aggregate-osm.js must concatenate 3 files and rewrite a negative ID.', fun
         t.error(err, 'Should not throw error.');
         const nodeWithNegId = '<node id="-1" action="modify" lat="1.0753199144383814" lon="34.16216178888775">';
         const idxRetVal = xml.indexOf(nodeWithNegId);
-        t.ok(idxRetVal > 0, 'there is a node with a -1 id');
+        t.ok(idxRetVal > 0, 'There is a node with a -1 id.');
     });
 });
 
@@ -59,10 +54,11 @@ test('aggregate-osm.js must rewrite the negative IDs of elements to maintain uni
 });
 
 test('aggregate-osm.js must update the refs to rewritten negative IDs for both ways and relation members.', function (t) {
-    t.plan(2);
+    t.plan(3);
     aggregateOsm(rewriteNegativeRefFilesPaths, null, function (err, xml) {
         t.error(err, 'Should not throw error.');
-        checkAllNegativeIDsAreUnique(t, xml);
+        var idHash = checkAllNegativeIDsAreUnique(t, xml);
+        checkAllNegativeRefsHaveCorrespondingId(t, xml, idHash);
     });
 });
 
@@ -89,9 +85,32 @@ function checkAllNegativeIDsAreUnique(t, xml) {
         // checking if id is already in hash
         if (idHash[idInt]) {
             t.fail('We found a duplicate negative ID: ' + idInt);
+            return;
         } else {
             idHash[idInt] = true;
         }
     }
-    t.pass('Check that all negative IDs unique passed.');
+    t.pass('All negative IDs are unique.');
+    return idHash;
+}
+
+/**
+ *
+ * @param t      - test callback object
+ * @param xml    - the xml string in question
+ * @param idHash - a hash with all the ids as keys and true as values
+ */
+function checkAllNegativeRefsHaveCorrespondingId(t, xml, idHash) {
+    const regex = /ref="-\d+"/gi;
+    const refAttrStrs = [];
+    var result;
+    while (result = regex.exec(xml)) {
+        var refAttrStr = result[0];
+        var refInt = parseInt(refAttrStr.split('ref="')[1]);
+        if (!idHash[refInt]) {
+            t.fail('We have a negative ref without a corresponding ID: ' + refInt);
+            return;
+        }
+    }
+    t.pass('All negative refs have a corresponding ID.');
 }

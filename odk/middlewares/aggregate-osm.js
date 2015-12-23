@@ -45,11 +45,15 @@ module.exports = function (files, filter, cb) {
                 var osmElement = osmElements[j];
                 // Check that the element is a node, way, or relation.
                 var elementName = osmElement.name();
-                if (elementName === 'node' || elementName === 'way' || elementName === 'relation') {
+                if (elementName === 'node') {
                     rewriteNegativeId(negIdRewriteHash, osmElement);
+                } else if (elementName === 'way' || elementName === 'relation') {
+                    rewriteNegativeId(negIdRewriteHash, osmElement);
+                    // Ways and relations might need their negative refs rewritten too.
                     rewriteNegativeRef(negIdRewriteHash, osmElement);
-                    mainOsmElement.addChild(osmElement);
+
                 }
+                mainOsmElement.addChild(osmElement);
             }
             ++filesCompleted;
             if (filesCompleted === numFiles) {
@@ -87,5 +91,17 @@ function rewriteNegativeId(negIdRewriteHash, osmElement) {
  * @param osmElement - the OSM XML Element we are processing
  */
 function rewriteNegativeRef(negIdRewriteHash, osmElement) {
-
+    const children = osmElement.childNodes();
+    for (var i = 0, len = children.length; i < len; i++) {
+        // A child can be a nd, member, or tag.
+        var child = children[i];
+        var refAttr = child.attr('ref');
+        if (!refAttr) continue;
+        var ref = parseInt(refAttr.value());
+        if (ref >= 0) continue;
+        var rewriteRef = negIdRewriteHash[ref];
+        if (typeof rewriteRef !== 'undefined' && rewriteRef !== null) {
+            refAttr.value(rewriteRef);
+        }
+    }
 }
