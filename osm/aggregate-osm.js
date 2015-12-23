@@ -1,6 +1,7 @@
 const fs = require('fs');
 const libxml = require('libxmljs');
 const appVersion = require('../package').version;
+const filterOsm = require('./filter-osm');
 
 /**
  * aggregate-osm.js
@@ -53,7 +54,9 @@ module.exports = function (files, filter, cb) {
                     rewriteNegativeRef(negIdRewriteHash, osmElement);
 
                 }
-                mainOsmElement.addChild(osmElement);
+                if (filterOsm(osmElement, filter)) {
+                    mainOsmElement.addChild(osmElement);
+                }
             }
             ++filesCompleted;
             if (filesCompleted === numFiles) {
