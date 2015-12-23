@@ -43,9 +43,13 @@ module.exports = function (files, filter, cb) {
             var osmElements = doc.root().childNodes();
             for (var j = 0, len = osmElements.length; j < len; j++) {
                 var osmElement = osmElements[j];
-                rewriteNegativeId(negIdRewriteHash, osmElement);
-                rewriteNegativeRef(negIdRewriteHash, osmElement);
-                mainOsmElement.addChild(osmElement);
+                // Check that the element is a node, way, or relation.
+                var elementName = osmElement.name();
+                if (elementName === 'node' || elementName === 'way' || elementName === 'relation') {
+                    rewriteNegativeId(negIdRewriteHash, osmElement);
+                    rewriteNegativeRef(negIdRewriteHash, osmElement);
+                    mainOsmElement.addChild(osmElement);
+                }
             }
             ++filesCompleted;
             if (filesCompleted === numFiles) {
@@ -66,6 +70,7 @@ module.exports = function (files, filter, cb) {
  */
 function rewriteNegativeId(negIdRewriteHash, osmElement) {
     var idAttr = osmElement.attr('id');
+    if (!idAttr) return;
     var id = parseInt(idAttr.value());
     if (id >= 0) return;
     negIdRewriteHash[id] = negIdRewriteHash.counter;
