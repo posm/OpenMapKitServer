@@ -4,7 +4,7 @@
   "description": "OpenMapKit Server is the lightweight server component of OpenMapKit that handles the collection and aggregation of OpenStreetMap and OpenDataKit data.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tape test/**/**/*.test.js | faucet"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
   "homepage": "https://github.com/AmericanRedCross/OpenMapKitServer#readme",
   "dependencies": {
     "express": "^4.13.3",
+    "libxmljs": "^0.16.1",
     "mkdirp": "^0.5.1",
     "multiparty": "^4.1.2",
     "openrosa-form-submission-middleware": "^1.0.4",
@@ -40,5 +41,9 @@
     "traverse": "^0.6.6",
     "xform-to-json": "^1.1.1",
     "xtend": "^4.0.1"
+  },
+  "devDependencies": {
+    "faucet": "0.0.1",
+    "tape": "^4.2.2"
   }
 }

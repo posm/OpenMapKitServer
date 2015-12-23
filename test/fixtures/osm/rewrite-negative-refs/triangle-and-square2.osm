@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6'>
+  <node id='-754' action='modify' visible='true' lat='66.8955227196' lon='-147.33743826058' />
+  <node id='-752' action='modify' visible='true' lat='66.89552243568' lon='-147.33737893185' />
+  <node id='-750' action='modify' visible='true' lat='66.89554145806' lon='-147.33737965537' />
+  <node id='-7' action='modify' visible='true' lat='66.89554145806' lon='-147.33743970762' />
+  <node id='-8' action='modify' visible='true' lat='66.89552697834' lon='-147.33753955353' />
+  <node id='-9' action='modify' visible='true' lat='66.89553294058' lon='-147.3374939717' />
+  <node id='-732' action='modify' visible='true' lat='66.89554230981' lon='-147.33755836507' />
+  <way id='-751' action='modify' visible='true'>
+    <nd ref='-7' />
+    <nd ref='-750' />
+    <nd ref='-752' />
+    <nd ref='-754' />
+    <nd ref='-7' />
+    <tag k='name' v='square2' />
+  </way>
+  <way id='-736' action='modify' visible='true'>
+    <nd ref='-732' />
+    <nd ref='-9' />
+    <nd ref='-8' />
+    <nd ref='-732' />
+    <tag k='name' v='triangle2' />
+  </way>
+</osm>

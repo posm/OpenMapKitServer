@@ -21,7 +21,9 @@ module.exports = function (req, res, next) {
 
     // All of the submission dirs in the form directory
     fs.readdir(dir, function (err, submissionDirs) {
-        if (err) res.status(500).json(err);
+        if (err) {
+            res.status(500).json(err);
+        }
         const len = submissionDirs.length;
         if (submissionDirs.length === 0) {
             res.status(200).json([]);
