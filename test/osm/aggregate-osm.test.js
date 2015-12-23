@@ -1,6 +1,6 @@
 const test = require('tape');
 const fs = require('fs');
-const aggregateOsm = require('../../../odk/middlewares/aggregate-osm');
+const aggregateOsm = require('../../osm/aggregate-osm');
 
 
 /**

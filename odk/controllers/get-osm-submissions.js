@@ -1,6 +1,6 @@
 const fs = require('fs');
 const settings = require('../../settings');
-const aggregateOsm = require('../middlewares/aggregate-osm');
+const aggregateOsm = require('../../osm/aggregate-osm');
 
 /**
  * Aggregates together all of the OSM submissions

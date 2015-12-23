@@ -1,6 +1,6 @@
 const fs = require('fs');
 const libxml = require('libxmljs');
-const appVersion = require('../../package').version;
+const appVersion = require('../package').version;
 
 /**
  * aggregate-osm.js
