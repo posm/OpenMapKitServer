@@ -35,37 +35,49 @@ module.exports = function (files, filter, cb) {
     };
 
     for (var i = 0; i < numFiles; i++) {
-        fs.readFile(files[i], 'utf-8', function (err, xml) {
-            if (err) {
-                cb(err);
+        /**
+         * The file filter checks the birthtime timestamp.
+         * If we want the file, we get a bool of true in
+         * the callback.
+         */
+        filterOsm.file(files[i], filter, function (filePath, bool) {
+            if (!bool) {
+                ++filesCompleted;
+                if (filesCompleted === numFiles) {
+                    cb(null, mainXmlDoc.toString());
+                }
                 return;
             }
-            var doc = libxml.parseXmlString(xml);
-            var osmElements = doc.root().childNodes();
-            for (var j = 0, len = osmElements.length; j < len; j++) {
-                var osmElement = osmElements[j];
-                // Check that the element is a node, way, or relation.
-                var elementName = osmElement.name();
-                if (elementName === 'node') {
-                    rewriteNegativeId(negIdRewriteHash, osmElement);
-                } else if (elementName === 'way' || elementName === 'relation') {
-                    rewriteNegativeId(negIdRewriteHash, osmElement);
-                    // Ways and relations might need their negative refs rewritten too.
-                    rewriteNegativeRef(negIdRewriteHash, osmElement);
-
+            fs.readFile(filePath, 'utf-8', function (err, xml) {
+                if (err) {
+                    cb(err);
+                    return;
                 }
-                if (filterOsm(osmElement, filter)) {
+                var doc = libxml.parseXmlString(xml);
+                var rootEl = doc.root();
+
+                var osmElements = rootEl.childNodes();
+                for (var j = 0, len = osmElements.length; j < len; j++) {
+                    var osmElement = osmElements[j];
+                    // Check that the element is a node, way, or relation.
+                    var elementName = osmElement.name();
+                    if (elementName === 'node') {
+                        rewriteNegativeId(negIdRewriteHash, osmElement);
+                    } else if (elementName === 'way' || elementName === 'relation') {
+                        rewriteNegativeId(negIdRewriteHash, osmElement);
+                        // Ways and relations might need their negative refs rewritten too.
+                        rewriteNegativeRef(negIdRewriteHash, osmElement);
+
+                    }
                     mainOsmElement.addChild(osmElement);
                 }
-            }
-            ++filesCompleted;
-            if (filesCompleted === numFiles) {
-                cb(null, mainXmlDoc.toString());
-            }
+                ++filesCompleted;
+                if (filesCompleted === numFiles) {
+                    cb(null, mainXmlDoc.toString());
+                }
+            });
         });
     }
-
-
 };
 
 /**
@@ -108,3 +120,7 @@ function rewriteNegativeRef(negIdRewriteHash, osmElement) {
         }
     }
 }
+
+//function filterUser(filter, rootXmlEl) {
+//    if (typeof filter !== 'undefined)
+//}

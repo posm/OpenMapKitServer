@@ -91,7 +91,8 @@ function findOsmFilesInDir(dirStat, osmFiles, req, res) {
  * @param res       - the http response
  */
 function aggregate(osmFiles, req, res) {
-    aggregateOsm(osmFiles, null, function (err, osmXml) {
+    //We filter by the query parameters of the request
+    aggregateOsm(osmFiles, req.query, function (err, osmXml) {
         if (err) {
             res.status(500).json({
                 status: 500,
