@@ -55,26 +55,34 @@ module.exports = function (files, filter, cb) {
                 }
                 var doc = libxml.parseXmlString(xml);
                 var rootEl = doc.root();
-
-                var osmElements = rootEl.childNodes();
-                for (var j = 0, len = osmElements.length; j < len; j++) {
-                    var osmElement = osmElements[j];
-                    // Check that the element is a node, way, or relation.
-                    var elementName = osmElement.name();
-                    if (elementName === 'node') {
-                        rewriteNegativeId(negIdRewriteHash, osmElement);
-                    } else if (elementName === 'way' || elementName === 'relation') {
-                        rewriteNegativeId(negIdRewriteHash, osmElement);
-                        // Ways and relations might need their negative refs rewritten too.
-                        rewriteNegativeRef(negIdRewriteHash, osmElement);
-
+                filterOsm.user(rootEl, filter, function (rootEl, bool) {
+                    if (!bool) {
+                        ++filesCompleted;
+                        if (filesCompleted === numFiles) {
+                            cb(null, mainXmlDoc.toString());
+                        }
+                        return;
                     }
-                    mainOsmElement.addChild(osmElement);
-                }
-                ++filesCompleted;
-                if (filesCompleted === numFiles) {
-                    cb(null, mainXmlDoc.toString());
-                }
+                    var osmElements = rootEl.childNodes();
+                    for (var j = 0, len = osmElements.length; j < len; j++) {
+                        var osmElement = osmElements[j];
+                        // Check that the element is a node, way, or relation.
+                        var elementName = osmElement.name();
+                        if (elementName === 'node') {
+                            rewriteNegativeId(negIdRewriteHash, osmElement);
+                        } else if (elementName === 'way' || elementName === 'relation') {
+                            rewriteNegativeId(negIdRewriteHash, osmElement);
+                            // Ways and relations might need their negative refs rewritten too.
+                            rewriteNegativeRef(negIdRewriteHash, osmElement);
+
+                        }
+                        mainOsmElement.addChild(osmElement);
+                    }
+                    ++filesCompleted;
+                    if (filesCompleted === numFiles) {
+                        cb(null, mainXmlDoc.toString());
+                    }
+                });
             });
         });
     }
@@ -120,7 +128,3 @@ function rewriteNegativeRef(negIdRewriteHash, osmElement) {
         }
     }
 }
-
-//function filterUser(filter, rootXmlEl) {
-//    if (typeof filter !== 'undefined)
-//}

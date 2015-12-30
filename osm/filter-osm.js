@@ -2,7 +2,21 @@ const fs = require('fs');
 
 const filter = module.exports = {};
 
+/**
+ * Gets stats on a file, and filters it based on `submitTimeStart`
+ * and `submitTimeEnd` filter parameters.
+ *
+ * @param filePath - Path to OSM file on the file system
+ * @param filterObj - Parameters to filter by
+ * @param cb - Callback object with `filePath` and `bool` value
+ */
 filter.file = function (filePath, filterObj, cb) {
+    // if there is no filter
+    if (typeof filterObj !== 'object' || filterObj === null) {
+        cb(filePath, true);
+        return;
+    }
+
     fs.stat(filePath, function (err, stats) {
         // lets just let it pass through in err state
         if (err) {
@@ -69,6 +83,7 @@ filter.file = function (filePath, filterObj, cb) {
     });
 };
 
-filter.user = function () {
 
+filter.user = function (rootOsmElement, filterObj, cb) {
+    cb(rootOsmElement, true);
 };
