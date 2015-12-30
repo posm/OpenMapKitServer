@@ -85,5 +85,25 @@ filter.file = function (filePath, filterObj, cb) {
 
 
 filter.user = function (rootOsmElement, filterObj, cb) {
+    // if there is no filter
+    if (typeof filterObj !== 'object' || filterObj === null) {
+        cb(rootOsmElement, true);
+        return;
+    }
+    if (typeof filterObj.user === 'string') {
+        var userAttr = rootOsmElement.attr('user');
+        // userAttr is not an attribute for the OSM edit, we dont want it
+        if (userAttr === null) {
+            cb(rootOsmElement, false);
+            return;
+        }
+        var user = userAttr.value();
+        if (user.toLowerCase() != filterObj.user.toLowerCase()) {
+            cb(rootOsmElement, false);
+            return;
+        }
+    }
+
+    // no user filter, pass through
     cb(rootOsmElement, true);
 };
