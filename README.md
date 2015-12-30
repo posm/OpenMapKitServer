@@ -66,3 +66,5 @@ version, use [node version manager](https://github.com/creationix/nvm).
 nvm install
 nvm use
 ```
+
+[![ZenHub] (https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png)] (https://zenhub.io)

@@ -39,7 +39,7 @@ module.exports = function (req, res, next) {
                 }
                 continue;
             }
-            const dataFile = dir + '/' + submissionDir + '/data.json';
+            var dataFile = dir + '/' + submissionDir + '/data.json';
             fs.readFile(dataFile, function (err, data) {
                 ++count;
                 if (err) {
