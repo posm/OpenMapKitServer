@@ -84,6 +84,14 @@ filter.file = function (filePath, filterObj, cb) {
 };
 
 
+/**
+ * Filters JOSM OSM Edit files by the user attribute OMK Android
+ * puts in the root OSM element.
+ *
+ * @param rootOsmElement - the root OSM object
+ * @param filterObj - we want to have a user filter specified in the filter object
+ * @param cb - Callback object with the `rootOsmElement` and `bool` value
+ */
 filter.user = function (rootOsmElement, filterObj, cb) {
     // if there is no filter
     if (typeof filterObj !== 'object' || filterObj === null) {
