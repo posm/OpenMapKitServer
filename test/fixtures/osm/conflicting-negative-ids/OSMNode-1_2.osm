@@ -1,1 +1,1 @@
-<?xml version='1.0' encoding='UTF-8' ?><osm version="0.6" generator="OpenMapKit 0.13" user="theoutpost"><node id="-1" action="modify" lat="38.65209230265988" lon="-121.36828459137037"><tag k="name" v="test poi" /></node></osm>
+<?xml version='1.0' encoding='UTF-8' ?><osm version="0.6" generator="OpenMapKit 0.13" user="AnotherUser"><node id="-1" action="modify" lat="38.65209230265988" lon="-121.36828459137037"><tag k="name" v="test poi" /></node></osm>
