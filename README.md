@@ -19,7 +19,7 @@ This is a REST API that handles all of the ODK business logic, including communi
 as well as serving and ingesting ODK XForm data.
 
 [__public__](https://github.com/AmericanRedCross/OpenMapKitServer/tree/master/public) is the public directory where 
-you store data and static assets. You can set an alternate public directory in `settings.js`.
+you store data and static assets. You can set an alternate public directory in `settings.js`. Front-end UI will be built as [micro-apps](https://github.com/AmericanRedCross/OpenMapKitServer/tree/master/public/export-osm) that live within directories in the public folder.
 
 [__util__](https://github.com/AmericanRedCross/OpenMapKitServer/tree/master/util) has utility functions 
 useful to OpenMapKit Server as a whole.
