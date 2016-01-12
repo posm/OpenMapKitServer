@@ -39,6 +39,7 @@ module.exports = function (req, res, next) {
                 var fileUrls = [];
                 for (var i = 0, length = deploymentFiles.length; i < length; i++) {
                     var deploymentFile = deploymentFiles[i];
+                    if (deploymentFile === 'manifest.json') continue;
                     var fileUrl = Url.publicDirFileUrl(req, 'deployments/' + deploymentDir, deploymentFile);
                     fileUrls.push(fileUrl);
                 }
