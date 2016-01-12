@@ -69,6 +69,14 @@ module.exports = function (req, res, next) {
 function findOsmFilesInDir(dirStat, osmFiles, req, res) {
     var fullPath = dirStat.fullPath;
     fs.readdir(dirStat.fullPath, function (err, files) {
+        if (err) {
+            res.status(500).json({
+                status: 500,
+                msg: 'There was a problem with reading the OSM files in the submissions directory.',
+                err: err
+            });
+            return;
+        }
         ++dirStat.count;
         for (var j = 0, len = files.length; j < len; j++) {
             var file = files[j];
