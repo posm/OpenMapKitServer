@@ -68,8 +68,10 @@ module.exports = function (req, res, next) {
  */
 function findOsmFilesInDir(dirStat, osmFiles, req, res) {
     var fullPath = dirStat.fullPath;
-    fs.readdir(dirStat.fullPath, function (err, files) {
+    fs.readdir(fullPath, function (err, files) {
         if (err) {
+            // trying to open a file instead of a directory, just continue on...
+            if (err.errno === -20) return;
             res.status(500).json({
                 status: 500,
                 msg: 'There was a problem with reading the OSM files in the submissions directory.',
