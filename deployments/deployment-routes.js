@@ -1,6 +1,8 @@
 const router = require('express').Router({ mergeParams: true });
-const getDeployments = require('./controllers/get-deployments');
+//const getDeployments = require('./controllers/get-deployments');
 const getDeployment = require('./controllers/get-deployment');
+
+const getDeployments = require('./controllers/get-deployments-refactor');
 
 /**
  * Retrieve the list of deployment areas of interest.

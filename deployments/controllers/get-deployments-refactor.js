@@ -5,9 +5,26 @@ const settings = require('../../settings');
 
 var readDirDeferred = function(){};
 module.exports = function (req, res, next) {
-    const dir = settings.publicDir + '/deployments';
+    const dir = settings.publicDir + '/deployments2';
     const deployments = [];
-    fs.readdir(dir, function (err, deploymentDirs) {
+
+    var deploymentDirs;
+
+    try {
+        deploymentDirs = fs.readdirSync(dir);
+
+        var stop;
+    } catch (err) {
+        if (err.errno === -2) {
+            res.status(200).json([]);
+            return;
+        }
+        res.status(500).json(err);
+        return;
+    }
+
+
+/*    fs.readdir(dir, function (err, deploymentDirs) {
         if (err) {
             // if no deployments directory yet...
             if (err.errno === -2) {
@@ -69,7 +86,7 @@ module.exports = function (req, res, next) {
                 });
             });
         });
-    });
+    });*/
 };
 
 function deploymentsSorted(deployments) {
