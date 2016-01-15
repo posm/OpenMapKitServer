@@ -47,6 +47,7 @@ const readDirDeferred = function(dirPath){
 
 };
 
+const inspectDir
 /**
  *
  * @param dirName
@@ -55,6 +56,8 @@ const readDirDeferred = function(dirPath){
  * returns object with properties describing contents of a deployment directory
  */
 const digestDeploymentDir = function(req, dirName, contents){
+
+    var deferred = Q.defer();
 
     // If no manifest file, message this deployment directory as invalid
     if (contents.indexOf('manifest.json') === -1) {
@@ -70,32 +73,37 @@ const digestDeploymentDir = function(req, dirName, contents){
         listingUrl: Url.publicDirFileUrl(req, deploymentParentDir, dirName)
     };
 
-    // Loop through directory items
-    contents.forEach(function (item) {
+    Q.all(contents.map(function(dirItem){
+        return statDeferred(deploymentParentDirPath + '/' + dirName + '/' + dirItem);
+        }))
+        .then(function(results){
 
-        // Get item stats
-        var stat = fs.statSync(deploymentParentDirPath + '/' + dirName + '/' + item);
+            results.forEach(function(stat, index){
 
-        // We're not expecting or interested in found directories here
-        if (stat.isDirectory()) return;
+                // Get the file extentions
+                var fileExt = path.extname(contents[index])
 
-        // Get the file extentions
-        var fileExt = path.extname(item).substring(1);
+                // Check the file extension, and if its a match, add to deploy object
+                if ([".osm", ".mbtiles"].indexOf(fileExt) > -1) {
 
-        // Check the file extension, and if its a match, add to deploy object
-        if (["osm", "mbtiles"].indexOf(fileExt) > -1) {
+                    deploymentObj.files[fileExt.substring(1)].push({
+                        name: contents[index],
+                        downloadUrl: Url.publicDirFileUrl(req, 'deployments/' + dirName, contents[index]),
+                        size: stat.size,
+                        last_modified: stat.mtime
 
-            deploymentObj.files[fileExt].push({
-                name: item,
-                downloadUrl: Url.publicDirFileUrl(req, 'deployments/' + dirName, item),
-                size: stat.size,
-                last_modified: stat.mtime
-
+                    });
+                }
             });
-        }
-    });
 
-    return deploymentObj;
+            deferred.resolve(deploymentObj);
+        })
+        .catch(function(err){
+            deferred.reject(err);
+        })
+        .done();
+
+    return deferred.promise;
 };
 
 module.exports.find = function(req, res, next) {
@@ -104,53 +112,57 @@ module.exports.find = function(req, res, next) {
     var deploymentDirContents;
     var deploymentDirs;
 
-    // Use sync function to read the "deployments" directory, thus avoiding nested callback at this stage
-    try {
-        deploymentDirContents = fs.readdirSync(deploymentParentDirPath);
-    } catch (err) {
-        if (err.errno === -2) {
+    fs.readdir(deploymentParentDirPath, function(err, deploymentDirContents){
+        if(err) {
+            if (err.errno === -2) {
+                res.status(200).json([]);
+                return;
+            }
+            next(err);
+            return;
+        }
+
+        // Return empty array if deployments directory is empty
+        if (deploymentDirContents.length === 0) {
             res.status(200).json([]);
             return;
         }
-        next(err);
-        return;
-    }
 
-    // Return empty array if deployments directory is empty
-    const len = deploymentDirContents.length;
-    if (deploymentDirContents.length === 0) {
-        res.status(200).json([]);
-        return;
-    }
-
-    // Get stats on contents of the deployment directory
-    Q.all(deploymentDirContents.map(function (dirItem) {
-            return statDeferred(deploymentParentDirPath + '/' + dirItem);
-        }))
-        .then(function (results) {
-
-            // remove items that are not directories
-            deploymentDirs = deploymentDirContents.filter(function (dirItem, index) {
-                return results[index].isDirectory();
-            });
-
-            // Read directory contents
-            return Q.all(deploymentDirs.map(function (dirName) {
-                return readDirDeferred(deploymentParentDirPath + '/' + dirName)
+        // Get stats on contents of the deployment directory
+        Q.all(deploymentDirContents.map(function (dirItem) {
+                return statDeferred(deploymentParentDirPath + '/' + dirItem);
             }))
-        })
-        .then(function (results) {
+            .then(function (results) {
 
-            // Loop thru results of each deployment directory read
-            results.forEach(function (directoryContents, index) {
-                deployments.push(digestDeploymentDir(req, deploymentDirs[index], directoryContents));
+                // remove items that are not directories
+                deploymentDirs = deploymentDirContents.filter(function (dirItem, index) {
+                    return results[index].isDirectory();
+                });
+
+                // Read directory contents
+                return Q.all(deploymentDirs.map(function (dirName) {
+                    return readDirDeferred(deploymentParentDirPath + '/' + dirName)
+                }))
             })
-            res.status(200).json(deploymentsSorted(deployments));
-        })
-        .catch(function (err) {
-            next(err);
-        })
-        .done();
+            .then(function (results) {
+
+                return Q.all(results.map(function (directoryContents, index) {
+                    return digestDeploymentDir(req, deploymentDirs[index], directoryContents);
+                }));
+
+
+            })
+            .then(function(deployments){
+                res.status(200).json(deploymentsSorted(deployments));
+            })
+            .catch(function (err) {
+                next(err);
+            })
+            .done();
+
+    });
+
+
 };
 
 module.exports.findOne = function(req, res, next) {
