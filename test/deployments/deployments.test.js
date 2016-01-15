@@ -59,7 +59,7 @@ test('/deployments/:deployment endpoint exists and returns correct response cont
             const response = res.body;
 
             t.equal(typeof response === "object", true, "Response is an Object.");
-            
+
             ["name", "files", "url", "listingUrl"].forEach(function(property){
                 t.equal(response.hasOwnProperty(property), true, 'Has "' + property + '" property.');
             });
