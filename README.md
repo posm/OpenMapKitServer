@@ -48,6 +48,11 @@ On a Debian or Ubuntu machine:
 ```
 sudo apt-get install python-pip
 ```
+If you're just installing OMK Server and not building POSM install git
+
+```
+sudo apt-get install git
+```
 
 Install dependencies, start the server.
 
