@@ -1,5 +1,9 @@
+'use strict';
+
+var settings;
+
 try {
-    const settings = require('./settings');
+    settings = require('./settings');
 } catch (e) {
     console.error("You must have a settings.js file. Take a look at settings.js.example. https://github.com/AmericanRedCross/OpenMapKitServer/blob/master/settings.js.example");
     process.exit();
@@ -30,10 +34,7 @@ app.use('/public', directory(settings.publicDir));
 // Handle errors
 app.use(error);
 
-const port = process.env.PORT || settings.port;
-app.listen(port);
-console.log('OpenMapKit Server is listening on port %s.', port);
-
+module.exports = app;
 
 function info(req, res) {
     res.status(200).json({

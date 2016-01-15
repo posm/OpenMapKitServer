@@ -4,7 +4,7 @@ const Q = require('q');
 const Url = require('../../util//url');
 const settings = require('../../settings');
 const deploymentParentDir = 'deployments' ;
-const deploymentParentDirPath = settings.publicDir + '/' + deploymentParentDir;
+var deploymentParentDirPath = settings.publicDir + '/' + deploymentParentDir;
 
 /**
  *
@@ -47,7 +47,6 @@ const readDirDeferred = function(dirPath){
 
 };
 
-const inspectDir
 /**
  *
  * @param dirName
@@ -106,8 +105,18 @@ const digestDeploymentDir = function(req, dirName, contents){
     return deferred.promise;
 };
 
-module.exports.find = function(req, res, next) {
+/**
+ * Override the default parent directory of the deployments data directory.  This allows us to test these endpoints
+ * with fixtures.
+ *
+ * @param parentDir
+ * @private
+ */
+module.exports._setParentDirectory = function(parentDir){
+    deploymentParentDirPath = parentDir + '/' + deploymentParentDir;
+};
 
+module.exports.find = function(req, res, next) {
     const deployments = [];
     var deploymentDirContents;
     var deploymentDirs;
