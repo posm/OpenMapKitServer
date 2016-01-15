@@ -53,9 +53,10 @@ If you're just installing OMK Server and not building POSM install git
 ```
 sudo apt-get install git
 ```
-OMK Server is a nodejs app so you'll need node.
+OMK Server is a nodejs app so you'll need node version 4.x.
 
 ```
+curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 sudo apt-get install nodejs
 ```
 
