@@ -146,11 +146,10 @@ module.exports.find = function(req, res, next) {
             })
             .then(function (results) {
 
+                // Digest the contents of the deployment directories
                 return Q.all(results.map(function (directoryContents, index) {
                     return digestDeploymentDir(req, deploymentDirs[index], directoryContents);
                 }));
-
-
             })
             .then(function(deployments){
                 res.status(200).json(deploymentsSorted(deployments));
@@ -159,32 +158,34 @@ module.exports.find = function(req, res, next) {
                 next(err);
             })
             .done();
-
     });
-
-
 };
 
 module.exports.findOne = function(req, res, next) {
 
     const deploymentDir = req.params.deployment;
 
-    fs.stat(deploymentParentDirPath + '/' + deploymentDir, function(err){
+    // Make sure it exists
+    statDeferred(deploymentParentDirPath + '/' + deploymentDir)
+        .then(function(stat){
 
-        if(err) {
+            // read the directory contents
+            return readDirDeferred(deploymentParentDirPath + '/' + deploymentDir);
+        })
+        .then(function(contents){
+
+            // Digest the contents of the deployment directories
+            return digestDeploymentDir(req,deploymentDir, contents );
+        })
+        .then(function(deployment){
+
+            res.status(200).json(deployment);
+        })
+        .catch(function(err){
             next(err);
-            return;
-        }
+        })
+        .done();
 
-        fs.readdir(deploymentParentDirPath + '/' + deploymentDir, function(err, contents){
-
-            if(err) {
-                next(err);
-                return;
-            }
-            res.status(200).json(digestDeploymentDir(req, deploymentDir, contents));
-        });
-    });
 };
 
 function deploymentsSorted(deployments) {
