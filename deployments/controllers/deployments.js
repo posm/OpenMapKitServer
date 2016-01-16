@@ -116,7 +116,7 @@ module.exports._setParentDirectory = function(parentDir){
     deploymentParentDirPath = parentDir + '/' + deploymentParentDir;
 };
 
-module.exports.find = function(req, res, next) {
+module.exports.getAll = function(req, res, next) {
     const deployments = [];
     var deploymentDirContents;
     var deploymentDirs;
@@ -170,7 +170,7 @@ module.exports.find = function(req, res, next) {
     });
 };
 
-module.exports.findOne = function(req, res, next) {
+module.exports.get = function(req, res, next) {
 
     const deploymentDir = req.params.deployment;
 
