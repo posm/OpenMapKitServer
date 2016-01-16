@@ -2,7 +2,7 @@
 
 const test = require('tape');
 const request = require('supertest');
-const app = require('../../server');
+const app = require('../../index');
 const getDeployments = require('../../deployments/controllers/deployments');
 
 getDeployments._setParentDirectory(__dirname + '/../fixtures');
