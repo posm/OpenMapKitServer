@@ -15,6 +15,7 @@ module.exports = function (req, res, next) {
             msg: 'You must specify a parameter for the formName in this end point.',
             path: '/odk/submissions/:formName.json'
         });
+        return;
     }
     const dir = settings.publicDir + '/submissions/' + formName;
     const aggregate = [];
@@ -22,7 +23,21 @@ module.exports = function (req, res, next) {
     // All of the submission dirs in the form directory
     fs.readdir(dir, function (err, submissionDirs) {
         if (err) {
-            res.status(500).json(err);
+            if (err.errno === -2) {
+                // trying to open a directory that is not there.
+                res.status(404).json({
+                    status: 404,
+                    msg: 'You are trying to aggregate the ODK submissions for a form that has no submissions. Please submit at least one survey to see data. Also, check to see if you spelled the form name correctly. Form name: ' + formName,
+                    err: err
+                });
+                return;
+            }
+            res.status(500).json({
+                status: 500,
+                msg: 'Problem reading submissions directory.',
+                err: err
+            });
+            return;
         }
         const len = submissionDirs.length;
         if (submissionDirs.length === 0) {
@@ -43,7 +58,11 @@ module.exports = function (req, res, next) {
             fs.readFile(dataFile, function (err, data) {
                 ++count;
                 if (err) {
-                    res.status(500).json(err);
+                    res.status(500).json({
+                        status: 500,
+                        msg: 'Problem reading data.json file in submission directory. dataFile: ' + dataFile,
+                        err: err
+                    });
                     return;
                 }
                 const dataObj = JSON.parse(data);

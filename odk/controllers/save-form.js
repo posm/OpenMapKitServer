@@ -17,6 +17,7 @@ module.exports = function (req, res, next) {
         if (err) {
             console.error(err);
             res.status(500).json({status: 500, err: err});
+            return;
         }
         fs.writeFile(xmlFileName, xml, function(err) {
             if (err) console.error(err);

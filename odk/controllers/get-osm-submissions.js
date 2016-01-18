@@ -23,11 +23,21 @@ module.exports = function (req, res, next) {
     // All of the submission dirs in the form directory
     fs.readdir(dir, function (err, submissionDirs) {
         if (err) {
+            if (err.errno === -2) {
+                // trying to open a directory that is not there.
+                res.status(404).json({
+                    status: 404,
+                    msg: 'You are trying to receive aggregated OSM submissions from a form that does not exist or has no submissions. You may have misspelled the name of the form you are looking for. The name that you specified is: ' + formName,
+                    err: err
+                });
+                return;
+            }
             res.status(500).json({
                 status: 500,
                 msg: 'Problem reading submissionDirs.',
                 err: err
             });
+            return;
         }
         const len = submissionDirs.length;
         if (len === 0) {

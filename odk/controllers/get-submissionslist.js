@@ -20,7 +20,11 @@ module.exports = function (req, res, next) {
                 return;
             }
             // This is some other error state...
-            res.status(500).json(err);
+            res.status(500).json({
+                status: 500,
+                msg: 'There was a problem reading the submissions directory. dir: ' + dir,
+                err: err
+            });
             return;
         }
         for (var i = 0, len = files.length; i < len; i++) {
