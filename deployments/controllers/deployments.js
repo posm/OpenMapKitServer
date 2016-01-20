@@ -87,9 +87,9 @@ const digestDeploymentDir = function(req, dirName, contents){
 
                     deploymentObj.files[fileExt.substring(1)].push({
                         name: contents[index],
-                        downloadUrl: Url.publicDirFileUrl(req, 'deployments/' + dirName, contents[index]),
+                        url: Url.publicDirFileUrl(req, 'deployments/' + dirName, contents[index]),
                         size: stat.size,
-                        last_modified: stat.mtime
+                        lastModified: stat.mtime
 
                     });
                 }
