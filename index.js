@@ -11,11 +11,15 @@ try {
 
 const express = require('express');
 const directory = require('serve-index');
+const cors = require('cors');
 const odk = require('./odk/odk-routes');
 const deployments = require('./deployments/deployment-routes');
 const error = require('./odk/controllers/error-handler');
 const pkg = require('./package');
 const app = express();
+
+// Enable CORS always.
+app.use(cors());
 
 // Basic Info
 app.get('/', info);

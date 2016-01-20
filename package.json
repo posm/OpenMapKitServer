@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/AmericanRedCross/OpenMapKitServer#readme",
   "dependencies": {
+    "cors": "^2.7.1",
     "express": "^4.13.3",
     "libxmljs": "^0.16.1",
     "mkdirp": "^0.5.1",
