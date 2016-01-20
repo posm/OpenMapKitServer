@@ -21,7 +21,7 @@ test('/deployments endpoint exists and returns correct response content', functi
 
             response.forEach(function(deployment){
 
-                ["name", "files", "url", "listingUrl"].forEach(function(property){
+                ["name", "files", "url", "listingUrl", "manifest"].forEach(function(property){
                     t.equal(deployment.hasOwnProperty(property), true, 'Has "' + property + '" property.');
                 });
 
@@ -32,13 +32,13 @@ test('/deployments endpoint exists and returns correct response content', functi
                 t.equal(deployment.files.mbtiles instanceof Array, true, 'Has "files.mbtiles" is an Array.');
 
                 deployment.files.osm.forEach(function(file){
-                    ["name", "downloadUrl", "size", "last_modified"].forEach(function(property){
+                    ["name", "url", "size", "lastModified"].forEach(function(property){
                         t.equal(file.hasOwnProperty(property), true, 'files.osm item has "' + property + '" property.');
                     });
                 });
 
                 deployment.files.mbtiles.forEach(function(file){
-                    ["name", "downloadUrl", "size", "last_modified"].forEach(function(property){
+                    ["name", "url", "size", "lastModified"].forEach(function(property){
                         t.equal(file.hasOwnProperty(property), true, 'files.mbtiles item has "' + property + '" property.');
                     });
                 });
@@ -60,7 +60,7 @@ test('/deployments/:deployment endpoint exists and returns correct response cont
 
             t.equal(typeof response === "object", true, "Response is an Object.");
 
-            ["name", "files", "url", "listingUrl"].forEach(function(property){
+            ["name", "files", "url", "listingUrl", "manifest"].forEach(function(property){
                 t.equal(response.hasOwnProperty(property), true, 'Has "' + property + '" property.');
             });
 
@@ -71,13 +71,13 @@ test('/deployments/:deployment endpoint exists and returns correct response cont
             t.equal(response.files.mbtiles instanceof Array, true, 'Has "files.mbtiles" is an Array.');
 
             response.files.osm.forEach(function(file){
-                ["name", "downloadUrl", "size", "last_modified"].forEach(function(property){
+                ["name", "url", "size", "lastModified"].forEach(function(property){
                     t.equal(file.hasOwnProperty(property), true, 'files.osm item has "' + property + '" property.');
                 });
             });
 
             response.files.mbtiles.forEach(function(file){
-                ["name", "downloadUrl", "size", "last_modified"].forEach(function(property){
+                ["name", "url", "size", "lastModified"].forEach(function(property){
                     t.equal(file.hasOwnProperty(property), true, 'files.mbtiles item has "' + property + '" property.');
                 });
             });

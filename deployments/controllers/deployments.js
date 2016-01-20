@@ -47,6 +47,22 @@ const readDirDeferred = function(dirPath){
 
 };
 
+
+const readFileDeferred = function(filePath){
+
+    const deferred = Q.defer();
+
+    fs.readFile(filePath, function(err, stats){
+
+        if(err)
+            deferred.reject(err);
+
+        deferred.resolve(stats);
+    });
+
+    return deferred.promise;
+};
+
 /**
  *
  * @param dirName
@@ -72,9 +88,14 @@ const digestDeploymentDir = function(req, dirName, contents){
         listingUrl: Url.publicDirFileUrl(req, deploymentParentDir, dirName)
     };
 
-    Q.all(contents.map(function(dirItem){
-        return statDeferred(deploymentParentDirPath + '/' + dirName + '/' + dirItem);
-        }))
+    readFileDeferred(deploymentParentDirPath + '/' + dirName + '/manifest.json')
+        .then(function(manifest){
+            deploymentObj.manifest = JSON.parse(manifest);
+
+            return  Q.all(contents.map(function(dirItem){
+                return statDeferred(deploymentParentDirPath + '/' + dirName + '/' + dirItem);
+            }));
+        })
         .then(function(results){
 
             results.forEach(function(stat, index){
