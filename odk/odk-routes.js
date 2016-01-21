@@ -1,6 +1,6 @@
 const router = require('express').Router({ mergeParams: true });
-const FormSubmissionMiddleware = require('openrosa-form-submission-middleware');
-const OpenRosaHeaders = require('openrosa-request-middleware');
+const FormSubmissionMiddleware = require('./middlewares/openrosa-form-submission-middleware');
+const OpenRosaHeaders = require('./middlewares/openrosa-request-middleware');
 
 const ProcessSubmission = require('./middlewares/process-submission');
 const SaveMedia = require('./middlewares/save-media');
