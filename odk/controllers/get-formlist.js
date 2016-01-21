@@ -1,3 +1,5 @@
+const xml2js = require('xml2js');
+const parser = new xml2js.Parser({explicitArray: false, attrkey: "attributes"});
 const createFormList = require('openrosa-formlist');
 const getFormUrls = require('../helpers/get-form-urls');
 
@@ -13,6 +15,9 @@ module.exports = function (req, res, next) {
         baseUrl: req.protocol + '://' + req.headers.host + '/public/forms'
     };
 
+    // Look for "json" query param
+    var json = req.query.json || false;
+
     getFormUrls(options, function (err, formUrls) {
         if (err) return next(err);
         var formListOptions = {
@@ -20,8 +25,17 @@ module.exports = function (req, res, next) {
         };
         createFormList(formUrls, formListOptions, function(err, xml) {
             if (err) return next(err);
-            res.set('content-type', 'text/xml; charset=utf-8');
-            res.status(200).send(xml);
+
+            // Default is XML, but JSON is an option
+            if(json) {
+                parser.parseString(xml, function (err, result) {
+                    res.status(200).json(result);
+                });
+
+            } else {
+                res.set('content-type', 'text/xml; charset=utf-8');
+                res.status(200).send(xml);
+            }
         });
     });
 };
