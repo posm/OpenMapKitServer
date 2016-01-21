@@ -25,11 +25,15 @@ app.use(cors());
 app.get('/', info);
 app.get('/info', info);
 
+// Open Data Kit
+//
+// It's better to stay on top level of routes to
+// prevent the user from having to add a prefix in ODK Collect
+// server path.
+app.use('/', odk);
+
 // Deployments
 app.use('/deployments', deployments);
-
-// Open Data Kit
-app.use('/odk', odk);
 
 // Public Data & Static Assets
 app.use('/public', express.static(settings.publicDir));
