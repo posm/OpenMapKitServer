@@ -29,7 +29,11 @@ module.exports = function (req, res, next) {
             // Default is XML, but JSON is an option
             if(json) {
                 parser.parseString(xml, function (err, result) {
-                    res.status(200).json(result);
+                    if (result === undefined) {
+                        res.status(200).json(null);
+                    } else {
+                        res.status(200).json(result);
+                    }
                 });
 
             } else {
