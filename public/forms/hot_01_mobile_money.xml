@@ -1,0 +1,314 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>01 Mobile Money Agent</h:title>
+    <model>
+      <instance>
+        <hot_01_mobile_money id="01_mobile_money">
+          <start/>
+          <today/>
+          <deviceid/>
+          <title/>
+          <image/>
+          <osm_mobile_money/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </hot_01_mobile_money>
+      </instance>
+      <bind jr:preload="timestamp" jr:preloadParams="start" nodeset="/hot_01_mobile_money/start" type="dateTime"/>
+      <bind jr:preload="date" jr:preloadParams="today" nodeset="/hot_01_mobile_money/today" type="date"/>
+      <bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/hot_01_mobile_money/deviceid" type="string"/>
+      <bind nodeset="/hot_01_mobile_money/title" readonly="true()" type="string"/>
+      <bind nodeset="/hot_01_mobile_money/image" type="binary"/>
+      <bind nodeset="/hot_01_mobile_money/osm_mobile_money" required="true()" type="binary"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/hot_01_mobile_money/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/hot_01_mobile_money/title">
+      <label>January 2016 Humanitarian OpenStreetMap Team Uganda Survey – Mobile Money Agents</label>
+    </input>
+    <upload mediatype="image/*" ref="/hot_01_mobile_money/image">
+      <label>Take a picture</label>
+    </upload>
+    <upload mediatype="osm/*" ref="/hot_01_mobile_money/osm_mobile_money">
+      <label>Mobile money agent</label>
+      <hint>Tag mobile money agent</hint>
+      <tag key="amenity">
+        <label>Amenity (required)</label>
+        <item>
+          <label>Mobile money</label>
+          <value>mobile_money_agent</value>
+        </item>
+      </tag>
+      <tag key="name">
+        <label>Name (required)</label>
+      </tag>
+      <tag key="network">
+        <label>Network (required)</label>
+        <item>
+          <label>Airtel Money</label>
+          <value>Airtel Money</value>
+        </item>
+        <item>
+          <label>Africell Money</label>
+          <value>Africell Money</value>
+        </item>
+        <item>
+          <label>MTN Mobile Money</label>
+          <value>MTN Mobile Money</value>
+        </item>
+        <item>
+          <label>UTL M-Sente</label>
+          <value>UTL M-Sente</value>
+        </item>
+        <item>
+          <label>SMART Mobile Money</label>
+          <value>SMART Mobile Money</value>
+        </item>
+        <item>
+          <label>Vodacom M-Pesa</label>
+          <value>Vodacom M-Pesa</value>
+        </item>
+        <item>
+          <label>Safaricom M-Pesa</label>
+          <value>Safaricom M-Pesa</value>
+        </item>
+      </tag>
+      <tag key="operator">
+        <label>Agent name (required)</label>
+      </tag>
+      <tag key="male">
+        <label>Male handler present? (required)</label>
+        <item>
+          <label>Yes</label>
+          <value>yes</value>
+        </item>
+        <item>
+          <label>No</label>
+          <value>no</value>
+        </item>
+      </tag>
+      <tag key="female">
+        <label>Female handler present? (required)</label>
+        <item>
+          <label>Yes</label>
+          <value>yes</value>
+        </item>
+        <item>
+          <label>No</label>
+          <value>no</value>
+        </item>
+      </tag>
+      <tag key="opening_hours">
+        <label>Opening hours</label>
+        <item>
+          <label>24/7</label>
+          <value>24/7</value>
+        </item>
+        <item>
+          <label>Mo-Sa 08:00-18:00</label>
+          <value>Mo-Sa 08:00-18:00</value>
+        </item>
+        <item>
+          <label>Mo-Sa 09:00-17:00</label>
+          <value>Mo-Sa 09:00-17:00</value>
+        </item>
+        <item>
+          <label>Mo-Sa 09:00-18:00</label>
+          <value>Mo-Sa 09:00-18:00</value>
+        </item>
+        <item>
+          <label>Mo-Fr 09:00-17:00</label>
+          <value>Mo-Fr 09:00-17:00</value>
+        </item>
+        <item>
+          <label>Mo-Su 09:00-21:00</label>
+          <value>Mo-Su 09:00-21:00</value>
+        </item>
+        <item>
+          <label>Mo-Fr 08:00-18:00; Sa-Su 08:00-15:00</label>
+          <value>Mo-Fr 08:00-18:00; Sa-Su 08:00-15:00</value>
+        </item>
+      </tag>
+      <tag key="phone">
+        <label>Phone number</label>
+      </tag>
+      <tag key="addr:city">
+        <label>City</label>
+        <item>
+          <label>Kampala</label>
+          <value>Kampala</value>
+        </item>
+        <item>
+          <label>Mbale</label>
+          <value>Mbale</value>
+        </item>
+        <item>
+          <label>Tororo</label>
+          <value>Tororo</value>
+        </item>
+        <item>
+          <label>Jinja</label>
+          <value>Jinja</value>
+        </item>
+      </tag>
+      <tag key="addr:street">
+        <label>Street</label>
+      </tag>
+      <tag key="addr:housenumber">
+        <label>House/plot number</label>
+      </tag>
+      <tag key="level">
+        <label>Floor, if necessary to indicate. 0 is ground floor!</label>
+        <item>
+          <label>0</label>
+          <value>0</value>
+        </item>
+        <item>
+          <label>1</label>
+          <value>1</value>
+        </item>
+        <item>
+          <label>2</label>
+          <value>2</value>
+        </item>
+        <item>
+          <label>3</label>
+          <value>3</value>
+        </item>
+      </tag>
+      <tag key="shop">
+        <label>Shop, if also selling other goods</label>
+        <item>
+          <label>Alcohol</label>
+          <value>alcohol</value>
+        </item>
+        <item>
+          <label>Art</label>
+          <value>art</value>
+        </item>
+        <item>
+          <label>Bakery</label>
+          <value>bakery</value>
+        </item>
+        <item>
+          <label>Beauty</label>
+          <value>beauty</value>
+        </item>
+        <item>
+          <label>Beverages</label>
+          <value>beverages</value>
+        </item>
+        <item>
+          <label>Bicycles</label>
+          <value>bicycles</value>
+        </item>
+        <item>
+          <label>Books</label>
+          <value>books</value>
+        </item>
+        <item>
+          <label>Butcher</label>
+          <value>butcher</value>
+        </item>
+        <item>
+          <label>Car</label>
+          <value>car</value>
+        </item>
+        <item>
+          <label>Car_parts</label>
+          <value>car_parts</value>
+        </item>
+        <item>
+          <label>Car_repair</label>
+          <value>car_repair</value>
+        </item>
+        <item>
+          <label>Charcoal</label>
+          <value>charcoal</value>
+        </item>
+        <item>
+          <label>Chemist</label>
+          <value>chemist</value>
+        </item>
+        <item>
+          <label>Clothes</label>
+          <value>clothes</value>
+        </item>
+        <item>
+          <label>Convenience</label>
+          <value>convenience</value>
+        </item>
+        <item>
+          <label>Copyshop</label>
+          <value>copyshop</value>
+        </item>
+        <item>
+          <label>Cosmetics</label>
+          <value>cosmetics</value>
+        </item>
+        <item>
+          <label>DIY DoItYourself</label>
+          <value>doityourself</value>
+        </item>
+        <item>
+          <label>Electronics</label>
+          <value>electronics</value>
+        </item>
+        <item>
+          <label>Furniture</label>
+          <value>furniture</value>
+        </item>
+        <item>
+          <label>Greengrocer</label>
+          <value>greengrocer</value>
+        </item>
+        <item>
+          <label>Hairdresser</label>
+          <value>hairdresser</value>
+        </item>
+        <item>
+          <label>Houseware</label>
+          <value>houseware</value>
+        </item>
+        <item>
+          <label>Jewellery</label>
+          <value>jewellery</value>
+        </item>
+        <item>
+          <label>Kiosk</label>
+          <value>kiosk</value>
+        </item>
+        <item>
+          <label>Mobile Phone</label>
+          <value>mobile_phone</value>
+        </item>
+        <item>
+          <label>Pastry</label>
+          <value>pastry</value>
+        </item>
+        <item>
+          <label>Shoes</label>
+          <value>shoes</value>
+        </item>
+        <item>
+          <label>Stationary</label>
+          <value>stationary</value>
+        </item>
+        <item>
+          <label>Supermarket</label>
+          <value>supermarket</value>
+        </item>
+        <item>
+          <label>Tailor</label>
+          <value>tailor</value>
+        </item>
+      </tag>
+      <tag key="description">
+        <label>Comments</label>
+      </tag>
+    </upload>
+  </h:body>
+</h:html>
