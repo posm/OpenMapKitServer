@@ -1,38 +1,40 @@
 <?xml version="1.0"?>
 <h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <h:head>
-    <h:title>01 Mobile Money Agent</h:title>
+    <h:title>Mobile Money Agent</h:title>
     <model>
       <instance>
-        <hot_01_mobile_money id="01_mobile_money">
+        <mobile_money id="mobile_money">
           <start/>
           <today/>
           <deviceid/>
+          <phonenumber/>
           <title/>
           <image/>
           <osm_mobile_money/>
           <meta>
             <instanceID/>
           </meta>
-        </hot_01_mobile_money>
+        </mobile_money>
       </instance>
-      <bind jr:preload="timestamp" jr:preloadParams="start" nodeset="/hot_01_mobile_money/start" type="dateTime"/>
-      <bind jr:preload="date" jr:preloadParams="today" nodeset="/hot_01_mobile_money/today" type="date"/>
-      <bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/hot_01_mobile_money/deviceid" type="string"/>
-      <bind nodeset="/hot_01_mobile_money/title" readonly="true()" type="string"/>
-      <bind nodeset="/hot_01_mobile_money/image" type="binary"/>
-      <bind nodeset="/hot_01_mobile_money/osm_mobile_money" required="true()" type="binary"/>
-      <bind calculate="concat('uuid:', uuid())" nodeset="/hot_01_mobile_money/meta/instanceID" readonly="true()" type="string"/>
+      <bind jr:preload="timestamp" jr:preloadParams="start" nodeset="/mobile_money/start" type="dateTime"/>
+      <bind jr:preload="date" jr:preloadParams="today" nodeset="/mobile_money/today" type="date"/>
+      <bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/mobile_money/deviceid" type="string"/>
+      <bind jr:preload="property" jr:preloadParams="phonenumber" nodeset="/mobile_money/phonenumber" type="string"/>
+      <bind nodeset="/mobile_money/title" readonly="true()" type="string"/>
+      <bind nodeset="/mobile_money/image" type="binary"/>
+      <bind nodeset="/mobile_money/osm_mobile_money" required="true()" type="binary"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/mobile_money/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
   <h:body>
-    <input ref="/hot_01_mobile_money/title">
+    <input ref="/mobile_money/title">
       <label>January 2016 Humanitarian OpenStreetMap Team Uganda Survey – Mobile Money Agents</label>
     </input>
-    <upload mediatype="image/*" ref="/hot_01_mobile_money/image">
+    <upload mediatype="image/*" ref="/mobile_money/image">
       <label>Take a picture</label>
     </upload>
-    <upload mediatype="osm/*" ref="/hot_01_mobile_money/osm_mobile_money">
+    <upload mediatype="osm/*" ref="/mobile_money/osm_mobile_money">
       <label>Mobile money agent</label>
       <hint>Tag mobile money agent</hint>
       <tag key="amenity">

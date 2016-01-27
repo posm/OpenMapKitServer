@@ -1,0 +1,330 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>Points of Interest</h:title>
+    <model>
+      <instance>
+        <pois id="pois">
+          <start/>
+          <end/>
+          <today/>
+          <deviceid/>
+          <phonenumber/>
+          <title/>
+          <osm_poi/>
+          <form_completed/>
+          <meta>
+            <instanceID/>
+          </meta>
+        </pois>
+      </instance>
+      <bind jr:preload="timestamp" jr:preloadParams="start" nodeset="/pois/start" type="dateTime"/>
+      <bind jr:preload="timestamp" jr:preloadParams="end" nodeset="/pois/end" type="dateTime"/>
+      <bind jr:preload="date" jr:preloadParams="today" nodeset="/pois/today" type="date"/>
+      <bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/pois/deviceid" type="string"/>
+      <bind jr:preload="property" jr:preloadParams="phonenumber" nodeset="/pois/phonenumber" type="string"/>
+      <bind nodeset="/pois/title" readonly="true()" type="string"/>
+      <bind nodeset="/pois/osm_poi" required="true()" type="binary"/>
+      <bind jr:preload="timestamp" jr:preloadParams="end" nodeset="/pois/form_completed" type="dateTime"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/pois/meta/instanceID" readonly="true()" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input ref="/pois/title">
+      <label>Points of Interest</label>
+      <hint>This is a generic points of interest survey. You can select or create a POI in OpenMapKit and then tag it.</hint>
+    </input>
+    <upload mediatype="osm/*" ref="/pois/osm_poi">
+      <label>POI</label>
+      <hint>Create or select a point of interest. Then, add appropriate tags.</hint>
+      <tag key="name">
+        <label>Name</label>
+      </tag>
+      <tag key="amenity">
+        <label>Type of Establishment (Amenity)</label>
+        <item>
+          <label>Place of Worship (Mosque / Church / Temple)</label>
+          <value>place_of_worship</value>
+        </item>
+        <item>
+          <label>Cafe / Tea Stall</label>
+          <value>café</value>
+        </item>
+        <item>
+          <label>Restaurant</label>
+          <value>restaurant</value>
+        </item>
+        <item>
+          <label>Bar (No Food)</label>
+          <value>bar</value>
+        </item>
+        <item>
+          <label>Pub (Food)</label>
+          <value>pub</value>
+        </item>
+        <item>
+          <label>Fast Food</label>
+          <value>fast_food</value>
+        </item>
+        <item>
+          <label>Bank</label>
+          <value>bank</value>
+        </item>
+        <item>
+          <label>Office</label>
+          <value>office</value>
+        </item>
+        <item>
+          <label>Hospital</label>
+          <value>hospital</value>
+        </item>
+        <item>
+          <label>Clinic / Consultation Chamber / Diagnostic Center</label>
+          <value>clinic</value>
+        </item>
+        <item>
+          <label>Internet Café</label>
+          <value>internet_cafe</value>
+        </item>
+        <item>
+          <label>Pharmacy</label>
+          <value>pharmacy</value>
+        </item>
+        <item>
+          <label>Police Station</label>
+          <value>police</value>
+        </item>
+        <item>
+          <label>Fire Station</label>
+          <value>fire_station</value>
+        </item>
+        <item>
+          <label>School</label>
+          <value>school</value>
+        </item>
+        <item>
+          <label>College</label>
+          <value>college</value>
+        </item>
+        <item>
+          <label>University</label>
+          <value>university</value>
+        </item>
+        <item>
+          <label>Cinema (Movie Theatre)</label>
+          <value>cinema</value>
+        </item>
+        <item>
+          <label>Library</label>
+          <value>library</value>
+        </item>
+        <item>
+          <label>Community Center</label>
+          <value>community_centre</value>
+        </item>
+        <item>
+          <label>Theatre</label>
+          <value>theatre</value>
+        </item>
+        <item>
+          <label>Fuel / Gas Station</label>
+          <value>fuel</value>
+        </item>
+        <item>
+          <label>Post Box</label>
+          <value>post_box</value>
+        </item>
+        <item>
+          <label>Bicycle Parking</label>
+          <value>bicycle_parking</value>
+        </item>
+      </tag>
+      <tag key="shop">
+        <label>Shop</label>
+        <item>
+          <label>Variety Shop</label>
+          <value>convenience</value>
+        </item>
+        <item>
+          <label>Supermarket</label>
+          <value>supermarket</value>
+        </item>
+        <item>
+          <label>Bakery</label>
+          <value>bakery</value>
+        </item>
+        <item>
+          <label>Clothes Shop</label>
+          <value>clothes</value>
+        </item>
+        <item>
+          <label>Tailor</label>
+          <value>tailor</value>
+        </item>
+        <item>
+          <label>Beauty Parlor</label>
+          <value>beauty</value>
+        </item>
+        <item>
+          <label>Barber / Hairdresser</label>
+          <value>hairdresser</value>
+        </item>
+        <item>
+          <label>Laundry</label>
+          <value>laundry</value>
+        </item>
+        <item>
+          <label>Electronics  Shop</label>
+          <value>electronics</value>
+        </item>
+        <item>
+          <label>Hardware Store (Tools)</label>
+          <value>hardware</value>
+        </item>
+        <item>
+          <label>Furniture Shop</label>
+          <value>furniture</value>
+        </item>
+        <item>
+          <label>Car Repair</label>
+          <value>car_repair</value>
+        </item>
+        <item>
+          <label>Printing / Copy Shop</label>
+          <value>copyshop</value>
+        </item>
+        <item>
+          <label>Video Shop</label>
+          <value>video</value>
+        </item>
+        <item>
+          <label>Bicycle Shop</label>
+          <value>bicycle</value>
+        </item>
+        <item>
+          <label>Car Shop</label>
+          <value>car</value>
+        </item>
+        <item>
+          <label>Chemist (Chemicals)</label>
+          <value>chemist</value>
+        </item>
+        <item>
+          <label>Shopping Mall</label>
+          <value>mall</value>
+        </item>
+      </tag>
+      <tag key="man_made">
+        <label>Man Made Structure</label>
+      </tag>
+      <tag key="addr:housenumber">
+        <label>Address Number (House Number)</label>
+      </tag>
+      <tag key="addr:street">
+        <label>Street Name</label>
+      </tag>
+      <tag key="addr:city">
+        <label>City / Town</label>
+        <item>
+          <label></label>
+          <value>Sacramento</value>
+        </item>
+        <item>
+          <label></label>
+          <value>Seattle</value>
+        </item>
+        <item>
+          <label></label>
+          <value>Bellingham</value>
+        </item>
+      </tag>
+      <tag key="addr:state">
+        <label>State</label>
+        <item>
+          <label></label>
+          <value>CA</value>
+        </item>
+        <item>
+          <label></label>
+          <value>WA</value>
+        </item>
+      </tag>
+      <tag key="addr:postcode">
+        <label>Zip Code</label>
+      </tag>
+      <tag key="office">
+        <label>Type of Office (If Office)</label>
+        <item>
+          <label>Company</label>
+          <value>company</value>
+        </item>
+        <item>
+          <label>Government</label>
+          <value>government</value>
+        </item>
+        <item>
+          <label>Insurance</label>
+          <value>insurance</value>
+        </item>
+        <item>
+          <label>Law</label>
+          <value>lawyer</value>
+        </item>
+        <item>
+          <label>Real Estate</label>
+          <value>estate_agent</value>
+        </item>
+        <item>
+          <label>Telecommunication</label>
+          <value>telecommunication</value>
+        </item>
+        <item>
+          <label>Other</label>
+          <value>yes</value>
+        </item>
+      </tag>
+      <tag key="religion">
+        <label>Type of Religion (If Place of Worship)</label>
+        <item>
+          <label>Muslim</label>
+          <value>muslim</value>
+        </item>
+        <item>
+          <label>Christian</label>
+          <value>christian</value>
+        </item>
+        <item>
+          <label>Buddhist</label>
+          <value>buddhist</value>
+        </item>
+        <item>
+          <label>Hindu</label>
+          <value>hindu</value>
+        </item>
+      </tag>
+      <tag key="cuisine">
+        <label>Type of Cuisine (If Restaurant)</label>
+        <item>
+          <label>Regional / Local Food</label>
+          <value>regional</value>
+        </item>
+        <item>
+          <label>Mexican</label>
+          <value>mexican</value>
+        </item>
+        <item>
+          <label>Asian</label>
+          <value>asian</value>
+        </item>
+        <item>
+          <label>Pizza</label>
+          <value>pizza</value>
+        </item>
+        <item>
+          <label>Sandwich</label>
+          <value>sandwich</value>
+        </item>
+      </tag>
+    </upload>
+  </h:body>
+</h:html>

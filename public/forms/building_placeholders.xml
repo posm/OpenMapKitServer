@@ -1,42 +1,42 @@
 <?xml version="1.0"?>
 <h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <h:head>
-    <h:title>Buildings</h:title>
+    <h:title>Building Placeholders</h:title>
     <model>
       <instance>
-        <buildings id="buildings">
+        <building_placeholders id="building_placeholders">
           <start/>
           <end/>
           <today/>
           <deviceid/>
           <phonenumber/>
           <title/>
-          <osm_building/>
+          <building_placeholder/>
           <form_completed/>
           <meta>
             <instanceID/>
           </meta>
-        </buildings>
+        </building_placeholders>
       </instance>
-      <bind jr:preload="timestamp" jr:preloadParams="start" nodeset="/buildings/start" type="dateTime"/>
-      <bind jr:preload="timestamp" jr:preloadParams="end" nodeset="/buildings/end" type="dateTime"/>
-      <bind jr:preload="date" jr:preloadParams="today" nodeset="/buildings/today" type="date"/>
-      <bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/buildings/deviceid" type="string"/>
-      <bind jr:preload="property" jr:preloadParams="phonenumber" nodeset="/buildings/phonenumber" type="string"/>
-      <bind nodeset="/buildings/title" readonly="true()" type="string"/>
-      <bind nodeset="/buildings/osm_building" required="true()" type="binary"/>
-      <bind jr:preload="timestamp" jr:preloadParams="end" nodeset="/buildings/form_completed" type="dateTime"/>
-      <bind calculate="concat('uuid:', uuid())" nodeset="/buildings/meta/instanceID" readonly="true()" type="string"/>
+      <bind jr:preload="timestamp" jr:preloadParams="start" nodeset="/building_placeholders/start" type="dateTime"/>
+      <bind jr:preload="timestamp" jr:preloadParams="end" nodeset="/building_placeholders/end" type="dateTime"/>
+      <bind jr:preload="date" jr:preloadParams="today" nodeset="/building_placeholders/today" type="date"/>
+      <bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/building_placeholders/deviceid" type="string"/>
+      <bind jr:preload="property" jr:preloadParams="phonenumber" nodeset="/building_placeholders/phonenumber" type="string"/>
+      <bind nodeset="/building_placeholders/title" readonly="true()" type="string"/>
+      <bind nodeset="/building_placeholders/building_placeholder" required="true()" type="binary"/>
+      <bind jr:preload="timestamp" jr:preloadParams="end" nodeset="/building_placeholders/form_completed" type="dateTime"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/building_placeholders/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
   <h:body>
-    <input ref="/buildings/title">
-      <label>Buildings</label>
-      <hint>This is a generic buildings survey.</hint>
+    <input ref="/building_placeholders/title">
+      <label>Building Placeholders</label>
+      <hint>While surveying, if you find a building that has not yet been added to the map, add a POI for that building instead. Tag accordingly. During validation, these tags can be copied and pasted into a new way of the sketched building.</hint>
     </input>
-    <upload mediatype="osm/*" ref="/buildings/osm_building">
-      <label>Building</label>
-      <hint>Please select and tag a building on the map.</hint>
+    <upload mediatype="osm/*" ref="/building_placeholders/building_placeholder">
+      <label>Building Placeholder POI</label>
+      <hint>Create and / or tag a Point of Interest associated with the previous building.</hint>
       <tag key="building">
         <label>Building</label>
         <item>
