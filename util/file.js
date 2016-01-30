@@ -49,11 +49,12 @@ module.exports.readDirDeferred = function(dirPath){
  * @param filePath
  * @returns Returns a deferred promise. Resolved with a string of file contents.
  */
-module.exports.readFileDeferred = function(filePath){
+module.exports.readFileDeferred = function(filePath, opts){
 
+    const options = opts || {};
     const deferred = Q.defer();
 
-    fs.readFile(filePath, function(err, filestream){
+    fs.readFile(filePath, options, function(err, filestream){
 
         if(err)
             deferred.reject(err);

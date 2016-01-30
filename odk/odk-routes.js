@@ -11,6 +11,7 @@ const getFormlist = require('./controllers/get-formlist');
 const getSubmissionsList = require('./controllers/get-submissionslist');
 const getJsonSubmissions = require('./controllers/get-json-submissions');
 const getOsmSubmissions = require('./controllers/get-osm-submissions');
+const patchSubmissions = require('./controllers/patch-submissions');
 const uploadForm = require('./controllers/upload-form');
 
 /**
@@ -32,6 +33,8 @@ router.route('/submission')
  */
 
 router.route('/submissions').get(getSubmissionsList);
+
+router.route('/submissions').patch(patchSubmissions);
 
 router.route('/submissions/:formName.json').get(getJsonSubmissions);
 
