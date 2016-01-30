@@ -1,67 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 const Q = require('q');
-const Url = require('../../util//url');
+const Url = require('../../util/url');
+const File = require('../../util/file');
 const settings = require('../../settings');
 const deploymentParentDir = 'deployments' ;
 var deploymentParentDirPath = settings.publicDir + '/' + deploymentParentDir;
 
-/**
- *
- * @param fd - full path to a file or directory
- * @returns Returns a deferred promise. Resolve with "stat" object for the passed in file descriptor.
- */
-const statDeferred = function(fd){
-
-    const deferred = Q.defer();
-
-    fs.stat(fd, function(err, stats){
-
-        if(err)
-            deferred.reject(err);
-
-        deferred.resolve(stats);
-    });
-
-    return deferred.promise;
-};
-
-/**
- *
- * @param dirPath - full path to a directory
- * @returns Returns a deferred promise. Resolved with an array of names of items in a directory.
- */
-const readDirDeferred = function(dirPath){
-
-    const deferred = Q.defer();
-
-    fs.readdir(dirPath, function(err, contents){
-
-        if(err)
-            deferred.reject(err);
-
-        deferred.resolve(contents);
-    });
-
-    return deferred.promise;
-
-};
-
-
-const readFileDeferred = function(filePath){
-
-    const deferred = Q.defer();
-
-    fs.readFile(filePath, function(err, stats){
-
-        if(err)
-            deferred.reject(err);
-
-        deferred.resolve(stats);
-    });
-
-    return deferred.promise;
-};
 
 /**
  *
@@ -88,12 +33,12 @@ const digestDeploymentDir = function(req, dirName, contents){
         listingUrl: Url.publicDirFileUrl(req, deploymentParentDir, dirName)
     };
 
-    readFileDeferred(deploymentParentDirPath + '/' + dirName + '/manifest.json')
+    File.readFileDeferred(deploymentParentDirPath + '/' + dirName + '/manifest.json')
         .then(function(manifest){
             deploymentObj.manifest = JSON.parse(manifest);
 
             return  Q.all(contents.map(function(dirItem){
-                return statDeferred(deploymentParentDirPath + '/' + dirName + '/' + dirItem);
+                return File.statDeferred(deploymentParentDirPath + '/' + dirName + '/' + dirItem);
             }));
         })
         .then(function(results){
@@ -160,7 +105,7 @@ module.exports.getAll = function(req, res, next) {
 
         // Get stats on contents of the deployment directory
         Q.all(deploymentDirContents.map(function (dirItem) {
-                return statDeferred(deploymentParentDirPath + '/' + dirItem);
+                return File.statDeferred(deploymentParentDirPath + '/' + dirItem);
             }))
             .then(function (results) {
 
@@ -171,7 +116,7 @@ module.exports.getAll = function(req, res, next) {
 
                 // Read directory contents
                 return Q.all(deploymentDirs.map(function (dirName) {
-                    return readDirDeferred(deploymentParentDirPath + '/' + dirName)
+                    return File.readDirDeferred(deploymentParentDirPath + '/' + dirName)
                 }))
             })
             .then(function (results) {
@@ -196,11 +141,11 @@ module.exports.get = function(req, res, next) {
     const deploymentDir = req.params.deployment;
 
     // Make sure it exists
-    statDeferred(deploymentParentDirPath + '/' + deploymentDir)
+    File.statDeferred(deploymentParentDirPath + '/' + deploymentDir)
         .then(function(stat){
 
             // read the directory contents
-            return readDirDeferred(deploymentParentDirPath + '/' + deploymentDir);
+            return File.readDirDeferred(deploymentParentDirPath + '/' + deploymentDir);
         })
         .then(function(contents){
 
