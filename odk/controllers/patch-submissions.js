@@ -1,76 +1,63 @@
 'use strict';
-
 const fs = require('fs');
-const Q = require('q');
+const split = require("split");
 const File = require('../../util/file');
+const readline = require('readline');
 const submissionsDir = __dirname + '/../../public/submissions';
+var checksumHelper = require('../helpers/checksum-hash');
 
-// On startup, build the checksum hash;  Use a ES6 Map,
-var checksumHash = new Map();
+module.exports = function(req, res, next){
 
-// Scan the submission directories for checksum files, add any checksums to checksumHash
-fs.readdir(submissionsDir, function(err, dirContents){
+    var testChecksums = ['54ceb91256e8190e474aa752a6e0650a2df5ba37', '92cfceb39d57d914ed8b14d0e37643de0797ae56'];
 
-    var childDirNames, checksumFilePaths = [];
+    var checksumHash = checksumHelper.get();
 
-    if(err) {
-        console.error(err);
-        return;
-    }
+    var editHash = new Map();
 
-    if (dirContents.length === 0) {
-        return;
-    }
+    testChecksums.forEach(function(keyString){
+        var fileDir = checksumHash.get(keyString);
 
-    // Loop thru the contents of the submissions directory and get file stats
-    Q.all(dirContents.map(function (dirItem) {
-            return File.statDeferred(submissionsDir + '/' + dirItem);
-        }))
-        .then(function (results) {
+        if(!fileDir) {
+            return;
+        }
 
-            // remove items that are not directories
-            childDirNames = dirContents.filter(function (dirItem, index) {
-                return results[index].isDirectory();
-            });
+        var fileChecksumsToRemove = editHash.get(fileDir);
 
-            // Read directory contents
-            return Q.all(childDirNames.map(function (dirName) {
-                return File.readDirDeferred(submissionsDir + '/' + dirName)
+        if(fileChecksumsToRemove) {
+            fileChecksumsToRemove.push(keyString);
+        } else {
+            fileChecksumsToRemove = [keyString];
+        }
+
+        editHash.set(fileDir, fileChecksumsToRemove);
+
+        checksumHash.delete(keyString);
+    });
+
+    // Iterate over editHash map
+    editHash.forEach(function(value, key, map){
+
+        var rstream = fs.createReadStream(submissionsDir + '/' + key + '/finalized-osm-checksums.txt');
+        var wstream = fs.createWriteStream(submissionsDir + '/' + key + '/checksum-temp.txt');
+
+        rstream
+            .pipe(split(function(line){
+                if(value.indexOf(line) === -1)
+                    return line + '\n';
             }))
-        })
-        .then(function (childDirs) {
+            .pipe(wstream);
 
-            // loop thru each directory and look for a finalized-osm-checksums.txt file, add its file path to an array
-            childDirs.forEach(function(dir, index){
-                if(dir.indexOf('finalized-osm-checksums.txt') > -1) {
-                    checksumFilePaths.push(childDirNames[index] + '/finalized-osm-checksums.txt')
-                }
-            });
 
-            // read the contents of each finalized-osm-checksums.txt file
-            return Q.all(checksumFilePaths.map(function (path) {
-                return File.readFileDeferred(submissionsDir + '/' + path, {encoding: 'utf8'})
-            }))
+        fs.rename(submissionsDir + '/' + key + '/checksum-temp.txt', filePath, function(err){
+
+            if(err) {
+                next(err);
+            }
 
         })
-        .then(function(checksumFiles){
 
-            // Use contents of checksum files to populate the checksumHash map
-            checksumFiles.forEach(function(fileStr, index){
-                fileStr.split('\n').forEach(function(checksum){
-                   checksumHash.set(checksum, checksumFilePaths[index]);
-                });
+    });
 
-            });
+    res.status(200).json({success: true});
 
-        })
-        .catch(function (err) {
-            console.error(err);
-        })
-        .done();
-
-});
-
-
-
-module.exports = function(){};
+};
