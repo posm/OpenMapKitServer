@@ -226,26 +226,26 @@
       <tag key="addr:city">
         <label>City / Town</label>
         <item>
-          <label></label>
+          <label>Sacramento</label>
           <value>Sacramento</value>
         </item>
         <item>
-          <label></label>
+          <label>Seattle</label>
           <value>Seattle</value>
         </item>
         <item>
-          <label></label>
+          <label>Bellingham</label>
           <value>Bellingham</value>
         </item>
       </tag>
       <tag key="addr:state">
         <label>State</label>
         <item>
-          <label></label>
+          <label>CA</label>
           <value>CA</value>
         </item>
         <item>
-          <label></label>
+          <label>WA</label>
           <value>WA</value>
         </item>
       </tag>
