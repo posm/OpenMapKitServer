@@ -85,7 +85,7 @@ function findOsmFilesInDir(dirStat, osmFiles, req, res) {
                 ++dirStat.count;
                 return;
             }
-            if (!res.headersSent) {
+            if (!res._headerSent) { // prevents trying to send multiple error responses on a single request
                 res.status(500).json({
                     status: 500,
                     msg: 'There was a problem with reading the OSM files in the submissions directory.',
