@@ -3,6 +3,8 @@ const libxml = require('libxmljs');
 const appVersion = require('../package').version;
 const filterOsm = require('./filter-osm');
 
+const CHUNK_SIZE = 500;
+
 /**
  * aggregate-osm.js
  *
@@ -34,58 +36,80 @@ module.exports = function (files, filter, cb) {
         counter: -1
     };
 
-    for (var i = 0; i < numFiles; i++) {
-        /**
-         * The file filter checks the birthtime timestamp.
-         * If we want the file, we get a bool of true in
-         * the callback.
-         */
-        filterOsm.file(files[i], filter, function (filePath, bool) {
-            if (!bool) {
-                ++filesCompleted;
-                if (filesCompleted === numFiles) {
-                    cb(null, mainXmlDoc.toString());
-                }
-                return;
-            }
-            fs.readFile(filePath, 'utf-8', function (err, xml) {
-                if (err) {
-                    cb(err);
-                    return;
-                }
-                var doc = libxml.parseXmlString(xml);
-                var rootEl = doc.root();
-                filterOsm.user(rootEl, filter, function (rootEl, bool) {
-                    if (!bool) {
-                        ++filesCompleted;
-                        if (filesCompleted === numFiles) {
-                            cb(null, mainXmlDoc.toString());
-                        }
-                        return;
-                    }
-                    var osmElements = rootEl.childNodes();
-                    for (var j = 0, len = osmElements.length; j < len; j++) {
-                        var osmElement = osmElements[j];
-                        // Check that the element is a node, way, or relation.
-                        var elementName = osmElement.name();
-                        if (elementName === 'node') {
-                            rewriteNegativeId(negIdRewriteHash, osmElement);
-                        } else if (elementName === 'way' || elementName === 'relation') {
-                            rewriteNegativeId(negIdRewriteHash, osmElement);
-                            // Ways and relations might need their negative refs rewritten too.
-                            rewriteNegativeRef(negIdRewriteHash, osmElement);
+    /**
+     * We don't want to process all of the files in parallel at once,
+     * because we will eventually reach the limit of number of files
+     * that can be simultaneously read by the system. We chunk it out
+     * into smaller concurrent batches.
+     *
+     * @param chunkOfFiles - a slice of the files fed to this module
+     */
+    function processChunksOfFiles(chunkOfFiles, remainingFiles) {
+        var chunkLen = chunkOfFiles.length;
+        var filesInChunkCompleted = 0;
 
-                        }
-                        mainOsmElement.addChild(osmElement);
-                    }
+        chunkOfFiles.forEach(function (f) {
+
+            /**
+             * The file filter checks the birthtime timestamp.
+             * If we want the file, we get a bool of true in
+             * the callback.
+             */
+            filterOsm.file(f, filter, function (filePath, bool) {
+
+                function checkToFireCallbacks() {
                     ++filesCompleted;
+                    ++filesInChunkCompleted;
+                    // if every single file is done
                     if (filesCompleted === numFiles) {
                         cb(null, mainXmlDoc.toString());
                     }
+                    // if every file in chunk is done
+                    else if (filesInChunkCompleted === chunkLen && remainingFiles.length > 0) {
+                        processChunksOfFiles(remainingFiles.slice(0, CHUNK_SIZE), remainingFiles.slice(CHUNK_SIZE));
+                    }
+                }
+
+                if (!bool) {
+                    checkToFireCallbacks();
+                    return;
+                }
+                fs.readFile(filePath, 'utf-8', function (err, xml) {
+                    if (err) {
+                        cb(err);
+                        return;
+                    }
+                    var doc = libxml.parseXmlString(xml);
+                    var rootEl = doc.root();
+                    filterOsm.user(rootEl, filter, function (rootEl, bool) {
+                        if (!bool) {
+                            checkToFireCallbacks();
+                            return;
+                        }
+                        var osmElements = rootEl.childNodes();
+                        for (var j = 0, len = osmElements.length; j < len; j++) {
+                            var osmElement = osmElements[j];
+                            // Check that the element is a node, way, or relation.
+                            var elementName = osmElement.name();
+                            if (elementName === 'node') {
+                                rewriteNegativeId(negIdRewriteHash, osmElement);
+                            } else if (elementName === 'way' || elementName === 'relation') {
+                                rewriteNegativeId(negIdRewriteHash, osmElement);
+                                // Ways and relations might need their negative refs rewritten too.
+                                rewriteNegativeRef(negIdRewriteHash, osmElement);
+                            }
+                            mainOsmElement.addChild(osmElement);
+                        }
+                        checkToFireCallbacks();
+                    });
                 });
             });
+
         });
     }
+
+    processChunksOfFiles(files.slice(0, CHUNK_SIZE), files.slice(CHUNK_SIZE));
+
 };
 
 /**
