@@ -119,12 +119,13 @@ function aggregate(osmFiles, req, res) {
     //We filter by the query parameters of the request
     aggregateOsm(osmFiles, req.query, function (err, osmXml) {
         if (err) {
-            res.headers
-            res.status(500).json({
-                status: 500,
-                msg: 'There was a problem with aggregating OSM JOSM editor files in the submissions directory.',
-                err: err
-            });
+            if (!res._headerSent) { // prevents trying to send multiple error responses on a single request
+                res.status(500).json({
+                    status: 500,
+                    msg: 'There was a problem with aggregating OSM JOSM editor files in the submissions directory.',
+                    err: err
+                });
+            }
             return;
         }
         res.set('Content-Type', 'text/xml').status(200).end(osmXml);
