@@ -57,7 +57,7 @@ fs.readdir(submissionsDir, function(err, dirContents){
             // Use contents of checksum files to populate the checksumHash map
             checksumFiles.forEach(function(fileStr, index){
                 fileStr.split('\n').forEach(function(checksum){
-                    checksumHash.set(checksum, checksumFilePaths[index]);
+                    checksumHash.set(checksum, true);
                 });
             });
 

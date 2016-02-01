@@ -10,28 +10,16 @@ module.exports = function(req, res, next){
 
     var testChecksums = ['54ceb91256e8190e474aa752a6e0650a2df5ba37', '92cfceb39d57d914ed8b14d0e37643de0797ae56'];
 
-    var checksumHash = checksumHelper.get();
+    var patchedChecksums = testChecksums;
+    var checksumBlacklist = checksumHelper.get();
 
     var editHash = new Map();
 
-    testChecksums.forEach(function(keyString){
-        var fileDir = checksumHash.get(keyString);
+    patchedChecksums.forEach(function(keyString){
 
-        if(!fileDir) {
-            return;
-        }
+        checksumBlacklist.set(keyString, true);
 
-        var fileChecksumsToRemove = editHash.get(fileDir);
-
-        if(fileChecksumsToRemove) {
-            fileChecksumsToRemove.push(keyString);
-        } else {
-            fileChecksumsToRemove = [keyString];
-        }
-
-        editHash.set(fileDir, fileChecksumsToRemove);
-
-        checksumHash.delete(keyString);
+        // now find the file to append
     });
 
     // Iterate over editHash map
