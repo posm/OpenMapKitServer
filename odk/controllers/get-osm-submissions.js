@@ -85,11 +85,13 @@ function findOsmFilesInDir(dirStat, osmFiles, req, res) {
                 ++dirStat.count;
                 return;
             }
-            res.status(500).json({
-                status: 500,
-                msg: 'There was a problem with reading the OSM files in the submissions directory.',
-                err: err
-            });
+            if (!res.headersSent) {
+                res.status(500).json({
+                    status: 500,
+                    msg: 'There was a problem with reading the OSM files in the submissions directory.',
+                    err: err
+                });
+            }
             return;
         }
         ++dirStat.count;
@@ -117,6 +119,7 @@ function aggregate(osmFiles, req, res) {
     //We filter by the query parameters of the request
     aggregateOsm(osmFiles, req.query, function (err, osmXml) {
         if (err) {
+            res.headers
             res.status(500).json({
                 status: 500,
                 msg: 'There was a problem with aggregating OSM JOSM editor files in the submissions directory.',
