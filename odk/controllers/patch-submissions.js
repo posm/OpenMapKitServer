@@ -4,7 +4,6 @@ const path = require('path');
 const Q = require('q');
 const glob = require("glob");
 const File = require('../../util/file');
-const readline = require('readline');
 const submissionsDir = __dirname + '/../../public/submissions';
 var checksumHelper = require('../helpers/checksum-hash');
 
