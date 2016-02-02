@@ -43,6 +43,7 @@ module.exports = function (files, filter, cb) {
      * into smaller concurrent batches.
      *
      * @param chunkOfFiles - a slice of the files fed to this module
+     * @param remainingFiles - a slice of the files that should be read in subsequent recursive calls
      */
     function processChunksOfFiles(chunkOfFiles, remainingFiles) {
         var chunkLen = chunkOfFiles.length;
