@@ -10,6 +10,7 @@ try {
 }
 
 const express = require('express');
+const bodyParser = require('body-parser');
 const directory = require('serve-index');
 const cors = require('cors');
 const odk = require('./odk/odk-routes');
@@ -20,6 +21,10 @@ const app = express();
 
 // Enable CORS always.
 app.use(cors());
+
+// Body parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Basic Info
 app.get('/', info);
