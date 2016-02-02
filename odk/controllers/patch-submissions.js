@@ -42,7 +42,7 @@ var findFilesDeferred = function(checksum, cwd) {
 
 module.exports = function(req, res, next){
 
-    var entityChecksums = req.body.entityChecksums || null;
+    var entityChecksums = req.body.finalizedOsmChecksums || null;
 
     if(!entityChecksums || !entityChecksums instanceof Array) {
         var err =new Error('Bad Request: entityChecksum must be a string array.');
