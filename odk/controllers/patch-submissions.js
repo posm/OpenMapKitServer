@@ -44,8 +44,6 @@ module.exports = function(req, res, next){
         next(err);
     }
 
-    console.log(formHash.size);
-
     // Parallel async call to find and append the finialized-osm-checksum.txt files that managed the patched checksums
     Q.all(entityChecksums.map(function(checksum){
 
@@ -54,7 +52,6 @@ module.exports = function(req, res, next){
 
     }))
     .then(function(results){
-        console.log(formHash.size);
         res.status(200).json({success: true});
     })
     .catch(function(err){
