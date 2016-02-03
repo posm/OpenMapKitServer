@@ -1,5 +1,7 @@
 const fs = require('fs');
-
+const path = require('path');
+const blacklistHelper = require('../odk/helpers/checksum-hash');
+const formHash = blacklistHelper.get();
 const filter = module.exports = {};
 
 /**
@@ -11,6 +13,19 @@ const filter = module.exports = {};
  * @param cb - Callback object with `filePath` and `bool` value
  */
 filter.file = function (filePath, filterObj, cb) {
+
+    // Get path metadata, get the form name from path, get the form blacklist
+    var pathMeta = path.parse(filePath);
+    var parsedPath = pathMeta.dir.split('/');
+    var formName = parsedPath[parsedPath.length - 2];
+    const formBlacklist = formHash.get(formName);
+
+    // if the filename is found in the blacklist, filter it.
+    if(formBlacklist.has(pathMeta.name)) {
+        cb(filePath, false);
+        return;
+    }
+
     // if there is no filter
     if (typeof filterObj !== 'object' || filterObj === null) {
         cb(filePath, true);
@@ -76,6 +91,7 @@ filter.file = function (filePath, filterObj, cb) {
             cb(filePath, false);
             return;
         }
+
 
         // No submission time filter, pass through
         cb(filePath, true);
