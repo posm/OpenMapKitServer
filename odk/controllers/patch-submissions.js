@@ -7,33 +7,15 @@ const File = require('../../util/file');
 const submissionsDir = __dirname + '/../../public/submissions';
 var checksumHelper = require('../helpers/checksum-hash');
 
-var findFilesDeferred = function(checksum, cwd) {
+var appendFileDeferred = function(filePath, append) {
 
     var deferred = Q.defer();
 
-    // now find the file to append; this is async, so manage the errors appropriately
-    glob('**/' + checksum + ".osm",{cwd: cwd}, function (err, files) {
-        if(err) {
+    fs.appendFile(filePath, '\n' + append, function(err){
+        if (err) {
             deferred.reject(err);
         }
-
-        if( files.length === 0 ) {
-            deferred.reject(new Error("Incoming checksum " + checksum + " cannot be paired with a matching .osm file!"));
-        }
-
-        if(files.length > 1) {
-            deferred.reject(new Error("More than 1 " +checksum + ".osm file!\n" + files.join('\n')));
-        }
-
-        // Get the parent directory of the the file
-        var checksumFilePath = cwd + '/' + path.dirname(path.dirname(files[0])) + '/finalized-osm-checksums.txt';
-
-        fs.appendFile(checksumFilePath, '\n' + checksum, function(err){
-            if (err) {
-                deferred.reject(err);
-            }
-            deferred.resolve();
-        });
+        deferred.resolve();
     });
 
     return deferred.promise;
@@ -42,35 +24,42 @@ var findFilesDeferred = function(checksum, cwd) {
 
 module.exports = function(req, res, next){
 
+    var err;
+
+    var formName = path.basename(req.params.formName);
+
     var entityChecksums = req.body.finalizedOsmChecksums || null;
 
     if(!entityChecksums || !entityChecksums instanceof Array) {
-        var err =new Error('Bad Request: entityChecksum must be a string array.');
+        err = new Error('Bad Request: finalizedOsmChecksums must be a string array.');
         err.status = 400;
-        next(err)
+        next(err);
     }
 
     // Get the current blacklist
-    var checksumBlacklist = checksumHelper.get();
+    var formHash = checksumHelper.get(formName);
 
-    console.log(checksumBlacklist.size);
+    if(!formHash) {
+        err = new Error('Bad Request: form with this name not found.');
+        err.status = 400;
+        next(err);
+    }
+
+    console.log(formHash.size);
 
     // Parallel async call to find and append the finialized-osm-checksum.txt files that managed the patched checksums
-    Q.all(entityChecksums.map(function(keyString){
+    Q.all(entityChecksums.map(function(checksum){
 
-        if(checksumBlacklist.has(keyString)) {
-            var err = new Error('Checksum already found in blacklist!');
-            err.status = 400;
-            throw  err;
-        }
-        checksumBlacklist.set(keyString, true);
-        return findFilesDeferred(keyString, submissionsDir);
+        formHash.set(checksum, true);
+        return appendFileDeferred(submissionsDir + '/' + formName + '/finalized-osm-checksums.txt', checksum);
+
     }))
-        .then(function(results){
-            res.status(200).json({success: true});
-        })
-        .catch(function(err){
-            next(err);
-        })
-        .done();
+    .then(function(results){
+        console.log(formHash.size);
+        res.status(200).json({success: true});
+    })
+    .catch(function(err){
+        next(err);
+    })
+    .done();
 };
