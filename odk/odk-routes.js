@@ -34,11 +34,11 @@ router.route('/submission')
 
 router.route('/submissions').get(getSubmissionsList);
 
-router.route('/submissions').patch(patchSubmissions);
-
 router.route('/submissions/:formName.json').get(getJsonSubmissions);
 
 router.route('/submissions/:formName.osm').get(getOsmSubmissions);
+
+router.route('/submissions/:formName.osm').patch(patchSubmissions);
 
 /**
  * XLSForm Upload Endpoint

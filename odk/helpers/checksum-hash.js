@@ -1,74 +1,108 @@
 'use strict';
 const fs = require('fs');
+const readline = require('readline');
 const Q = require('q');
 const File = require('../../util/file');
 const submissionsDir = __dirname + '/../../public/submissions';
 
-// On startup, build the checksum hash;  Use a ES6 Map,
-var checksumHash = new Map();
+var readlineDeferred = function(filePath, hashMap){
 
-// Scan the submission directories for checksum files, add any checksums to checksumHash
-fs.readdir(submissionsDir, function(err, dirContents){
+    var deferred = Q.defer();
 
-    var childDirNames, checksumFilePaths = [];
+    try {
+        const rl = readline.createInterface({
+            input: fs.createReadStream(filePath)
+        });
 
-    if(err) {
-        console.error(err);
-        return;
+        rl.on('line', function (line) {
+            hashMap.set(line, true);
+        });
+
+        rl.on('close', function () {
+            console.log('finished loading: ' + filePath + ' into blacklist');
+            deferred.resolve();
+        });
+
+    } catch(e) {
+        deferred.reject(e);
     }
+    return deferred.promise;
+};
 
-    if (dirContents.length === 0) {
-        return;
-    }
+// On startup, build the form hash map;  Use a ES6 Map
+var formHash = new Map();
 
-    // Loop thru the contents of the submissions directory and get file stats
-    Q.all(dirContents.map(function (dirItem) {
-            return File.statDeferred(submissionsDir + '/' + dirItem);
-        }))
-        .then(function (results) {
+module.exports.create = function(cb){
+    // Scan the submission directories for checksum files, add any checksums to checksumHash
+    fs.readdir(submissionsDir, function(err, dirContents){
 
-            // remove items that are not directories
-            childDirNames = dirContents.filter(function (dirItem, index) {
-                return results[index].isDirectory();
-            });
+        var childDirNames;
 
-            // Read directory contents
-            return Q.all(childDirNames.map(function (dirName) {
-                return File.readDirDeferred(submissionsDir + '/' + dirName)
-            }));
-        })
-        .then(function (childDirs) {
-
-            // loop thru each directory and look for a finalized-osm-checksums.txt file, add its file path to an array
-            childDirs.forEach(function(dir, index){
-                if(dir.indexOf('finalized-osm-checksums.txt') > -1) {
-                    checksumFilePaths.push(childDirNames[index]);
-                }
-            });
-
-            // read the contents of each finalized-osm-checksums.txt file
-            return Q.all(checksumFilePaths.map(function (dir) {
-                return File.readFileDeferred(submissionsDir + '/' + dir + '/' + 'finalized-osm-checksums.txt', {encoding: 'utf8'})
-            }));
-
-        })
-        .then(function(checksumFiles){
-
-            // Use contents of checksum files to populate the checksumHash map
-            checksumFiles.forEach(function(fileStr, index){
-                fileStr.split('\n').forEach(function(checksum){
-                    checksumHash.set(checksum, true);
-                });
-            });
-
-        })
-        .catch(function (err) {
+        if(err) {
             console.error(err);
-        })
-        .done();
+            return;
+        }
 
-});
+        if (dirContents.length === 0) {
+            return;
+        }
 
-module.exports.get = function(){
-    return checksumHash;
+        // Loop thru the contents of the submissions directory and get file stats
+        Q.all(dirContents.map(function (dirItem) {
+                return File.statDeferred(submissionsDir + '/' + dirItem);
+            }))
+            .then(function (results) {
+
+                // remove items that are not directories
+                childDirNames = dirContents.filter(function (dirItem, index) {
+                    return results[index].isDirectory();
+                });
+
+                // Read directory contents
+                return Q.all(childDirNames.map(function (dirName) {
+                    return File.readDirDeferred(submissionsDir + '/' + dirName)
+                }));
+            })
+            .then(function (childDirs) {
+
+                var formDirs = [];
+
+                // loop thru each form directory; add an entry to the formHash, with key:form-name and value: new Map()
+                childDirs.forEach(function(dir, index){
+
+                    // Create a checksum hash map for each form in the formHash
+                    formHash.set(childDirNames[index], new Map());
+
+                    // Keep track of which directories have a finalized-osm-checksums.txt
+                    if(dir.indexOf('finalized-osm-checksums.txt') > -1) {
+                        formDirs.push(childDirNames[index]);
+                    }
+                });
+
+                // Do all file reads in parallel
+                return Q.all(formDirs.map(function(dir){
+
+                    // Get the checksum hash map for the appropriate form
+                    var checksumHash = formHash.get(dir);
+
+                    return readlineDeferred(submissionsDir + '/' + dir + '/finalized-osm-checksums.txt', checksumHash);
+                }));
+            })
+            .then(function(results){
+                cb(null);
+            })
+            .catch(function (err) {
+                console.error(err);
+                cb(err);
+            })
+            .done();
+    });
+};
+module.exports.get = function(formName){
+
+    if(formName === undefined) {
+        return formHash;
+    }
+
+    return formHash.get(formName);
 };
