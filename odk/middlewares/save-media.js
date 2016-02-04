@@ -30,7 +30,7 @@ function SaveMedia (options) {
                 filename: req.submission.instanceId + '/' + file.originalFilename,
                 file: file,
                 filesystem: {
-                    path: 'public/submissions/' + req.submission.formId + '/'
+                    path: settings.publicDir + 'public/submissions/' + req.submission.formId + '/'
                 }
             };
 
