@@ -2,6 +2,7 @@ const extend = require('xtend');
 const fs = require('fs');
 const persistFs = require('../helpers/persist');
 const updateFileRef = require('../helpers/update-file-ref');
+const settings = require('../../settings.js');
 
 var defaults = {
     store: 'fs'
