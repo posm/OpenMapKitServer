@@ -39,11 +39,12 @@ module.exports.create = function(cb){
         var childDirNames;
 
         if(err) {
-            console.error(err);
+            cb(err);
             return;
         }
 
         if (dirContents.length === 0) {
+            cb(null);
             return;
         }
 
