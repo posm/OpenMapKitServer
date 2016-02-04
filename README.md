@@ -65,7 +65,7 @@ Install dependencies, start the server.
 ```
 git submodule init
 git submodule update
-pip install -r requirements.txt
+sudo pip install -r requirements.txt
 npm install
 npm start
 ```
