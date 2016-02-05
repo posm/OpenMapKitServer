@@ -40,21 +40,22 @@ useful to OpenMapKit Server as a whole.
 
 ## The Basics
 
-### After your installation is done, you can see if the server is alive at:
+#### After your installation is done, you can see if the server is alive at:
 
-http://<your_host_url>/info
+_http://{{your_host_url}}/info_
 
-### See all of the data and apps on your server:
 
-http://<your_host_url>/public/
+#### See all of the data and apps on your server:
 
-### Upload an XLS Form:
+_http://{{your_host_url}}/public/_
 
-http://<your_host_url>/public/upload-form/
+#### Upload an XLS Form:
 
-### Edit your OSM submissions and finalize to OpenStreetMap:
+_http://{{your_host_url}}/public/upload-form/_
 
-http://{{your_host_url}}/public/id/
+#### Edit your OSM submissions and finalize to OpenStreetMap:
+
+_http://{{your_host_url}}/public/id/_
 
 You need to submit some data first to see something. Pick which form you 
 want in the top right (once you've submitted some data).
@@ -62,28 +63,28 @@ want in the top right (once you've submitted some data).
 Download your aggregated OSM XML by selecting your form and pressing 
 __Download__ in the top right.
 
-### See your ODK submissions:
+#### See your ODK submissions:
 
-http://{{your_host_url}}/submissions/{{form}}.json
+_http://{{your_host_url}}/submissions/{{form}}.json_
 
-### See your OSM submissions:
+#### See your OSM submissions:
 
 This is where you can see what OpenMapKit Android users submitted to 
 OpenMapKit Server.
 
-http://{{your_host_url}}/submissions/{{form}}.osm
+_http://{{your_host_url}}/submissions/{{form}}.osm_
 
 To filter your OSM submissions by user, do the following:
 
-http://{{your_host_url}}/submissions/{{form}}.osm?user={{osm_user}}
+_http://{{your_host_url}}/submissions/{{form}}.osm?user={{osm_user}}_
 
 To filter by date:
 
-http://{{your_host_url}}/submissions/{{form}}.osm?submitTimeStart=2015-12-28
+_http://{{your_host_url}}/submissions/{{form}}.osm?submitTimeStart=2015-12-28_
 
 or
 
-http://{{your_host_url}}/submissions/{{form}}.osm?submitTimeStart=2015-12-28&submitTimeEnd=2015-12-30
+_http://{{your_host_url}}/submissions/{{form}}.osm?submitTimeStart=2015-12-28&submitTimeEnd=2015-12-30_
 
 A UI for filtering in iD is coming soon...
 
