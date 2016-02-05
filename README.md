@@ -42,19 +42,19 @@ useful to OpenMapKit Server as a whole.
 
 ### After your installation is done, you can see if the server is alive at:
 
-http://<your_ip>/info
+http://<your_host_url>/info
 
 ### See all of the data and apps on your server:
 
-http://<your_ip>/public/
+http://<your_host_url>/public/
 
 ### Upload an XLS Form:
 
-http://<your_ip>/public/upload-form/
+http://<your_host_url>/public/upload-form/
 
 ### Edit your OSM submissions and finalize to OpenStreetMap:
 
-http://<your_ip>/public/id/
+http://{{your_host_url}}/public/id/
 
 You need to submit some data first to see something. Pick which form you 
 want in the top right (once you've submitted some data).
@@ -64,26 +64,26 @@ __Download__ in the top right.
 
 ### See your ODK submissions:
 
-http://<your_ip>/submissions/<form>.json
+http://{{your_host_url}}/submissions/{{form}}.json
 
 ### See your OSM submissions:
 
 This is where you can see what OpenMapKit Android users submitted to 
 OpenMapKit Server.
 
-http://<your_ip>/submissions/<form>.osm
+http://{{your_host_url}}/submissions/{{form}}.osm
 
 To filter your OSM submissions by user, do the following:
 
-http://<your_ip>/submissions/<form>.osm?user=<osm_user>
+http://{{your_host_url}}/submissions/{{form}}.osm?user={{osm_user}}
 
 To filter by date:
 
-http://<your_ip>/submissions/<form>.osm?submitTimeStart=2015-12-28
+http://{{your_host_url}}/submissions/{{form}}.osm?submitTimeStart=2015-12-28
 
 or
 
-http://<your_ip>/submissions/<form>.osm?submitTimeStart=2015-12-28&submitTimeEnd=2015-12-30
+http://{{your_host_url}}/submissions/{{form}}.osm?submitTimeStart=2015-12-28&submitTimeEnd=2015-12-30
 
 A UI for filtering in iD is coming soon...
 
