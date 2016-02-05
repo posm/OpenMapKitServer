@@ -8,33 +8,33 @@ as well as on higher powered, cloud-based servers.
 
 OpenMapKit Server is 100% database free! All data is persisted on the file system.
 
-## [Development Installation](tree/master/docs/development-installation.md)
+## [Development Installation](docs/development-installation.md)
 
 These [instructions](tree/master/docs/development-installation.md) are for setting up 
 and running OpenMapKit Server in your development environment.
 
-## [Production Installation](tree/master/docs/posm-build-installation.md)
+## [Production Installation](docs/posm-build-installation.md)
 
 If you want to run OpenMapKit Server for your field mapping survey, use the 
-[POSM Build Installation](tree/master/docs/posm-build-installation.md) instructions.
+[POSM Build Installation](docs/posm-build-installation.md) instructions.
 
 
 ## Project Structure
 
-[__deployments__](tree/master/deployments) is the OpenMapKit 
+[__deployments__](deployments) is the OpenMapKit 
 deployment API. This services deployment data in the 
-[deployments public directory](tree/master/public/deployments).
+[deployments public directory](public/deployments).
 Manifest files in this directory work with [posm-deployment](https://github.com/AmericanRedCross/posm-deployment)
 to provision deployment data that is fetched by OpenMapKit Android.
 
-[__odk__](tree/master/odk) is the OpenMapKit ODK API. 
+[__odk__](odk) is the OpenMapKit ODK API. 
 This is a REST API that handles all of the ODK business logic, including communicating with ODK Collect,
 as well as serving and ingesting ODK XForm data.
 
-[__public__](tree/master/public) is the public directory where 
+[__public__](public) is the public directory where 
 you store data and static assets. You can set an alternate public directory in `settings.js`. Front-end UI will be built as [micro-apps](https://github.com/AmericanRedCross/OpenMapKitServer/tree/master/public/export-osm) that live within directories in the public folder.
 
-[__util__](tree/master/util) has utility functions 
+[__util__](util) has utility functions 
 useful to OpenMapKit Server as a whole.
 
 
