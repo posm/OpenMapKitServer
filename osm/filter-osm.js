@@ -18,10 +18,11 @@ filter.file = function (filePath, filterObj, cb) {
     var pathMeta = path.parse(filePath);
     var parsedPath = pathMeta.dir.split('/');
     var formName = parsedPath[parsedPath.length - 2];
-    const formBlacklist = formHash.get(formName);
+    const formBlacklist = formHash.get(formName) || null;
 
-    // if the filename is found in the blacklist, filter it.
-    if(formBlacklist.has(pathMeta.name)) {
+
+    // if a blacklist for this form exists and the filename is found in the blacklist, filter it.
+    if(formBlacklist && formBlacklist.has(pathMeta.name)) {
         cb(filePath, false);
         return;
     }

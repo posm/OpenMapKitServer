@@ -35,19 +35,21 @@ module.exports = function(req, res, next){
         next(err);
     }
 
-    // Get the current blacklist
-    var formHash = checksumHelper.get(formName);
 
-    if(!formHash) {
-        err = new Error('Bad Request: form with this name not found.');
-        err.status = 400;
-        next(err);
+    // Get the current blacklist
+    var blacklist = checksumHelper.get(formName) || null;
+
+    // If the form not yet added to the formHash map, then we need to add it and create an empty blacklist
+    if(!blacklist) {
+        var formHash = checksumHelper.get();
+        formHash.set(formName, new Map());
+        blacklist = formHash.get(formName);
     }
 
     // Parallel async call to find and append the finialized-osm-checksum.txt files that managed the patched checksums
     Q.all(entityChecksums.map(function(checksum){
 
-        formHash.set(checksum, true);
+        blacklist.set(checksum, true);
         return appendFileDeferred(submissionsDir + '/' + formName + '/finalized-osm-checksums.txt', checksum);
 
     }))
