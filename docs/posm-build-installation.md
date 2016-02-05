@@ -29,25 +29,20 @@ have to throw much hardware at it.
 
 1. Download and extract posm-build.
 
-```
-sudo -s
-wget -q -O - https://github.com/AmericanRedCross/posm-build/archive/master.tar.gz | tar -zxf - -C /root --strip=2
-```
+        sudo -s
+        wget -q -O - https://github.com/AmericanRedCross/posm-build/archive/master.tar.gz | tar -zxf - -C /root --strip=2
 
 2. Create a `settings.local` file in `/root/etc` with the following content:
 
-```
-posm_domain="local"
-posm_hostname="posm.$posm_domain"
-posm_ip="54.191.109.128"
-```
+        posm_domain="local"
+        posm_hostname="posm.$posm_domain"
+        posm_ip="54.191.109.128"
 
-Replace the IP address for `posm_ip` with the actual public IP or your server.
+        Replace the IP address for `posm_ip` with the actual public IP or your server.
 
 3. Execute `bootstrap.sh` and tell it to only install NGINX and OpenMapKit Server.
 
-```
-/root/scripts/bootstrap.sh base virt nodejs nginx omk
-```
+        /root/scripts/bootstrap.sh base virt nodejs nginx omk
+
 
 Let the installation churn. That's it!
