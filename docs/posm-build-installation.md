@@ -46,3 +46,12 @@ have to throw much hardware at it.
 
 
 Let the installation churn. That's it!
+
+## Upstart
+
+You can start / stop / restart the `omk-service` like any Ubuntu Upstart service.
+
+    sudo service omk-server stop
+    sudo service omk-server start
+    sudo service omk-server restart
+    
