@@ -8,74 +8,84 @@ as well as on higher powered, cloud-based servers.
 
 OpenMapKit Server is 100% database free! All data is persisted on the file system.
 
-[__deployments__](https://github.com/AmericanRedCross/OpenMapKitServer/tree/master/deployments) is the OpenMapKit 
+## [Development Installation](tree/master/docs/development-installation.md)
+
+These [instructions](tree/master/docs/development-installation.md) are for setting up 
+and running OpenMapKit Server in your development environment.
+
+## [Production Installation](tree/master/docs/posm-build-installation.md)
+
+If you want to run OpenMapKit Server for your field mapping survey, use the 
+[POSM Build Installation](tree/master/docs/posm-build-installation.md) instructions.
+
+
+## Project Structure
+
+[__deployments__](tree/master/deployments) is the OpenMapKit 
 deployment API. This services deployment data in the 
-[deployments public directory](https://github.com/AmericanRedCross/OpenMapKitServer/tree/master/public/deployments).
+[deployments public directory](tree/master/public/deployments).
 Manifest files in this directory work with [posm-deployment](https://github.com/AmericanRedCross/posm-deployment)
 to provision deployment data that is fetched by OpenMapKit Android.
 
-[__odk__](https://github.com/AmericanRedCross/OpenMapKitServer/tree/master/odk) is the OpenMapKit ODK API. 
+[__odk__](tree/master/odk) is the OpenMapKit ODK API. 
 This is a REST API that handles all of the ODK business logic, including communicating with ODK Collect,
 as well as serving and ingesting ODK XForm data.
 
-[__public__](https://github.com/AmericanRedCross/OpenMapKitServer/tree/master/public) is the public directory where 
+[__public__](tree/master/public) is the public directory where 
 you store data and static assets. You can set an alternate public directory in `settings.js`. Front-end UI will be built as [micro-apps](https://github.com/AmericanRedCross/OpenMapKitServer/tree/master/public/export-osm) that live within directories in the public folder.
 
-[__util__](https://github.com/AmericanRedCross/OpenMapKitServer/tree/master/util) has utility functions 
+[__util__](tree/master/util) has utility functions 
 useful to OpenMapKit Server as a whole.
 
 
-## Installation
+## The Basics
 
-Create a `settings.js` file in this directory. You can use `settings.js.example`
-as an example.
+### After your installation is done, you can see if the server is alive at:
 
-If you are on Debian or Ubuntu, you may have to install `build-essential`:
+http://<your_ip>/info
 
-```
-sudo apt-get install build-essential
-```
+### See all of the data and apps on your server:
 
-The ODK component requires python dependencies that are installed via pip.
-The best way to install pip on a Mac is through [Homebrew](http://brew.sh/):
+http://<your_ip>/public/
 
-```
-brew install python
-```
+### Upload an XLS Form:
 
-On a Debian or Ubuntu machine:
+http://<your_ip>/public/upload-form/
 
-```
-sudo apt-get install python-pip
-```
-If you're just installing OMK Server and not building POSM install git
+### Edit your OSM submissions and finalize to OpenStreetMap:
 
-```
-sudo apt-get install git
-```
-OMK Server is a nodejs app so you'll need node version 4.x.
+http://<your_ip>/public/id/
 
-```
-curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
-sudo apt-get install nodejs
-```
+You need to submit some data first to see something. Pick which form you 
+want in the top right (once you've submitted some data).
 
-Install dependencies, start the server.
+Download your aggregated OSM XML by selecting your form and pressing 
+__Download__ in the top right.
 
-```
-git submodule init
-git submodule update
-sudo pip install -r requirements.txt
-npm install
-npm start
-```
+### See your ODK submissions:
 
-We are using node version 4.2.*. If you are having problems with another
-version, use [node version manager](https://github.com/creationix/nvm).
+http://<your_ip>/submissions/<form>.json
 
-```
-nvm install
-nvm use
-```
+### See your OSM submissions:
+
+This is where you can see what OpenMapKit Android users submitted to 
+OpenMapKit Server.
+
+http://<your_ip>/submissions/<form>.osm
+
+To filter your OSM submissions by user, do the following:
+
+http://<your_ip>/submissions/<form>.osm?user=<osm_user>
+
+To filter by date:
+
+http://<your_ip>/submissions/<form>.osm?submitTimeStart=2015-12-28
+
+or
+
+http://<your_ip>/submissions/<form>.osm?submitTimeStart=2015-12-28&submitTimeEnd=2015-12-30
+
+A UI for filtering in iD is coming soon...
+
 
 [![ZenHub] (https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png)] (https://zenhub.io)
