@@ -47,7 +47,7 @@ module.exports = function (req, res, next) {
         var count = 0;
         for (var i = 0; i < len; i++) {
             var submissionDir = submissionDirs[i];
-            if (submissionDir[0] === '.') {
+            if (submissionDir[0] === '.' || submissionDir.indexOf('.txt') > 0) {
                 ++count;
                 if (len === count) {
                     res.status(200).json(aggregate);
@@ -67,7 +67,7 @@ module.exports = function (req, res, next) {
                 }
                 const dataObj = JSON.parse(data);
                 aggregate.push(dataObj);
-                if (len === count) {
+                if (len === count && !res._headerSent) {
                     res.status(200).json(aggregate);
                 }
             });

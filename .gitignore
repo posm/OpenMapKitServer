@@ -34,7 +34,8 @@ pids
 
 ############## OpenMapKit Stuff ##############
 settings.js
-public/submissions
+public/submissions/*
+!public/submissions/README.md
 public/deployments/**/*.osm
 public/deployments/**/*.mbtiles
 public/deployments/**/*.md
