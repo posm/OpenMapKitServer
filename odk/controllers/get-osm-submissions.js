@@ -1,6 +1,6 @@
-const fs = require('fs');
-const settings = require('../../settings');
-const aggregateOsm = require('../../osm/aggregate-osm');
+var fs = require('fs');
+var settings = require('../../settings');
+var aggregateOsm = require('../../osm/aggregate-osm');
 
 /**
  * Aggregates together all of the OSM submissions
@@ -8,7 +8,7 @@ const aggregateOsm = require('../../osm/aggregate-osm');
  * file system for the given form.
  */
 module.exports = function (req, res, next) {
-    const formName = req.params.formName;
+    var formName = req.params.formName;
     if (typeof formName === 'undefined' || formName === null) {
         res.status(400).json({
             status: 400,
@@ -17,8 +17,8 @@ module.exports = function (req, res, next) {
             path: '/odk/submissions/:formName.osm'
         });
     }
-    const dir = settings.publicDir + '/submissions/' + formName;
-    const osmFiles = [];
+    var dir = settings.publicDir + '/submissions/' + formName;
+    var osmFiles = [];
 
     // All of the submission dirs in the form directory
     fs.readdir(dir, function (err, submissionDirs) {
@@ -39,7 +39,7 @@ module.exports = function (req, res, next) {
             });
             return;
         }
-        const len = submissionDirs.length;
+        var len = submissionDirs.length;
         if (len === 0) {
             res.status(200).json([]);
             return;

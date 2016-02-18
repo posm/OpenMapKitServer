@@ -1,9 +1,9 @@
 'use strict';
 
-const test = require('tape');
-const request = require('supertest');
-const app = require('../../index');
-const getDeployments = require('../../deployments/controllers/deployments');
+var test = require('tape');
+var request = require('supertest');
+var app = require('../../index');
+var getDeployments = require('../../deployments/controllers/deployments');
 
 getDeployments._setParentDirectory(__dirname + '/../fixtures');
 
@@ -14,7 +14,7 @@ test('/deployments endpoint exists and returns correct response content', functi
         .expect(200)
         .end(function (err, res) {
 
-            const response = res.body;
+            var response = res.body;
 
             t.equal(response instanceof Array, true, "Response is an Array.");
             t.equal(response.length, 1, "Response array has length 1.");
@@ -56,7 +56,7 @@ test('/deployments/:deployment endpoint exists and returns correct response cont
         .expect(200)
         .end(function (err, res) {
 
-            const response = res.body;
+            var response = res.body;
 
             t.equal(typeof response === "object", true, "Response is an Object.");
 

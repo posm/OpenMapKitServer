@@ -1,12 +1,12 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const Q = require('q');
-const Url = require('../../util/url');
-const File = require('../../util/file');
-const settings = require('../../settings');
-const deploymentParentDir = 'deployments' ;
+var fs = require('fs');
+var path = require('path');
+var Q = require('q');
+var Url = require('../../util/url');
+var File = require('../../util/file');
+var settings = require('../../settings');
+var deploymentParentDir = 'deployments' ;
 var deploymentParentDirPath = settings.publicDir + '/' + deploymentParentDir;
 
 
@@ -17,7 +17,7 @@ var deploymentParentDirPath = settings.publicDir + '/' + deploymentParentDir;
  *
  * returns object with properties describing contents of a deployment directory
  */
-const digestDeploymentDir = function(req, dirName, contents){
+var digestDeploymentDir = function(req, dirName, contents){
 
     var deferred = Q.defer();
 
@@ -85,7 +85,7 @@ module.exports._setParentDirectory = function(parentDir){
 };
 
 module.exports.getAll = function(req, res, next) {
-    const deployments = [];
+    var deployments = [];
     var deploymentDirContents;
     var deploymentDirs;
 
@@ -140,7 +140,7 @@ module.exports.getAll = function(req, res, next) {
 
 module.exports.get = function(req, res, next) {
 
-    const deploymentDir = req.params.deployment;
+    var deploymentDir = req.params.deployment;
 
     // Make sure it exists
     File.statDeferred(deploymentParentDirPath + '/' + deploymentDir)

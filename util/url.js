@@ -1,6 +1,6 @@
-const settings = require('../settings');
+var settings = require('../settings');
 
-const Url = module.exports = {};
+var Url = module.exports = {};
 
 /**
  * Returns a fully qualified url for a resource in the
@@ -29,7 +29,7 @@ Url.publicDirFileUrl = function (req, path, fileName) {
  */
 Url.apiUrl = function (req, path) {
     path = encodeURIComponent(path).replace(/%2F/g, '/'); // keep slashes
-    const base = req.protocol + '://' + req.headers.host;
+    var base = req.protocol + '://' + req.headers.host;
     return path[0] === '/' ? base + path : base + '/' + path;
 };
 

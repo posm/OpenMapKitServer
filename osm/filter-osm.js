@@ -1,8 +1,8 @@
-const fs = require('fs');
-const path = require('path');
-const blacklistHelper = require('../odk/helpers/checksum-hash');
-const formHash = blacklistHelper.get();
-const filter = module.exports = {};
+var fs = require('fs');
+var path = require('path');
+var blacklistHelper = require('../odk/helpers/checksum-hash');
+var formHash = blacklistHelper.get();
+var filter = module.exports = {};
 
 /**
  * Gets stats on a file, and filters it based on `submitTimeStart`
@@ -18,7 +18,7 @@ filter.file = function (filePath, filterObj, cb) {
     var pathMeta = path.parse(filePath);
     var parsedPath = pathMeta.dir.split('/');
     var formName = parsedPath[parsedPath.length - 2];
-    const formBlacklist = formHash.get(formName) || null;
+    var formBlacklist = formHash.get(formName) || null;
 
 
     // if a blacklist for this form exists and the filename is found in the blacklist, filter it.

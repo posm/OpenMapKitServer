@@ -1,13 +1,13 @@
-const test = require('tape');
-const fs = require('fs');
-const libxml = require('libxmljs');
-const filterOsm = require('../../osm/filter-osm');
+var test = require('tape');
+var fs = require('fs');
+var libxml = require('libxmljs');
+var filterOsm = require('../../osm/filter-osm');
 
 /**
  * Get together an array of the simple set of OSM files to test.
  */
-const simpleFiles = fs.readdirSync('./test/fixtures/osm/basic');
-const simpleFilesXml = [];
+var simpleFiles = fs.readdirSync('./test/fixtures/osm/basic');
+var simpleFilesXml = [];
 for (var i = 0, len = simpleFiles.length; i < len; i++) {
     var fName = simpleFiles[i];
     var path = './test/fixtures/osm/basic/' + fName;

@@ -1,7 +1,7 @@
 'use strict';
 
-const fs = require('fs');
-const Q  = require('q');
+var fs = require('fs');
+var Q  = require('q');
 
 /**
  *
@@ -9,17 +9,13 @@ const Q  = require('q');
  * @returns Returns a deferred promise. Resolve with "stat" object for the passed in file descriptor.
  */
 module.exports.statDeferred = function(fd){
-
-    const deferred = Q.defer();
-
+    var deferred = Q.defer();
     fs.stat(fd, function(err, stats){
-
-        if(err)
+        if(err) {
             deferred.reject(err);
-
+        }
         deferred.resolve(stats);
     });
-
     return deferred.promise;
 };
 
@@ -29,19 +25,14 @@ module.exports.statDeferred = function(fd){
  * @returns Returns a deferred promise. Resolved with an array of names of items in a directory.
  */
 module.exports.readDirDeferred = function(dirPath){
-
-    const deferred = Q.defer();
-
+    var deferred = Q.defer();
     fs.readdir(dirPath, function(err, contents){
-
-        if(err)
+        if(err) {
             deferred.reject(err);
-
+        }
         deferred.resolve(contents);
     });
-
     return deferred.promise;
-
 };
 
 /**
@@ -50,17 +41,13 @@ module.exports.readDirDeferred = function(dirPath){
  * @returns Returns a deferred promise. Resolved with a string of file contents.
  */
 module.exports.readFileDeferred = function(filePath, opts){
-
-    const options = opts || {};
-    const deferred = Q.defer();
-
+    var options = opts || {};
+    var deferred = Q.defer();
     fs.readFile(filePath, options, function(err, filestream){
-
-        if(err)
+        if(err) {
             deferred.reject(err);
-
+        }
         deferred.resolve(filestream);
     });
-
     return deferred.promise;
 };

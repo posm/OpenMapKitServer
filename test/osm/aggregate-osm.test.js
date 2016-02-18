@@ -1,13 +1,13 @@
-const test = require('tape');
-const fs = require('fs');
-const aggregateOsm = require('../../osm/aggregate-osm');
+var test = require('tape');
+var fs = require('fs');
+var aggregateOsm = require('../../osm/aggregate-osm');
 
 
 /**
  * Get together an array of the simple set of OSM files to test.
  */
-const simpleFiles = fs.readdirSync('./test/fixtures/osm/basic');
-const simpleFilesPaths = [];
+var simpleFiles = fs.readdirSync('./test/fixtures/osm/basic');
+var simpleFilesPaths = [];
 for (var i = 0, len = simpleFiles.length; i < len; i++) {
     var fName = simpleFiles[i];
     simpleFilesPaths.push('./test/fixtures/osm/basic/' + fName);
@@ -16,8 +16,8 @@ for (var i = 0, len = simpleFiles.length; i < len; i++) {
 /**
  * Get together an array of OSM files with conflicting negative IDs to test.
  */
-const conflictingIdFiles = fs.readdirSync('./test/fixtures/osm/conflicting-negative-ids');
-const conflictingIdFilesPaths = [];
+var conflictingIdFiles = fs.readdirSync('./test/fixtures/osm/conflicting-negative-ids');
+var conflictingIdFilesPaths = [];
 for (var j = 0, len2 = conflictingIdFiles.length; j < len2; j++) {
     var fName2 = conflictingIdFiles[i];
     conflictingIdFilesPaths.push('./test/fixtures/osm/conflicting-negative-ids/' + fName2);
@@ -27,8 +27,8 @@ for (var j = 0, len2 = conflictingIdFiles.length; j < len2; j++) {
  * Several OSM files with conflicting negative IDs as well as corresponding way and relation
  * references that also need to be rewritten.
  */
-const rewriteNegativeRefFiles = fs.readdirSync('./test/fixtures/osm/rewrite-negative-refs');
-const rewriteNegativeRefFilesPaths = [];
+var rewriteNegativeRefFiles = fs.readdirSync('./test/fixtures/osm/rewrite-negative-refs');
+var rewriteNegativeRefFilesPaths = [];
 for (var l = 0, len4 = rewriteNegativeRefFiles.length; l < len4; l++) {
     var fName3 = rewriteNegativeRefFiles[l];
     rewriteNegativeRefFilesPaths.push('./test/fixtures/osm/rewrite-negative-refs/' + fName3);
@@ -39,8 +39,8 @@ test('aggregate-osm.js must concatenate 3 files and rewrite a negative ID.', fun
     t.plan(2);
     aggregateOsm(simpleFilesPaths, null, function (err, xml) {
         t.error(err, 'Should not throw error.');
-        const nodeWithNegId = '<node id="-1" action="modify" lat="1.0753199144383814" lon="34.16216178888775">';
-        const idxRetVal = xml.indexOf(nodeWithNegId);
+        var nodeWithNegId = '<node id="-1" action="modify" lat="1.0753199144383814" lon="34.16216178888775">';
+        var idxRetVal = xml.indexOf(nodeWithNegId);
         t.ok(idxRetVal > 0, 'There is a node with a -1 id.');
     });
 });
@@ -70,14 +70,14 @@ test('aggregate-osm.js must update the refs to rewritten negative IDs for both w
  * @param xml   - the xml string in question
  */
 function checkAllNegativeIDsAreUnique(t, xml) {
-    const regex = /id="-\d+"/gi;
-    const idAttrStrs = [];
+    var regex = /id="-\d+"/gi;
+    var idAttrStrs = [];
     var result;
     while (result = regex.exec(xml)) {
         idAttrStrs.push(result[0]);
     }
     // keys are ids so we can see if we have an aformentioned id
-    const idHash = {};
+    var idHash = {};
     for (var k = 0, len3 = idAttrStrs.length; k < len3; k++) {
         // ex: id="-1"
         var idAttrStr = idAttrStrs[k];
@@ -101,8 +101,8 @@ function checkAllNegativeIDsAreUnique(t, xml) {
  * @param idHash - a hash with all the ids as keys and true as values
  */
 function checkAllNegativeRefsHaveCorrespondingId(t, xml, idHash) {
-    const regex = /ref="-\d+"/gi;
-    const refAttrStrs = [];
+    var regex = /ref="-\d+"/gi;
+    var refAttrStrs = [];
     var result;
     while (result = regex.exec(xml)) {
         var refAttrStr = result[0];

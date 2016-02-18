@@ -1,16 +1,16 @@
 'use strict';
-const fs = require('fs');
-const readline = require('readline');
-const Q = require('q');
-const File = require('../../util/file');
-const submissionsDir = __dirname + '/../../public/submissions';
+var fs = require('fs');
+var readline = require('readline');
+var Q = require('q');
+var File = require('../../util/file');
+var submissionsDir = __dirname + '/../../public/submissions';
 
 var readlineDeferred = function(filePath, hashMap){
 
     var deferred = Q.defer();
 
     try {
-        const rl = readline.createInterface({
+        var rl = readline.createInterface({
             input: fs.createReadStream(filePath)
         });
 

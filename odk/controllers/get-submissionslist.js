@@ -1,6 +1,6 @@
-const fs = require('fs');
-const settings = require('../../settings');
-const Url = require('../../util/url');
+var fs = require('fs');
+var settings = require('../../settings');
+var Url = require('../../util/url');
 
 /**
  * Provides metadata as JSON of the public directories of
@@ -8,9 +8,9 @@ const Url = require('../../util/url');
  * endpoints.
  */
 module.exports = function (req, res, next) {
-    const dir = settings.publicDir + '/submissions/';
+    var dir = settings.publicDir + '/submissions/';
     fs.readdir(dir, function (err, files) {
-        const urls = [];
+        var urls = [];
         if (err) {
             // Submissions directory doesn't exist if submissions have not yet been made.
             // This is a normal situation, so we should just send back an array showing

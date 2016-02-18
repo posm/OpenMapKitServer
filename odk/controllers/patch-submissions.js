@@ -1,9 +1,9 @@
 'use strict';
-const fs = require('fs');
-const path = require('path');
-const Q = require('q');
-const File = require('../../util/file');
-const submissionsDir = __dirname + '/../../public/submissions';
+var fs = require('fs');
+var path = require('path');
+var Q = require('q');
+var File = require('../../util/file');
+var submissionsDir = __dirname + '/../../public/submissions';
 var checksumHelper = require('../helpers/checksum-hash');
 
 var appendFileDeferred = function(filePath, append) {

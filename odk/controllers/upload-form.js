@@ -1,9 +1,9 @@
-const fs = require('fs');
-const multiparty = require('multiparty');
-const PythonShell = require('python-shell');
+var fs = require('fs');
+var multiparty = require('multiparty');
+var PythonShell = require('python-shell');
 
-const settings = require('../../settings');
-const formsDir = settings.publicDir + '/forms/';
+var settings = require('../../settings');
+var formsDir = settings.publicDir + '/forms/';
 
 /**
  * User uploads an XLSForm (Excel ODK Form).

@@ -9,15 +9,15 @@ try {
     process.exit();
 }
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const directory = require('serve-index');
-const cors = require('cors');
-const odk = require('./odk/odk-routes');
-const deployments = require('./deployments/deployment-routes');
-const error = require('./odk/controllers/error-handler');
-const pkg = require('./package');
-const app = express();
+var express = require('express');
+var bodyParser = require('body-parser');
+var directory = require('serve-index');
+var cors = require('cors');
+var odk = require('./odk/odk-routes');
+var deployments = require('./deployments/deployment-routes');
+var error = require('./odk/controllers/error-handler');
+var pkg = require('./package');
+var app = express();
 
 // Enable CORS always.
 app.use(cors());

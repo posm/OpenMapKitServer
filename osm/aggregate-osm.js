@@ -1,9 +1,9 @@
-const fs = require('fs');
-const libxml = require('libxmljs');
-const appVersion = require('../package').version;
-const filterOsm = require('./filter-osm');
+var fs = require('fs');
+var libxml = require('libxmljs');
+var appVersion = require('../package').version;
+var filterOsm = require('./filter-osm');
 
-const CHUNK_SIZE = 500;
+var CHUNK_SIZE = 500;
 
 /**
  * aggregate-osm.js
@@ -17,7 +17,7 @@ const CHUNK_SIZE = 500;
  * @param cb      - Final aggregated OSM XML.
  */
 module.exports = function (files, filter, cb) {
-    const numFiles = files.length;
+    var numFiles = files.length;
 
     // Empty OSM XML if no files.
     if (numFiles === 0) {
@@ -25,14 +25,14 @@ module.exports = function (files, filter, cb) {
     }
 
     var filesCompleted = 0;
-    const mainXmlDoc = new libxml.Document();
+    var mainXmlDoc = new libxml.Document();
     mainXmlDoc.node('osm').attr({
         version: '0.6',
         generator: 'OpenMapKit Server ' + appVersion
     });
-    const mainOsmElement = mainXmlDoc.root();
+    var mainOsmElement = mainXmlDoc.root();
 
-    const negIdRewriteHash = {
+    var negIdRewriteHash = {
         counter: -1
     };
 
@@ -139,7 +139,7 @@ function rewriteNegativeId(negIdRewriteHash, osmElement) {
  * @param osmElement - the OSM XML Element we are processing
  */
 function rewriteNegativeRef(negIdRewriteHash, osmElement) {
-    const children = osmElement.childNodes();
+    var children = osmElement.childNodes();
     for (var i = 0, len = children.length; i < len; i++) {
         // A child can be a nd, member, or tag.
         var child = children[i];

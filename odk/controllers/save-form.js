@@ -1,17 +1,17 @@
-const fs = require('fs');
-const path = require('path');
-const mkdirp = require('mkdirp');
-const settings = require('../../settings.js');
+var fs = require('fs');
+var path = require('path');
+var mkdirp = require('mkdirp');
+var settings = require('../../settings.js');
 
 module.exports = function (req, res, next) {
-    const submission = req.submission;
-    const ext = submission.geojson ? '.geojson' : '.json';
-    const json = JSON.stringify(submission.json, null, '  ');
-    const xml = submission.xml; // Original XML for debug purposes is nice.
+    var submission = req.submission;
+    var ext = submission.geojson ? '.geojson' : '.json';
+    var json = JSON.stringify(submission.json, null, '  ');
+    var xml = submission.xml; // Original XML for debug purposes is nice.
 
-    const dir = settings.publicDir + '/submissions/' + submission.formId + '/' + submission.instanceId;
-    const jsonFileName = dir + '/data' + ext;
-    const xmlFileName = dir + '/data' + '.xml';
+    var dir = settings.publicDir + '/submissions/' + submission.formId + '/' + submission.instanceId;
+    var jsonFileName = dir + '/data' + ext;
+    var xmlFileName = dir + '/data' + '.xml';
 
     mkdirp(path.dirname(jsonFileName), function (err) {
         if (err) {

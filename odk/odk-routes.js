@@ -1,18 +1,18 @@
-const router = require('express').Router({ mergeParams: true });
-const FormSubmissionMiddleware = require('./middlewares/openrosa-form-submission-middleware');
-const OpenRosaHeaders = require('./middlewares/openrosa-request-middleware');
+var router = require('express').Router({ mergeParams: true });
+var FormSubmissionMiddleware = require('./middlewares/openrosa-form-submission-middleware');
+var OpenRosaHeaders = require('./middlewares/openrosa-request-middleware');
 
-const ProcessSubmission = require('./middlewares/process-submission');
-const SaveMedia = require('./middlewares/save-media');
+var ProcessSubmission = require('./middlewares/process-submission');
+var SaveMedia = require('./middlewares/save-media');
 
-const saveForm = require('./controllers/save-form');
-const getFormlist = require('./controllers/get-formlist');
+var saveForm = require('./controllers/save-form');
+var getFormlist = require('./controllers/get-formlist');
 
-const getSubmissionsList = require('./controllers/get-submissionslist');
-const getJsonSubmissions = require('./controllers/get-json-submissions');
-const getOsmSubmissions = require('./controllers/get-osm-submissions');
-const patchSubmissions = require('./controllers/patch-submissions');
-const uploadForm = require('./controllers/upload-form');
+var getSubmissionsList = require('./controllers/get-submissionslist');
+var getJsonSubmissions = require('./controllers/get-json-submissions');
+var getOsmSubmissions = require('./controllers/get-osm-submissions');
+var patchSubmissions = require('./controllers/patch-submissions');
+var uploadForm = require('./controllers/upload-form');
 
 /**
  * OpenRosa Endpoints that ODK Collect uses.

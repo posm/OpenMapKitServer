@@ -1,7 +1,7 @@
-const xml2js = require('xml2js');
-const parser = new xml2js.Parser({explicitArray: false, attrkey: "attributes"});
-const createFormList = require('openrosa-formlist');
-const getFormUrls = require('../helpers/get-form-urls');
+var xml2js = require('xml2js');
+var parser = new xml2js.Parser({explicitArray: false, attrkey: "attributes"});
+var createFormList = require('openrosa-formlist');
+var getFormUrls = require('../helpers/get-form-urls');
 
 /**
  * Searches for XForm XML Files on the file system and

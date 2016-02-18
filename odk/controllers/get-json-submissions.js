@@ -1,5 +1,5 @@
-const fs = require('fs');
-const settings = require('../../settings');
+var fs = require('fs');
+var settings = require('../../settings');
 
 /**
  * Aggregates together all of the survey submissions
@@ -7,7 +7,7 @@ const settings = require('../../settings');
  * as one JSON response.
  */
 module.exports = function (req, res, next) {
-    const formName = req.params.formName;
+    var formName = req.params.formName;
     if (typeof formName === 'undefined' || formName === null) {
         res.status(400).json({
             status: 400,
@@ -17,8 +17,8 @@ module.exports = function (req, res, next) {
         });
         return;
     }
-    const dir = settings.publicDir + '/submissions/' + formName;
-    const aggregate = [];
+    var dir = settings.publicDir + '/submissions/' + formName;
+    var aggregate = [];
 
     // All of the submission dirs in the form directory
     fs.readdir(dir, function (err, submissionDirs) {
@@ -39,7 +39,7 @@ module.exports = function (req, res, next) {
             });
             return;
         }
-        const len = submissionDirs.length;
+        var len = submissionDirs.length;
         if (submissionDirs.length === 0) {
             res.status(200).json([]);
             return;
@@ -65,7 +65,7 @@ module.exports = function (req, res, next) {
                     });
                     return;
                 }
-                const dataObj = JSON.parse(data);
+                var dataObj = JSON.parse(data);
                 aggregate.push(dataObj);
                 if (len === count && !res._headerSent) {
                     res.status(200).json(aggregate);

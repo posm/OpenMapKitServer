@@ -1,5 +1,5 @@
-const xform2json = require('xform-to-json');
-const extend = require('xtend');
+var xform2json = require('xform-to-json');
+var extend = require('xtend');
 
 var defaults = {
     geojson: false

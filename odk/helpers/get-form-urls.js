@@ -1,6 +1,6 @@
-const fs = require('fs');
+var fs = require('fs');
 
-const settings = require('../../settings.js');
+var settings = require('../../settings.js');
 
 module.exports = function (options, cb) {
     fs.readdir(settings.publicDir + '/forms', function (err, files) {

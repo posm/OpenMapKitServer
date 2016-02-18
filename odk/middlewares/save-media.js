@@ -1,8 +1,8 @@
-const extend = require('xtend');
-const fs = require('fs');
-const persistFs = require('../helpers/persist');
-const updateFileRef = require('../helpers/update-file-ref');
-const settings = require('../../settings.js');
+var extend = require('xtend');
+var fs = require('fs');
+var persistFs = require('../helpers/persist');
+var updateFileRef = require('../helpers/update-file-ref');
+var settings = require('../../settings.js');
 
 var defaults = {
     store: 'fs'
@@ -16,7 +16,7 @@ var defaults = {
  * This middleware saves each file to the chosen storage.
  */
 function SaveMedia (options) {
-    const store = persistFs;
+    var store = persistFs;
 
     options = extend(defaults, options);
 
