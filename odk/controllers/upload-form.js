@@ -32,6 +32,7 @@ module.exports = function (req, res, next) {
                 status: 400,
                 msg: 'Only xlsx format is supported. Older XLS formats, and as well as other spreadsheet formats are not supported by pyxform. Please save your spreadsheet as .xlsx in your spreadsheet application.'
             });
+            return;
         }
         var xlsPath = formsDir + xlsFilename;
         fs.rename(file[0].path, xlsPath, function(err) {
