@@ -10,7 +10,7 @@ OpenMapKit Server is 100% database free! All data is persisted on the file syste
 
 ## [Development Installation](docs/development-installation.md)
 
-These [instructions](tree/master/docs/development-installation.md) are for setting up 
+These [instructions](docs/development-installation.md) are for setting up 
 and running OpenMapKit Server in your development environment.
 
 ## [Production Installation](docs/posm-build-installation.md)
