@@ -20,13 +20,19 @@ module.exports = function (req, res, next) {
         if (!file) {
             res.status(400).json({
                 status: 400,
-                msg: 'You must POST form-data with a key of "xls_file" and a value of an XLS Excel file.'
+                msg: 'You must POST form-data with a key of "xls_file" and a value of an XLSX Excel file.'
             });
             return;
         }
 
         // We move the XLSForm from temp to the forms directory.
         var xlsFilename = file[0].originalFilename;
+        if (xlsFilename.indexOf('.xlsx') < 0) {
+            res.status(400).json({
+                status: 400,
+                msg: 'Only xlsx format is supported. Older XLS formats, and as well as other spreadsheet formats are not supported by pyxform. Please save your spreadsheet as .xlsx in your spreadsheet application.'
+            });
+        }
         var xlsPath = formsDir + xlsFilename;
         fs.rename(file[0].path, xlsPath, function(err) {
             if (err) {
@@ -55,14 +61,12 @@ module.exports = function (req, res, next) {
                     });
                     return;
                 }
-
                 res.status(201).json({
                     status: 201,
                     msg: 'Converted ' + file[0].originalFilename + ' to an XForm and saved both to the forms directory.',
                     xFormUrl: req.protocol + '://' + req.headers.host + '/public/forms/' + xFormFilename,
                     xlsFormUrl: req.protocol + '://' + req.headers.host + '/public/forms/' + xlsFilename
                 });
-
             });
         });
     });
