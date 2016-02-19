@@ -33,7 +33,6 @@ pids
 *.seed
 
 ############## OpenMapKit Stuff ##############
-settings.js
 public/submissions/*
 !public/submissions/README.md
 public/deployments/**/*.osm

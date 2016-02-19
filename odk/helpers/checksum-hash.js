@@ -19,7 +19,7 @@ var readlineDeferred = function(filePath, hashMap){
         });
 
         rl.on('close', function () {
-            console.log('finished loading: ' + filePath + ' into blacklist');
+            //console.log('finished loading: ' + filePath + ' into blacklist');
             deferred.resolve();
         });
 

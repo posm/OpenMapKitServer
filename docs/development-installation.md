@@ -1,49 +1,49 @@
 ## Development Installation
 
-Create a `settings.js` file in this directory. You can use `settings.js.example`
-as an example.
+OpenMapKit Server is a NodeJS service, so you'll need NodeJS version 4.x.
 
-If you are on Debian or Ubuntu, you may have to install `build-essential`:
+### Ubuntu & Debian
+
+Install dependencies:
 
 ```
-sudo apt-get install build-essential
+sudo apt-get install build-essential python-pip git
+curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+sudo apt-get install nodejs
 ```
 
-The ODK component requires python dependencies that are installed via pip.
+### Mac
+
+The ODK pyxform component requires python dependencies that are installed via pip.
 The best way to install pip on a Mac is through [Homebrew](http://brew.sh/):
 
 ```
 brew install python
 ```
 
-On a Debian or Ubuntu machine:
+Also make sure you have installed [NodeJS](https://nodejs.org/) and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
 
-```
-sudo apt-get install python-pip
-```
-If you're just installing OMK Server and not building POSM install git
+### Setup Project
 
-```
-sudo apt-get install git
-```
-OMK Server is a nodejs app so you'll need node version 4.x.
-
-```
-curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
-sudo apt-get install nodejs
-```
-
-Install dependencies, start the server.
+Install project dependencies.
 
 ```
 git submodule init
 git submodule update
 sudo pip install -r requirements.txt
 npm install
+```
+
+
+### Turn on server
+
+```
 npm start
 ```
 
-We are using node version 4.2.*. If you are having problems with another
+### NodeJS Version Problems
+
+We are using node version 4.*. If you are having problems with another
 version, use [node version manager](https://github.com/creationix/nvm).
 
 ```
