@@ -10,6 +10,7 @@ OMK.jsonUrl = function () {
     if (!json) {
         var form = getParam('form');
         if (form) {
+            $('h1').html(form);
             var json = OMK.omkServerUrl() + '/submissions/' + form + '.json';
         }
     }
@@ -20,6 +21,7 @@ OMK.fetchJSON = function (url) {
     if (!url) return;
 
     $.get(url, function(data, status, xhr) {
+        $('.fetching').hide();
         doCSV(data);
     }).fail(function(xhr, status, errorThrown) {
         console.log("Error fetching ODK submissions!");
