@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>OpenMapKit ODK CSV</title>
+<meta name="og:title" content="OpenMapKit ODK CSV" />
+
+<link href="assets/bootstrap.min.css" type="text/css" rel="stylesheet" />
+<link href="assets/index.css" type="text/css" rel="stylesheet" />
+
+<script src='assets/jquery-2.1.1.min.js'></script>
+<script src="assets/jquery.csv.js"></script>
+<script src="assets/index.js"></script>
+<script src="assets/omk.js"></script>
+
+</head>
+<body>
+
+<h1>OpenMapKit ODK CSV</h1>
+
+<section class="csv">
+
+  <p>
+    <span class="rendered">
+      <span class="rows count"></span> total submissions.
+
+      <a download="data.csv" href="#" class="download">
+        Download the entire CSV</a>,
+
+      or <a href="#" class="raw">show the raw data</a>.
+
+      You can also download the <a id="downloadJson" download="data.json"href="#">source JSON</a>.
+    </span>
+
+    <span class="fetching">
+      Fetching data from OpenMapKit Server...
+    </span>
+  </p>
+
+  <div class="table rendered">
+    <table></table>
+  </div>
+
+  <div class="areas">
+    <textarea class="editing" readonly></textarea>
+  </div>
+
+</section>
+
+<footer>
+<p></p>
+</footer>
+
+
+</body>
+</html>
