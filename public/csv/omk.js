@@ -15,9 +15,7 @@ OMK.fetchJSON = function (url) {
     if (!url) return;
 
     $.get(url, function(data, status, xhr) {
-        $(".json textarea").val(JSON.stringify(data));
-        doJSON();
-        showJSON(true);
+        doCSV(data);
     }).fail(function(xhr, status, errorThrown) {
         console.log("Error fetching ODK submissions!");
         console.log(xhr);

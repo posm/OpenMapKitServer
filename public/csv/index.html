@@ -24,7 +24,6 @@
 <script src="omk.js"></script>
 
 <script>
-  var excerptRows = 100;
   var input;
   var url;
   var lastSaved;
@@ -151,7 +150,7 @@
 
     var csv = $.csv.fromObjects(outArray);
     // excerpt and render first 10 rows
-    renderCSV(outArray.slice(0, excerptRows));
+    renderCSV(outArray);
     showCSV(true);
 
     // show raw data if people really want it
@@ -331,24 +330,11 @@
 
 <h1>OpenMapKit ODK CSV</h1>
 
-<section class="json">
-
-  <div class="areas">
-    <textarea class="editing"></textarea>
-    <pre class="rendered"><code></code></pre>
-    <div class="drop">DROP JSON HERE</div>
-  </div>
-
-  <div class="warning">
-    Please wait. Fetching ODK submissions from OpenMapKit Server...
-  </div>
-</section>
-
 <section class="csv">
 
   <p>
     <span class="rendered">
-      <span class="rows count"></span> total submissions. Showing first 100 submissions.
+      <span class="rows count"></span> total submissions.
 
       <a download="result.csv" href="#" class="download">
         Download the entire CSV</a>,
@@ -363,12 +349,14 @@
     </span>
   </p>
 
+  <div class="table rendered">
+    <table></table>
+  </div>
+
   <div class="areas">
     <textarea class="editing" readonly></textarea>
-    <div class="table rendered">
-      <table></table>
-    </div>
   </div>
+
 </section>
 
 <footer>

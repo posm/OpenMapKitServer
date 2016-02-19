@@ -13,7 +13,7 @@ h1 {
 
 
 /* position textareas and renderings over each other */
-.areas {position: relative; width: 90%; height: 17em;}
+.areas {position: relative; width: 100%; height: 25em;}
 
 .json textarea,
 .json pre,
