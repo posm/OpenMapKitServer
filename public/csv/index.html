@@ -21,6 +21,7 @@
 <link href="assets/github.css" type="text/css" rel="stylesheet" />
 <script src="assets/site.js"></script>
 <script src="assets/highlight.pack.js"></script>
+<script src="omk.js"></script>
 
 <script>
   var excerptRows = 100;
@@ -321,6 +322,7 @@
     $(".csv textarea").click(function() {$(this).focus().select();});
 
     loadPermalink();
+    OMK.fetch();
   });
 </script>
 
@@ -352,6 +354,8 @@
         Download the entire CSV</a>,
 
       or <a href="#" class="raw">show the raw data</a>.
+
+      You can also download the <a href="#">source JSON</a>.
     </span>
 
     <span class="editing">
