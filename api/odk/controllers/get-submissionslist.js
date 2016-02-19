@@ -1,6 +1,6 @@
 var fs = require('fs');
-var settings = require('../../settings');
-var Url = require('../../util/url');
+var settings = require('../../../settings');
+var Url = require('../../../util/url');
 
 /**
  * Provides metadata as JSON of the public directories of
@@ -8,7 +8,7 @@ var Url = require('../../util/url');
  * endpoints.
  */
 module.exports = function (req, res, next) {
-    var dir = settings.publicDir + '/submissions/';
+    var dir = settings.dataDir + '/submissions/';
     fs.readdir(dir, function (err, files) {
         var urls = [];
         if (err) {

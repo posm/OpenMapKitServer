@@ -1,6 +1,6 @@
-[submodule "odk/pyxform"]
-	path = odk/pyxform
+[submodule "api/odk/pyxform"]
+	path = api/odk/pyxform
 	url = https://github.com/spatialdev/pyxform.git
-[submodule "public/id"]
-	path = public/id
+[submodule "pages/id"]
+	path = pages/id
 	url = https://github.com/AmericanRedCross/iD.git

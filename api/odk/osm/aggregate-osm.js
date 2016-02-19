@@ -1,6 +1,6 @@
 var fs = require('fs');
 var libxml = require('libxmljs');
-var appVersion = require('../package').version;
+var appVersion = require('../../../package').version;
 var filterOsm = require('./filter-osm');
 
 var CHUNK_SIZE = 500;

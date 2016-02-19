@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
-var settings = require('../../settings.js');
+var settings = require('../../../settings.js');
 
 module.exports = function (req, res, next) {
     var submission = req.submission;
@@ -9,7 +9,7 @@ module.exports = function (req, res, next) {
     var json = JSON.stringify(submission.json, null, '  ');
     var xml = submission.xml; // Original XML for debug purposes is nice.
 
-    var dir = settings.publicDir + '/submissions/' + submission.formId + '/' + submission.instanceId;
+    var dir = settings.dataDir + '/submissions/' + submission.formId + '/' + submission.instanceId;
     var jsonFileName = dir + '/data' + ext;
     var xmlFileName = dir + '/data' + '.xml';
 

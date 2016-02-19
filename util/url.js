@@ -4,13 +4,13 @@ var Url = module.exports = {};
 
 /**
  * Returns a fully qualified url for a resource in the
- * static public directory.
+ * data directory.
  *
  * @param req
  * @param path
  * @param fileName (optional)
  */
-Url.publicDirFileUrl = function (req, path, fileName) {
+Url.dataDirFileUrl = function (req, path, fileName) {
     path = encodeURIComponent(path).replace(/%2F/g, '/'); // keep slashes
     fileName = encodeURIComponent(fileName).replace(/%2F/g, '/'); // keep slashes
     var url = base = req.protocol + '://' + req.headers.host + '/public';

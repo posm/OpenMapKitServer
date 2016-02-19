@@ -1,7 +1,7 @@
 'use strict';
 
 var settings;
-var checksumBlacklistHelper = require('./odk/helpers/checksum-hash');
+var checksumBlacklistHelper = require('./api/odk/helpers/checksum-hash');
 
 try {
     settings = require('./settings');

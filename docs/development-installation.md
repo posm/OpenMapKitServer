@@ -34,7 +34,6 @@ sudo pip install -r requirements.txt
 npm install
 ```
 
-
 ### Turn on server
 
 ```

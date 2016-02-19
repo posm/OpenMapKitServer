@@ -13,9 +13,9 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var directory = require('serve-index');
 var cors = require('cors');
-var odk = require('./odk/odk-routes');
-var deployments = require('./deployments/deployment-routes');
-var error = require('./odk/controllers/error-handler');
+var odk = require('./api/odk/odk-routes');
+var deployments = require('./api/deployments/deployment-routes');
+var error = require('./api/odk/controllers/error-handler');
 var pkg = require('./package');
 var app = express();
 
@@ -41,8 +41,10 @@ app.use('/', odk);
 app.use('/deployments', deployments);
 
 // Public Data & Static Assets
-app.use('/public', express.static(settings.publicDir));
-app.use('/public', directory(settings.publicDir));
+app.use('/public', express.static(settings.dataDir));
+app.use('/public', directory(settings.dataDir));
+app.use('/pages', express.static(settings.pagesDir));
+app.use('/pages', directory(settings.pagesDir));
 
 // Handle errors
 app.use(error);

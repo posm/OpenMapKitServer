@@ -2,7 +2,7 @@ var extend = require('xtend');
 var fs = require('fs');
 var persistFs = require('../helpers/persist');
 var updateFileRef = require('../helpers/update-file-ref');
-var settings = require('../../settings.js');
+var settings = require('../../../settings.js');
 
 var defaults = {
     store: 'fs'
@@ -31,7 +31,7 @@ function SaveMedia (options) {
                 filename: req.submission.instanceId + '/' + file.originalFilename,
                 file: file,
                 filesystem: {
-                    path: settings.publicDir + '/submissions/' + req.submission.formId + '/'
+                    path: settings.dataDir + '/submissions/' + req.submission.formId + '/'
                 }
             };
 

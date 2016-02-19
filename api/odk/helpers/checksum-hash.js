@@ -2,8 +2,9 @@
 var fs = require('fs');
 var readline = require('readline');
 var Q = require('q');
-var File = require('../../util/file');
-var submissionsDir = __dirname + '/../../public/submissions';
+var File = require('../../../util/file');
+var settings = require('../../../settings');
+var submissionsDir = settings.dataDir + '/submissions';
 
 var readlineDeferred = function(filePath, hashMap){
 

@@ -3,7 +3,7 @@
 var test = require('tape');
 var request = require('supertest');
 var app = require('../../index');
-var getDeployments = require('../../deployments/controllers/deployments');
+var getDeployments = require('.././controllers/deployments');
 
 getDeployments._setParentDirectory(__dirname + '/../fixtures');
 

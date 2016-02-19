@@ -3,11 +3,11 @@
 var fs = require('fs');
 var path = require('path');
 var Q = require('q');
-var Url = require('../../util/url');
-var File = require('../../util/file');
-var settings = require('../../settings');
+var Url = require('../../../util/url');
+var File = require('../../../util/file');
+var settings = require('../../../settings');
 var deploymentParentDir = 'deployments' ;
-var deploymentParentDirPath = settings.publicDir + '/' + deploymentParentDir;
+var deploymentParentDirPath = settings.dataDir + '/' + deploymentParentDir;
 
 
 /**
@@ -32,7 +32,7 @@ var digestDeploymentDir = function(req, dirName, contents){
         valid: true,
         files: {"osm": [], "mbtiles": []},
         url: Url.apiUrl(req, deploymentParentDir + '/' + dirName),
-        listingUrl: Url.publicDirFileUrl(req, deploymentParentDir, dirName)
+        listingUrl: Url.dataDirFileUrl(req, deploymentParentDir, dirName)
     };
 
     File.readFileDeferred(deploymentParentDirPath + '/' + dirName + '/manifest.json')
@@ -55,7 +55,7 @@ var digestDeploymentDir = function(req, dirName, contents){
 
                     deploymentObj.files[fileExt.substring(1)].push({
                         name: contents[index],
-                        url: Url.publicDirFileUrl(req, 'deployments/' + dirName, contents[index]),
+                        url: Url.dataDirFileUrl(req, 'deployments/' + dirName, contents[index]),
                         size: stat.size,
                         lastModified: stat.mtime
 

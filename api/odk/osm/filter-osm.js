@@ -1,6 +1,6 @@
 var fs = require('fs');
 var path = require('path');
-var blacklistHelper = require('../odk/helpers/checksum-hash');
+var blacklistHelper = require('../helpers/checksum-hash');
 var formHash = blacklistHelper.get();
 var filter = module.exports = {};
 

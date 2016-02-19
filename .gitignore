@@ -33,8 +33,8 @@ pids
 *.seed
 
 ############## OpenMapKit Stuff ##############
-public/submissions/*
-!public/submissions/README.md
-public/deployments/**/*.osm
-public/deployments/**/*.mbtiles
-public/deployments/**/*.md
+data/submissions/*
+!data/submissions/README.md
+data/deployments/**/*.osm
+data/deployments/**/*.mbtiles
+data/deployments/**/*.md
