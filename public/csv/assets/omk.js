@@ -1,8 +1,7 @@
 window.OMK = {};
 
 OMK.fetch = function () {
-    var url = OMK.jsonUrl();
-    OMK.fetchJSON(url);
+    OMK.fetchJSON(OMK.jsonUrl());
 };
 
 OMK.jsonUrl = function () {
@@ -11,7 +10,7 @@ OMK.jsonUrl = function () {
         var form = getParam('form');
         if (form) {
             $('h1').html(form);
-            var json = OMK.omkServerUrl() + '/submissions/' + form + '.json';
+            json = OMK.omkServerUrl() + '/submissions/' + form + '.json';
         }
     }
     return json;
