@@ -160,7 +160,8 @@
     // thanks to http://jsfiddle.net/terryyounghk/KPEGU/
     // and http://stackoverflow.com/questions/14964035/how-to-export-javascript-array-info-to-csv-on-client-side
     var uri = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
-    $(".csv a.download").attr("href", uri);
+    $(".csv a.download").attr("href", uri).attr("download", getParam('form') + ".csv");
+    $("#downloadJson").attr("href", OMK.jsonUrl()).attr("download", getParam('form') + ".json");
   }
 
   // loads original pasted JSON from textarea, saves to anonymous gist
@@ -336,12 +337,12 @@
     <span class="rendered">
       <span class="rows count"></span> total submissions.
 
-      <a download="result.csv" href="#" class="download">
+      <a download="data.csv" href="#" class="download">
         Download the entire CSV</a>,
 
       or <a href="#" class="raw">show the raw data</a>.
 
-      You can also download the <a href="#">source JSON</a>.
+      You can also download the <a id="downloadJson" download="data.json"href="#">source JSON</a>.
     </span>
 
     <span class="editing">

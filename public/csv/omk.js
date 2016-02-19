@@ -1,14 +1,19 @@
 window.OMK = {};
 
 OMK.fetch = function () {
-    OMK.fetchJSON(getParam('json'));
+    var url = OMK.jsonUrl();
+    OMK.fetchJSON(url);
+};
 
-    var form = getParam('form');
-    if (form) {
-        var url = OMK.omkServerUrl() + '/submissions/' + form + '.json';
-        OMK.fetchJSON(url);
+OMK.jsonUrl = function () {
+    var json = getParam('json');
+    if (!json) {
+        var form = getParam('form');
+        if (form) {
+            var json = OMK.omkServerUrl() + '/submissions/' + form + '.json';
+        }
     }
-
+    return json;
 };
 
 OMK.fetchJSON = function (url) {
