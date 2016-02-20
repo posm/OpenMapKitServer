@@ -10,7 +10,7 @@ OMK.jsonUrl = function () {
         var form = getParam('form');
         if (form) {
             $('h1').html(form);
-            json = OMK.omkServerUrl() + '/submissions/' + form + '.json';
+            json = OMK.omkServerUrl() + '/omk/odk/submissions/' + form + '.json';
         }
     }
     return json;

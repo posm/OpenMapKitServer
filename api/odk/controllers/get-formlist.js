@@ -12,7 +12,7 @@ module.exports = function (req, res, next) {
         headers: {
             'User-Agent': 'OpenMapKitServer'
         },
-        baseUrl: req.protocol + '://' + req.headers.host + '/public/forms'
+        baseUrl: req.protocol + '://' + req.headers.host + '/omk/data/forms'
     };
 
     // Look for "json" query param
