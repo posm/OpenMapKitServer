@@ -58,9 +58,6 @@ h1 {
 .csv table tbody tr:nth-child(2n) {background-color: #f8f8f8;}
 
 .csv td, .csv th {
-  max-width: 250px;
-  text-overflow: ellipsis;
-  overflow: hidden;
   white-space: nowrap;
   line-height: 1em;
   border: 1px solid #aaa;
