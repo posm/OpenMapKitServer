@@ -1,9 +1,9 @@
 var fs = require('fs');
 
-var settings = require('../../settings.js');
+var settings = require('../../../settings.js');
 
 module.exports = function (options, cb) {
-    fs.readdir(settings.publicDir + '/forms', function (err, files) {
+    fs.readdir(settings.dataDir + '/forms', function (err, files) {
         if (err) return cb(err);
         var urls = [];
         for (var i = 0; i < files.length; i++) {

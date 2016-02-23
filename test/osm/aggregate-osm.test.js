@@ -1,6 +1,6 @@
 var test = require('tape');
 var fs = require('fs');
-var aggregateOsm = require('../../osm/aggregate-osm');
+var aggregateOsm = require('.././aggregate-osm');
 
 
 /**

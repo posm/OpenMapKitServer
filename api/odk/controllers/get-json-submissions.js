@@ -1,5 +1,5 @@
 var fs = require('fs');
-var settings = require('../../settings');
+var settings = require('../../../settings');
 
 /**
  * Aggregates together all of the survey submissions
@@ -17,7 +17,7 @@ module.exports = function (req, res, next) {
         });
         return;
     }
-    var dir = settings.publicDir + '/submissions/' + formName;
+    var dir = settings.dataDir + '/submissions/' + formName;
     var aggregate = [];
 
     // All of the submission dirs in the form directory

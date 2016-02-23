@@ -2,7 +2,7 @@
 var fs = require('fs');
 var path = require('path');
 var Q = require('q');
-var File = require('../../util/file');
+var File = require('../../../util/file');
 var submissionsDir = __dirname + '/../../public/submissions';
 var checksumHelper = require('../helpers/checksum-hash');
 

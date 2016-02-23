@@ -1,6 +1,6 @@
 var fs = require('fs');
-var settings = require('../../settings');
-var aggregateOsm = require('../../osm/aggregate-osm');
+var settings = require('../../../settings');
+var aggregateOsm = require('../osm/aggregate-osm');
 
 /**
  * Aggregates together all of the OSM submissions
@@ -17,7 +17,7 @@ module.exports = function (req, res, next) {
             path: '/odk/submissions/:formName.osm'
         });
     }
-    var dir = settings.publicDir + '/submissions/' + formName;
+    var dir = settings.dataDir + '/submissions/' + formName;
     var osmFiles = [];
 
     // All of the submission dirs in the form directory

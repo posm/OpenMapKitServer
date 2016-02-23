@@ -2,8 +2,9 @@
 var fs = require('fs');
 var readline = require('readline');
 var Q = require('q');
-var File = require('../../util/file');
-var submissionsDir = __dirname + '/../../public/submissions';
+var File = require('../../../util/file');
+var settings = require('../../../settings');
+var submissionsDir = settings.dataDir + '/submissions';
 
 var readlineDeferred = function(filePath, hashMap){
 
@@ -19,7 +20,7 @@ var readlineDeferred = function(filePath, hashMap){
         });
 
         rl.on('close', function () {
-            console.log('finished loading: ' + filePath + ' into blacklist');
+            //console.log('finished loading: ' + filePath + ' into blacklist');
             deferred.resolve();
         });
 
