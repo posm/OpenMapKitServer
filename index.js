@@ -66,7 +66,8 @@ function info(req, res) {
         name: settings.name,
         description: settings.description,
         status: 200,
-        service: pkg.name,
+        service: 'omk-server',
+        npm: pkg.name,
         version: pkg.version
     });
 }
