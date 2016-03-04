@@ -1,12 +1,103 @@
 <!DOCTYPE html>
 <html>
-<body>
 
-<form action="/omk/odk/upload-form" method="post" enctype="multipart/form-data">
-    Select and XLS Form to upload:
-    <input type="file" name="xls_file" id="xls_file">
-    <input type="submit" value="Upload Form" name="submit">
-</form>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-</body>
+  <title>OpenMapKit Server</title>
+  <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">
+
+  <link rel="canonical" href="http://yourdomain.comomk/pages/upload-form/">
+
+  <!-- Local Material Design Lite css Library -->
+  <link rel="stylesheet" href="../css/material.css">
+  
+
+  <!-- Custom theme css -->
+  <link rel="stylesheet" href="../css/main.css">
+
+
+
+
+</head>
+
+
+  <body>
+
+    <!-- Start Layout -->
+    
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+
+    <div class="mdl-layout__header-row">
+      <div><img id="omkLogo" src="../img/ic_omk_nobg-web.png"></div>
+      <!-- Title -->
+      <span class="mdl-layout-title">OpenMapKit Server</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+
+      <button class="mdl-button mdl-js-button mdl-button--icon" id="menu-lower-left">
+        <i class="material-icons">more_vert</i>
+      </button>
+
+      <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="menu-lower-left">
+        
+        <li><a href="/omk/pages/forms" class="mdl-menu__item">Forms</a></li>
+        
+        <li><a href="/omk/pages/upload-form/" class="mdl-menu__item">Upload Form</a></li>
+        
+      </ul>
+    </div>
+  </header>
+
+
+    
+
+    <div class="page-content">
+
+    <div class="mdl-grid">
+
+        <form action="/omk/odk/upload-form" method="post" enctype="multipart/form-data">
+
+                <div class="dropzone-area">
+                    <div class="dropzone-text">
+                        <span class="dropzone-title">Select and XLS Form to upload:</span>
+                        <span class="dropzone-info"></span>
+                    </div>
+                    <input type="file" name="xls_file" id="xls_file">
+                </div>
+
+
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored submitButton" type="submit" value="Upload Form" name="submit">
+                Submit
+            </button>
+        </form>
+
+
+    </div>
+</div>
+
+
+    </div>
+    <!-- /End Layout -->
+
+    <!-- Material Design Lite js Library -->
+    <script type="text/javascript" src="../js/material.min.js"></script>
+
+      <script type="text/javascript" src="../js/vue.js"></script>
+      <script type="text/javascript" src="../js/vue-resource.min.js"></script>
+
+      <!--Inject Vue JS dependency if template-->
+      
+
+      <!--Inject JS dependency for Submission From-->
+      
+
+
+
+  </body>
+
 </html>

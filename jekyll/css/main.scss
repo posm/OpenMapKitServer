@@ -1,0 +1,195 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+//
+// Main sass file, to import all styles
+//
+
+@charset "utf-8";
+
+$spacing-unit:     30px;
+$super-search:     rgba(0, 191, 255, 0.85);
+$grey-color:       #828282;
+$grey-color-light: lighten($grey-color, 40%);
+$grey-color-dark:  darken($grey-color, 25%);
+
+// Colour
+$color-white: #FFFFFF;
+$color-title: #0C0C0C;
+$color-general: #2E2E2E;
+$color-dropdown: #888888;
+$color-label: #696969;
+$color-descrete: #A8A8A8;
+$color-disabled: #B6B6B6;
+$color-placeholder: #C7C7C7;
+$color-border: #CBCBCB;
+$color-cta-solid: #12d758;
+$color-cta-text: darken($color-cta-solid, 5);
+$color-ok-solid: rgb(63,81,181);
+$color-ok-text: darken($color-ok-solid, 5);
+$color-warning-solid: #f46374;
+$color-warning-text: darken($color-warning-solid, 5);
+
+//Material Design Fonts
+@font-face {
+        font-family: 'Material Icons';
+        font-style: normal;
+        font-weight: 400;
+        src: local('Material Icons'),
+        local('MaterialIcons-Regular'),
+        url(./fonts/MaterialIcons-Regular.woff2) format('woff2'),
+        url(./fonts/MaterialIcons-Regular.woff) format('woff'),
+        url(./fonts/MaterialIcons-Regular.ttf) format('truetype');
+}
+
+
+// Import partials from `sass_dir` (defaults to `_sass`)
+@import
+        "base",
+        "layout",
+        "syntax-highlighting",
+        "dropzone"
+;
+
+// MDL default Overwrites
+
+a {
+        color: #7ebc6f;
+        font-weight: 500;
+}
+
+.mdl-layout__header{
+        background-color: #7ebc6f;
+}
+.mdl-button--raised.mdl-button--colored {
+        background: #7ebc6f;
+        color: rgb(255,255,255);
+}
+.mdl-button--raised.mdl-button--colored:hover {
+        background: rgba(158,158,158,.2);
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+        color: #000;
+}
+
+.mdl-list {
+        display: -webkit-inline-box;
+        padding: 8px 0;
+        list-style: none;
+}
+
+// Cards styles
+.mdl-card{
+        margin: 10px 3px;
+        overflow: visible;
+}
+.mdl-card {
+        .mdl-card__title {
+                color: black;
+                height: 65px;
+
+        }
+
+        .mdl-card__supporting-text > span { color: #9F9F9F; }
+
+        .mdl-card__menu {
+                color: #fff;
+        }
+
+        .mdl-button {
+
+                min-width: 10px;
+
+                font-size: 10px;
+        }
+        .mdl-button.mdl-button--colored {
+                color: #7ebc6f;
+        }
+        .mdl-card__actions {
+
+                position: relative;
+        }
+}
+
+
+//
+// Form List
+//
+.demo-list-three {
+        width: 400px;
+}
+
+//Submission
+/* position textareas and renderings over each other */
+.areas {position: relative; width: 100%; height: 25em;}
+.json textarea,
+.json pre,
+.csv textarea,
+.csv .table,
+.json .drop {
+        width: 100%; height: 100%;
+        //position: absolute;
+}
+
+/* fix top border bug on json textarea */
+.json textarea {position: static !important;}
+
+.json pre {cursor: pointer;}
+
+.json .drop {
+        opacity: 0.5; background-color: #444;
+        vertical-align: middle; text-align: center;
+        color: #fff; font-size: 40pt;
+        padding-top: 75px;
+}
+
+/* show empty textarea by default */
+.json textarea {display: block;}
+.json .rendered {display: none;}
+.json .drop {display: none; z-index: 100;}
+.csv textarea {}
+.csv .rendered {display: none;}
+
+.json .warning {margin-top: 5px; color: #888;}
+.json .permalink {display: none;}
+
+.csv {color: black;margin-top: 30px; width: 100%;}
+.csv textarea {background-color: #f5f5f5; color: #888;}
+
+
+/** csv rendered table **/
+
+.csv table {font-size: 10pt;}
+.csv table tr {background-color: #fff;}
+.csv table thead tr,
+.csv table tbody tr:nth-child(2n) {background-color: #f8f8f8;}
+
+.csv td, .csv th {
+        white-space: nowrap;
+        line-height: 1em;
+        border: 1px solid #aaa;
+        padding: 6px 6px;
+}
+.table{
+        overflow-x: auto;
+}
+
+form{
+        margin: auto;
+}
+
+.mdl-badge[data-badge]:after { background: #7ebc6f;
+}
+
+#omkLogo {
+        width: 45px;
+        margin: 5px 11px 0 10px;
+}
+
+.mdl-layout__header-row {
+        padding: 0 40px 0 0px;
+}
+
+.buttonRight {
+        color: #7ebc6f;
+        float: right;
+}
