@@ -1,23 +1,21 @@
 
-## Installation for the Intel Edison.
+### Installation for the Intel Edison.
 Same as the installtion for the POSM or VM but still super hacky and experiemental. 
 It's a 'works on my machine' situation at the moment. 
 
+
 OpenMapKit Server is a NodeJS service, so you'll need NodeJS version 4.x.
-#borrowing heavily from MSF's repo for isntallating Formhub on Edison (https://github.com/ivangayton/ODKAggregateOnEdison/wiki/001-Full-Instructions)
+Borrowing heavily from MSF's repo for isntallating Formhub on Edison (https://github.com/ivangayton/ODKAggregateOnEdison/wiki/001-Full-Instructions)
 
-### Ubilinix
+Ubilinix
 
-Get the Ubilinux distro here:
-http://www.emutexlabs.com/ubilinux
+Get the Ubilinux distro here:http://www.emutexlabs.com/ubilinux
 
-There is a step by step video walkthrough here:
-https://www.youtube.com/watch?v=BSnXjuttSgY
+There is a step by step video walkthrough here: https://www.youtube.com/watch?v=BSnXjuttSgY
 
-#I found that the process works best on Windows. I haven't tried on Linux yet but suspect it'll work fine there as well. Also finding that 
-#using screen to ssh into the device after it installing ubilinux is problematic. 
+I found that the process works best on Windows. I haven't tried on Linux yet but suspect it'll work fine there as well. Also finding that using screen to ssh into the device after it installing ubilinux is problematic. 
 
-#once you ssh in, get the thing connected to the interwebs by chaning the network settings
+once you ssh in, get the thing connected to the interwebs by chaning the network settings
 
 ```
 nano /etc/network/interfaces
