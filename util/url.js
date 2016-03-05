@@ -13,7 +13,7 @@ var Url = module.exports = {};
 Url.dataDirFileUrl = function (req, path, fileName) {
     path = encodeURIComponent(path).replace(/%2F/g, '/'); // keep slashes
     fileName = encodeURIComponent(fileName).replace(/%2F/g, '/'); // keep slashes
-    var url = base = req.protocol + '://' + req.headers.host + '/public';
+    var url = base = req.protocol + '://' + req.headers.host + '/omk/data';
     path[0] === '/' ? url += path : url += '/' + path;
     if (typeof fileName === 'undefined' || fileName === null) return url;
     path[path.length -1] === '/' ? url += fileName : url += '/' + fileName;

@@ -31,7 +31,7 @@ var digestDeploymentDir = function(req, dirName, contents){
         name: dirName,
         valid: true,
         files: {"osm": [], "mbtiles": []},
-        url: Url.apiUrl(req, deploymentParentDir + '/' + dirName),
+        url: Url.apiUrl(req, '/omk/' + deploymentParentDir + '/' + dirName),
         listingUrl: Url.dataDirFileUrl(req, deploymentParentDir, dirName)
     };
 
