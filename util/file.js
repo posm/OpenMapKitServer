@@ -2,6 +2,7 @@
 
 var fs = require('fs');
 var Q  = require('q');
+var recursive = require('recursive-readdir');
 
 /**
  *
@@ -31,6 +32,20 @@ module.exports.readDirDeferred = function(dirPath){
             deferred.reject(err);
         }
         deferred.resolve(contents);
+    });
+    return deferred.promise;
+};
+
+module.exports.readDirRecursiveDeferred = function (dirPath) {
+    var deferred = Q.defer();
+    recursive(dirPath, function(err, contents){
+        if(err) {
+            deferred.reject(err);
+        }
+        var contentsRelativePath = contents.map(function (absPath) {
+            return absPath.replace(dirPath+'/', '');
+        });
+        deferred.resolve(contentsRelativePath);
     });
     return deferred.promise;
 };

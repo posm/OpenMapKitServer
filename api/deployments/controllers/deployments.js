@@ -118,7 +118,7 @@ module.exports.getAll = function(req, res, next) {
 
                 // Read directory contents
                 return Q.all(deploymentDirs.map(function (dirName) {
-                    return File.readDirDeferred(deploymentParentDirPath + '/' + dirName)
+                    return File.readDirRecursiveDeferred(deploymentParentDirPath + '/' + dirName)
                 }))
             })
             .then(function (results) {
@@ -147,7 +147,7 @@ module.exports.get = function(req, res, next) {
         .then(function(stat){
 
             // read the directory contents
-            return File.readDirDeferred(deploymentParentDirPath + '/' + deploymentDir);
+            return File.readDirRecursiveDeferred(deploymentParentDirPath + '/' + deploymentDir);
         })
         .then(function(contents){
 
