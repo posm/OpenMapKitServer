@@ -99,6 +99,10 @@ function renderCSV(objects) {
 
     table.appendChild(thead);
     table.appendChild(tbody);
+    //register the mdl menus on each card
+    //setTimeout(function () {
+    //    componentHandler.upgradeAllRegistered();
+    //}, 500);
 }
 
 function doCSV(json) {
@@ -111,7 +115,12 @@ function doCSV(json) {
     for (var row in inArray)
         outArray[outArray.length] = parseObject(inArray[row]);
 
-    $("span.rows.count").text("" + outArray.length);
+    //$("span.rows.count").text("" + outArray.length);
+
+    var count = outArray.length;
+
+    var msglist = document.getElementById("badgeCount");
+    msglist.setAttribute("data-badge", count.toString());
 
     var csv = $.csv.fromObjects(outArray);
     // excerpt and render first 10 rows

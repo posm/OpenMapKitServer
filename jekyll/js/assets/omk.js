@@ -9,12 +9,18 @@ OMK.jsonUrl = function () {
     if (!json) {
         var form = getParam('form');
         if (form) {
-            $('h1').html(form);
-            json = OMK.omkServerUrl() + '/omk/odk/submissions/' + form + '.json';
+            $('h1').html(capitalizeFirstLetter(form.replace(/_/g,' ')));
+            //json = OMK.omkServerUrl() + '/omk/pages/submissions/' + form + '.json';
+            json = 'http://localhost:3210/omk/odk/submissions/' + form + '.json';
         }
     }
     return json;
 };
+
+//Function to capitalise first character for strings
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 OMK.fetchJSON = function (url) {
     if (!url) return;

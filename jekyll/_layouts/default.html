@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+  {% include head.html %}
+
+  <body>
+
+    <!-- Start Layout -->
+    {% if site.header_type == 'drawer' %}
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
+      {% include header_fixed.html %}
+    {% else %}
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      {% include header.html %}
+    {% endif %}
+
+    {{ content }}
+
+    </div>
+    <!-- /End Layout -->
+
+    <!-- Material Design Lite js Library -->
+    <script type="text/javascript" src="../js/material.min.js"></script>
+
+      <script type="text/javascript" src="../js/vue.js"></script>
+      <script type="text/javascript" src="../js/vue-resource.min.js"></script>
+
+      <!--Inject Vue JS dependency if template-->
+      {% if page.controllerjs %}
+
+      <script src="../js/{{page.controllerjs | downcase}}.js"></script>
+
+      {% endif %}
+
+      <!--Inject JS dependency for Submission From-->
+      {% if page.jquery %}
+
+      <script src='../js/assets/{{page.jquery | downcase}}.js'></script>
+      <script src="../js/assets/{{page.csv | downcase}}.js"></script>
+      <script src="../js/assets/{{page.index | downcase}}.js"></script>
+      <script src="../js/assets/{{page.omk | downcase}}.js"></script>
+
+      {% endif %}
+
+
+
+  </body>
+
+</html>

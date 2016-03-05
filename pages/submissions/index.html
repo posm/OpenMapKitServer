@@ -1,58 +1,141 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title>OpenMapKit Form Submissions</title>
-<meta name="og:title" content="OpenMapKit Form Submissions" />
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link href="assets/bootstrap.min.css" type="text/css" rel="stylesheet" />
-<link href="assets/index.css" type="text/css" rel="stylesheet" />
+  <title>OpenMapKit Server</title>
+  <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">
 
-<script src='assets/jquery-2.1.1.min.js'></script>
-<script src="assets/jquery.csv.js"></script>
-<script src="assets/index.js"></script>
-<script src="assets/omk.js"></script>
+  <link rel="canonical" href="http://yourdomain.comomk/pages/submissions/">
+
+  <!-- Local Material Design Lite css Library -->
+  <link rel="stylesheet" href="../css/material.css">
+  
+
+  <!-- Custom theme css -->
+  <link rel="stylesheet" href="../css/main.css">
+
+
+
 
 </head>
-<body>
 
-<h1>OpenMapKit Form Submissions</h1>
 
-<section class="csv">
+  <body>
 
-  <p>
+    <!-- Start Layout -->
+    
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+
+    <div class="mdl-layout__header-row">
+      <div><img id="omkLogo" src="../img/ic_omk_nobg-web.png"></div>
+      <!-- Title -->
+      <span class="mdl-layout-title">OpenMapKit Server</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+
+      <button class="mdl-button mdl-js-button mdl-button--icon" id="menu-lower-left">
+        <i class="material-icons">more_vert</i>
+      </button>
+
+      <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="menu-lower-left">
+        
+        <li><a href="/omk/pages/forms" class="mdl-menu__item">Forms</a></li>
+        
+        <li><a href="/omk/pages/upload-form/" class="mdl-menu__item">Upload Form</a></li>
+        
+      </ul>
+    </div>
+  </header>
+
+
+    
+
+    <div id="submissionsPage" class="page-content">
+
+    <div class="mdl-grid">
+
+
+        <!--<h1>OpenMapKit Form Submissions</h1>-->
+        <div class="typo-styles__demo mdl-typography--display-1">OpenMapKit Form Submissions</div>
+
+        <section class="csv">
+
     <span class="rendered">
-      <span class="rows count"></span> total submissions.
 
-      <a download="data.csv" href="#" class="download">
-        Download the entire CSV</a>,
+        <ul class='mdl-list'>
+            <li class="mdl-list__item">
+                <!-- Number badge on icon -->
+                <div id="badgeCount" class="mdl-badge" data-badge>Total submissions</div>
+            </li>
 
-      or <a href="#" class="raw">show the raw data</a>.
 
-      You can also download the <a id="downloadJson" download="data.json"href="#">source JSON</a>.
+
+            <li class="mdl-list__item"><a download="data.csv" href="#" class="download">
+                <button class="mdl-button mdl-js-button mdl-button--raised">
+                    Download CSV
+                </button></a></li>
+            <li class="mdl-list__item raw"><a href="#">
+                <button class="mdl-button mdl-js-button mdl-button--raised">
+                show the raw data
+                </button></a></li>
+            <li class="mdl-list__item"><a id="downloadJson" download="data.json" href="#">
+                <button class="mdl-button mdl-js-button mdl-button--raised">
+                    Download JSON
+                </button></a>
+            </li>
+        </ul>
     </span>
 
     <span class="fetching">
       Fetching data from OpenMapKit Server...
     </span>
-  </p>
 
-  <div class="table rendered">
-    <table></table>
-  </div>
+            <div class="table rendered">
+                <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
 
-  <div class="areas">
-    <textarea class="editing" readonly></textarea>
-  </div>
+                </table>
+            </div>
 
-</section>
+            <div class="areas">
+                <textarea class="editing" readonly></textarea>
+            </div>
 
-<footer>
-<p></p>
-</footer>
+        </section>
 
 
-</body>
+    </div>
+</div>
+
+    </div>
+    <!-- /End Layout -->
+
+    <!-- Material Design Lite js Library -->
+    <script type="text/javascript" src="../js/material.min.js"></script>
+
+      <script type="text/javascript" src="../js/vue.js"></script>
+      <script type="text/javascript" src="../js/vue-resource.min.js"></script>
+
+      <!--Inject Vue JS dependency if template-->
+      
+
+      <!--Inject JS dependency for Submission From-->
+      
+
+      <script src='../js/assets/jquery-2.1.1.min.js'></script>
+      <script src="../js/assets/jquery.csv.js"></script>
+      <script src="../js/assets/index.js"></script>
+      <script src="../js/assets/omk.js"></script>
+
+      
+
+
+
+  </body>
+
 </html>

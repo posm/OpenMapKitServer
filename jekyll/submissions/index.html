@@ -1,0 +1,64 @@
+---
+layout: default
+jquery: jquery-2.1.1.min
+csv: jquery.csv
+index: index
+omk: omk
+---
+
+
+<div id="submissionsPage" class="page-content">
+
+    <div class="mdl-grid">
+
+
+        <!--<h1>OpenMapKit Form Submissions</h1>-->
+        <div class="typo-styles__demo mdl-typography--display-1">OpenMapKit Form Submissions</div>
+
+        <section class="csv">
+
+    <span class="rendered">
+
+        <ul class='mdl-list'>
+            <li class="mdl-list__item">
+                <!-- Number badge on icon -->
+                <div id="badgeCount" class="mdl-badge" data-badge>Total submissions</div>
+            </li>
+
+
+
+            <li class="mdl-list__item"><a download="data.csv" href="#" class="download">
+                <button class="mdl-button mdl-js-button mdl-button--raised">
+                    Download CSV
+                </button></a></li>
+            <li class="mdl-list__item raw"><a href="#">
+                <button class="mdl-button mdl-js-button mdl-button--raised">
+                show the raw data
+                </button></a></li>
+            <li class="mdl-list__item"><a id="downloadJson" download="data.json" href="#">
+                <button class="mdl-button mdl-js-button mdl-button--raised">
+                    Download JSON
+                </button></a>
+            </li>
+        </ul>
+    </span>
+
+    <span class="fetching">
+      Fetching data from OpenMapKit Server...
+    </span>
+
+            <div class="table rendered">
+                <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+
+                </table>
+            </div>
+
+            <div class="areas">
+                <textarea class="editing" readonly></textarea>
+            </div>
+
+        </section>
+
+
+    </div>
+</div>
