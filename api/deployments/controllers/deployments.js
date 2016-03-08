@@ -29,6 +29,7 @@ var digestDeploymentDir = function(req, dirName, contents){
     // Create object that describes deployment
     var deploymentObj = {
         name: dirName,
+        totalSize: 0,
         valid: true,
         files: {"osm": [], "mbtiles": []},
         url: Url.apiUrl(req, '/omk/' + deploymentParentDir + '/' + dirName),
@@ -48,11 +49,11 @@ var digestDeploymentDir = function(req, dirName, contents){
             results.forEach(function(stat, index){
 
                 // Get the file extentions
-                var fileExt = path.extname(contents[index])
+                var fileExt = path.extname(contents[index]);
 
                 // Check the file extension, and if its a match, add to deploy object
                 if ([".osm", ".mbtiles"].indexOf(fileExt) > -1) {
-
+                    deploymentObj.totalSize += stat.size;
                     deploymentObj.files[fileExt.substring(1)].push({
                         name: contents[index],
                         url: Url.dataDirFileUrl(req, 'deployments/' + dirName, contents[index]),
@@ -155,7 +156,6 @@ module.exports.get = function(req, res, next) {
             return digestDeploymentDir(req,deploymentDir, contents );
         })
         .then(function(deployment){
-
             res.status(200).json(deployment);
         })
         .catch(function(err){
