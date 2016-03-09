@@ -49,7 +49,8 @@ module.exports = function (req, res, next) {
             var xFormFilename = xlsFilename.replace('.xlsx', '.xml');
             var xFormPath = formsDir + xFormFilename;
             var options = {
-                scriptPath: __dirname + '/../pyxform/pyxform/',
+                //scriptPath: __dirname + '/../pyxform/pyxform/',
+                scriptPath: '/Users/renerodriguez/sites/work/OpenMapKitServer/api/odk/pyxform/pyxform/',
                 args: [xlsPath, xFormPath],
                 mode: "text"
             };
