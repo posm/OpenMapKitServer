@@ -17,18 +17,28 @@ controllerjs: upload
                     <span class="dropzone-title" v-if="!fileName">Drop image here or click to select</span>
                     <span class="dropzone-info" v-else>{{ fileName }}</span>
                 </div>
-                <!--<form action="/omk/odk/upload-form"  method="post" enctype="multipart/form-data">-->
-                <input type="file" id="xls_file" name="xls_file" @change="onFileChange">
-                <!--</form>-->
+
+                <input type="file" id="xls_file" name="xls_file">
+
             </div>
 
-            <input type="submit" name="submit" value="Submit">
-            <progress min="0" max="100" value="{{ progress }}">{{ progress }}% complete</progress>
+            <input type="submit" name="submit" value="Submit" class="mdl-button mdl-button--raised mdl-button--colored submitButton">
+            <progress min="0" max="100" value="{{ progress }}" @click="showSnackBar()" v-show="showProgess">{{ progress }}% complete</progress>
         </ajax-form>
 
         <!--<pre>{{ response | json }}</pre>-->
+        <dialog class="mdl-dialog">
+        <div class="mdl-dialog__content">
+            <p>
+                {{uploadMessage}}
+            </p>
+        </div>
+        </dialog>
+
+
 
 
         {% endraw %}
     </div>
+
 </div>

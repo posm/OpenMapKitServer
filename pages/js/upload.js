@@ -43,6 +43,9 @@ var AjaxFormComponent = Vue.extend({
 
             this.fileName = files[0].name;
 
+            // fires when files has been loaded
+            this.$dispatch('getFilesName', this.fileName);
+
 
         },
         handleAjaxFormSubmit: function() {
@@ -76,6 +79,7 @@ var AjaxFormComponent = Vue.extend({
                 if (evt.lengthComputable) {
                     // create a new lazy property for percent
                     evt.percent = (evt.loaded / evt.total) * 100;
+
                     this.$dispatch('onFormProgress', this, evt);
                 }
             }).bind(this);
@@ -98,9 +102,14 @@ var AjaxFormComponent = Vue.extend({
 
             data.append('xls_file', event.target[0].files[0]);
 
-            this.fileName = event.target[0].files[0].name;
 
-            xhr.send(data);
+
+            //If there's no name there's no data
+            if(this.fileName){
+                this.fileName = event.target[0].files[0].name;
+                xhr.send(data);
+            }
+
             // we have setup all the stuff we needed to
             this.$dispatch('afterFormSubmit', this);
         }
@@ -115,12 +124,25 @@ new Vue({
     el: '#uploadPage',
     data: {
         response: {},
-        progress: 0
+        progress: 0,
+        showProgess: false,
+        uploadMessage: '',
+        fileName: ''
+    },
+    ready: function (){
+
+        //componentHandler.upgradeAllRegistered();
+        componentHandler.upgradeDom();
     },
     events: {
+        getFilesName: function(el){
+            this.fileName = el;
+        },
         beforeFormSubmit: function(el) {
             // fired after form is submitted
             console.log('beforeFormSubmit', el);
+            this.showProgess = true;
+
         },
         afterFormSubmit: function(el) {
             // fired after fetch is called
@@ -131,6 +153,15 @@ new Vue({
             console.log('onFormComplete', el, res);
             // indicate the changes
             this.response = res;
+
+            this.progress = 0;
+
+            this.uploadMessage = "Uploaded " + this.fileName + " file successfully";
+
+            this.fileName = '';
+
+
+            this.showDialod();
         },
         onFormProgress: function(el, e) {
             // the form is done, but there could still be errors
@@ -142,7 +173,22 @@ new Vue({
             // handle errors
             console.log('onFormError', el, err);
             // indicate the changes
+            this.uploadMessage = "Failed uploading" + this.fileName + " file"
             this.response = err;
+        }
+    },
+    methods: {
+        showDialod: function(){
+            setTimeout(function () {
+                componentHandler.upgradeAllRegistered();
+            });
+
+            var dialog = document.querySelector('dialog');
+            dialog.showModal();
+            setTimeout(function () {
+                dialog.close();
+                this.showProgess = false;
+            }, 5000);
         }
     }
 })
