@@ -62,7 +62,8 @@
 
         
 
-        <div>
+
+        <ajax-form id="formOne" class="my-form" name="myCoolForm" action="/omk/odk/upload-form" method="POST" enctype="multipart/form-data" v-response-type="json">
             <div class="dropzone-area" @dragenter="hovering = true" @dragleave="hovering = false" :class="{'dropzone-hover': hovering}">
                 <div class="dropzone-text">
 
@@ -70,30 +71,18 @@
                     <span class="dropzone-info" v-else>{{ fileName }}</span>
                 </div>
                 <!--<form action="/omk/odk/upload-form"  method="post" enctype="multipart/form-data">-->
-                    <input type="file" id="xls_file" name="xls_file" @change="onFileChange">
+                <input type="file" id="xls_file" name="xls_file" @change="onFileChange">
                 <!--</form>-->
             </div>
-        </div>
-        <!--<div class="dropzone-preview" v-else>-->
-            <!--<span class="">{{ image }}</span>-->
-            <!--&lt;!&ndash;<div class="dropzone-close modal-close" @click="removeImage">&ndash;&gt;-->
-                <!--&lt;!&ndash;<span></span>&ndash;&gt;-->
-                <!--&lt;!&ndash;<span></span>&ndash;&gt;-->
-            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-        <!--</div>-->
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored submitButton" @click="upload()">
-        Submit
-        </button>
 
+            <input type="submit" name="submit" value="Submit">
+            <progress min="0" max="100" value="{{ progress }}">{{ progress }}% complete</progress>
+        </ajax-form>
+
+        <!--<pre>{{ response | json }}</pre>-->
 
 
         
-
-        <!--<form action="/omk/odk/upload-form" method="post" enctype="multipart/form-data">-->
-            <!--Select and XLS Form to upload:-->
-            <!--<input type="file" name="xls_file" id="xls_file">-->
-            <!--<input type="submit" value="Upload Form" name="submit">-->
-        <!--</form>-->
     </div>
 </div>
 

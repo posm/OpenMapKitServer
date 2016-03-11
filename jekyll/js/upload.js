@@ -2,16 +2,37 @@
  * Created by renerodriguez on 2/27/16.
  */
 
+/* globals FormData, Vue */
 
-new Vue({
-    el: '#uploadPage',
-    props: ['info'],
-    data: {
-
-        fileName: '',
-        fileData: '',
-        hovering: false
-
+var AjaxFormComponent = Vue.extend({
+    template: '<form id="{{ id }}" class="{{ class }}" name="{{ name }}" action="{{ action }}" method="{{ method }}" v-on:submit.prevent="handleAjaxFormSubmit" @change="onFileChange"><slot></slot></form>',
+    props: {
+        'id': String,
+        'fileName': '',
+        'class': String,
+        'action': {
+            type: String,
+            required: true
+        },
+        'method': {
+            type: String,
+            required: true,
+            validator: function(value){
+                switch(value.toUpperCase()){
+                    case 'CONNECT': return true
+                    case 'DELETE': return true
+                    case 'GET': return true
+                    case 'HEAD': return true
+                    case 'OPTIONS': return true
+                    case 'POST': return true
+                    case 'PUT': return true
+                    case 'TRACE': return true
+                    case 'TRACK': return true
+                    default: return false
+                }
+            }
+        },
+        'v-response-type': String
     },
     methods: {
         onFileChange: function (e) {
@@ -19,34 +40,109 @@ new Vue({
             var files = e.target.files || e.dataTransfer.files;
             if (!files.length) return;
 
-            var data = new FormData();
-            //var data = {}
-            // for single file
-            data.append('xls_file', files[0]);
-            //data['xls_file'] = files;
+
             this.fileName = files[0].name;
-            this.fileData = data;
-            console.log("data: ", data);
+
 
         },
-        upload: function(){
+        handleAjaxFormSubmit: function() {
+            // fires before we do anything
+            this.$dispatch('beforeFormSubmit', this);
 
-             //GET request
-            this.$http({url: '/omk/odk/upload-form', method: 'POST', data: this.fileData}).then(function (response) {
-                // success callback
-                console.log(response);
-            }, function (response) {
-                // error callback
-                console.log("error: ", response);
-            });
+            // fires whenever an error occurs
+            var handleError = (function(err) {
+                this.$dispatch('onFormError', this, err);
+            }).bind(this);
 
-            //this.$http.post('/omk/odk/upload-form', this.fileData, function (data, status, request) {
-            //    //handling
-            //    //console.log(data, status, request);
-            //}).error(function (data, status, request) {
-            //    //handling
-            //    console.log(data, status, request);
-            //});
+            // set a default form method
+            if (!this.method) {
+                this.method = 'post';
+            }
+
+            // fires when the form returns a result
+            var handleFinish = (function(data) {
+                if (xhr.readyState == 4) {
+                    // a check to make sure the result was a success
+                    if (xhr.status < 400) {
+                        this.$dispatch('onFormComplete', this, xhr.response);
+                    } else {
+                        this.$dispatch('onFormError', this, xhr.statusText);
+                    }
+                }
+            }).bind(this);
+
+            var handleProgress = (function(evt) {
+                // flag indicating if the resource has a length that can be calculated
+                if (evt.lengthComputable) {
+                    // create a new lazy property for percent
+                    evt.percent = (evt.loaded / evt.total) * 100;
+                    this.$dispatch('onFormProgress', this, evt);
+                }
+            }).bind(this);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open(this.method, this.action, true);
+
+            // you can set the form response type via v-response-type
+            if (this.vResponseType) {
+                xhr.responseType = this.vResponseType;
+            } else {
+                xhr.responseType = 'json';
+            }
+
+            xhr.upload.addEventListener('progress', handleProgress);
+            xhr.addEventListener('readystatechange', handleFinish);
+            xhr.addEventListener('error', handleError);
+            xhr.addEventListener('abort', handleError);
+            var data = new FormData();
+
+            data.append('xls_file', event.target[0].files[0]);
+
+            this.fileName = event.target[0].files[0].name;
+
+            xhr.send(data);
+            // we have setup all the stuff we needed to
+            this.$dispatch('afterFormSubmit', this);
+        }
+    }
+});
+
+// register
+Vue.component('ajax-form', AjaxFormComponent);
+
+
+new Vue({
+    el: '#uploadPage',
+    data: {
+        response: {},
+        progress: 0
+    },
+    events: {
+        beforeFormSubmit: function(el) {
+            // fired after form is submitted
+            console.log('beforeFormSubmit', el);
+        },
+        afterFormSubmit: function(el) {
+            // fired after fetch is called
+            console.log('afterFormSubmit', el);
+        },
+        onFormComplete: function(el, res) {
+            // the form is done, but there could still be errors
+            console.log('onFormComplete', el, res);
+            // indicate the changes
+            this.response = res;
+        },
+        onFormProgress: function(el, e) {
+            // the form is done, but there could still be errors
+            console.log('onFormProgress', el, e);
+            // indicate the changes
+            this.progress = e.percent;
+        },
+        onFormError: function(el, err) {
+            // handle errors
+            console.log('onFormError', el, err);
+            // indicate the changes
+            this.response = err;
         }
     }
 })
