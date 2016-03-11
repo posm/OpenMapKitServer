@@ -9,6 +9,7 @@ var AjaxFormComponent = Vue.extend({
     props: {
         'id': String,
         'fileName': '',
+        fileData: null,
         'class': String,
         'action': {
             type: String,
@@ -43,6 +44,8 @@ var AjaxFormComponent = Vue.extend({
 
             this.fileName = files[0].name;
 
+            this.fileData = files[0];
+
             // fires when files has been loaded
             this.$dispatch('getFilesName', this.fileName);
 
@@ -68,6 +71,8 @@ var AjaxFormComponent = Vue.extend({
                     // a check to make sure the result was a success
                     if (xhr.status < 400) {
                         this.$dispatch('onFormComplete', this, xhr.response);
+                        this.fileData = null;
+                        this.fileName = null;
                     } else {
                         this.$dispatch('onFormError', this, xhr.statusText);
                     }
@@ -100,13 +105,12 @@ var AjaxFormComponent = Vue.extend({
             xhr.addEventListener('abort', handleError);
             var data = new FormData();
 
-            data.append('xls_file', event.target[0].files[0]);
+            data.append('xls_file', this.fileData);
 
 
 
-            //If there's no name there's no data
-            if(this.fileName){
-                this.fileName = event.target[0].files[0].name;
+            //Check if there's data
+            if(this.fileData){
                 xhr.send(data);
             }
 
@@ -179,15 +183,13 @@ new Vue({
     },
     methods: {
         showDialod: function(){
-            setTimeout(function () {
-                componentHandler.upgradeAllRegistered();
-            });
 
+            self = this;
             var dialog = document.querySelector('dialog');
             dialog.showModal();
             setTimeout(function () {
                 dialog.close();
-                this.showProgess = false;
+                self.showProgess = false;
             }, 5000);
         }
     }
