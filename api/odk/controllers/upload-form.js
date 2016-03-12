@@ -65,8 +65,8 @@ module.exports = function (req, res, next) {
                 res.status(201).json({
                     status: 201,
                     msg: 'Converted ' + file[0].originalFilename + ' to an XForm and saved both to the forms directory.',
-                    xFormUrl: req.protocol + '://' + req.headers.host + '/public/forms/' + xFormFilename,
-                    xlsFormUrl: req.protocol + '://' + req.headers.host + '/public/forms/' + xlsFilename
+                    xFormUrl: req.protocol + '://' + req.headers.host + '/omk/data/forms/' + xFormFilename,
+                    xlsFormUrl: req.protocol + '://' + req.headers.host + '/omk/data/forms/' + xlsFilename
                 });
             });
         });

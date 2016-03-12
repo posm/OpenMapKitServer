@@ -3,13 +3,13 @@
 var test = require('tape');
 var request = require('supertest');
 var app = require('../../index');
-var getDeployments = require('.././controllers/deployments');
+var getDeployments = require('../../api/deployments/controllers/deployments');
 
 getDeployments._setParentDirectory(__dirname + '/../fixtures');
 
-test('/deployments endpoint exists and returns correct response content', function (t) {
+test('/omk/deployments endpoint exists and returns correct response content', function (t) {
     request(app)
-        .get('/deployments')
+        .get('/omk/deployments')
         .expect('Content-Type', /json/)
         .expect(200)
         .end(function (err, res) {
@@ -48,10 +48,10 @@ test('/deployments endpoint exists and returns correct response content', functi
         });
 });
 
-test('/deployments/:deployment endpoint exists and returns correct response content', function (t) {
+test('/omk/deployments/:deployment endpoint exists and returns correct response content', function (t) {
 
     request(app)
-        .get('/deployments/Arcade%20Creek')
+        .get('/omk/deployments/Arcade%20Creek')
         .expect('Content-Type', /json/)
         .expect(200)
         .end(function (err, res) {

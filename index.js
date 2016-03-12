@@ -28,9 +28,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Basic Info
-app.get('/', info);
-app.get('/omk', info);
+app.get('/', redirectToForms);
+app.get('/omk', redirectToForms);
 app.get('/omk/info', info);
+
 
 // Open Data Kit OpenRosa
 
@@ -66,7 +67,12 @@ function info(req, res) {
         name: settings.name,
         description: settings.description,
         status: 200,
-        service: pkg.name,
+        service: 'omk-server',
+        npm: pkg.name,
         version: pkg.version
     });
+}
+
+function redirectToForms(req, res, next) {
+    res.redirect('/omk/pages/forms');
 }

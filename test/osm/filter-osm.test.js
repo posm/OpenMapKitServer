@@ -1,7 +1,7 @@
 var test = require('tape');
 var fs = require('fs');
 var libxml = require('libxmljs');
-var filterOsm = require('.././filter-osm');
+var filterOsm = require('../../api/odk/osm/filter-osm');
 
 /**
  * Get together an array of the simple set of OSM files to test.
