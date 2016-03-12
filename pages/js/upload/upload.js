@@ -34,8 +34,15 @@ var AjaxFormComponent = Vue.extend({
             if (!files.length) return;
 
             //capture values from file
-            this.fileName = files[0].name;
-            this.fileData = files[0];
+            var fileNameString = files[0].name;
+            if (fileNameString.indexOf('.xlsx') < 0) {
+                // fires when files has been loaded
+                this.$dispatch('NotifyWrongFile');
+            }else{
+                this.fileName = files[0].name;
+                this.fileData = files[0];
+            }
+
 
             // fires when files has been loaded
             this.$dispatch('getFilesName', this.fileName);
@@ -128,6 +135,12 @@ new Vue({
     events: {
         getFilesName: function(el){
             this.fileName = el;
+
+
+        },
+        NotifyWrongFile: function(){
+            this.uploadMessage = "You must POST form-data with a key of 'xls_file'' and a value of an XLSX Excel file.";
+            this.showDialod();
         },
         afterFormSubmit: function(el) {
             // fired after fetch is called
@@ -159,8 +172,9 @@ new Vue({
             console.log('onFormError', el, err);
             // indicate the changes
             //Failed message
-            this.uploadMessage = "Failed uploading" + this.fileName + " file"
+            this.uploadMessage = "Failed uploading" + this.fileName + " file";
             this.response = err;
+            this.showDialod();
         }
     },
     methods: {
