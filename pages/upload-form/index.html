@@ -56,28 +56,42 @@
 
     
 
-    <div class="page-content">
+    <div id="uploadPage" class="page-content">
 
     <div class="mdl-grid">
 
-        <form action="/omk/odk/upload-form" method="post" enctype="multipart/form-data">
+        
 
-                <div class="dropzone-area">
-                    <div class="dropzone-text">
-                        <span class="dropzone-title">Select and XLS Form to upload:</span>
-                        <span class="dropzone-info"></span>
-                    </div>
-                    <input type="file" name="xls_file" id="xls_file">
+
+        <ajax-form id="formOne" class="my-form" name="myCoolForm" action="/omk/odk/upload-form" method="POST" enctype="multipart/form-data" v-response-type="json">
+            <div class="dropzone-area" @dragenter="hovering = true" @dragleave="hovering = false" :class="{'dropzone-hover': hovering}">
+                <div class="dropzone-text">
+
+                    <span class="dropzone-title" v-if="!fileName">Drop image here or click to select</span>
+                    <span class="dropzone-info" v-else>{{ fileName }}</span>
                 </div>
 
+                <input type="file" id="xls_file" name="xls_file">
 
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored submitButton" type="submit" value="Upload Form" name="submit">
-                Submit
-            </button>
-        </form>
+            </div>
+
+            <input type="submit" name="submit" value="Submit" class="mdl-button mdl-button--raised mdl-button--colored submitButton">
+            <progress min="0" max="100" value="{{ progress }}" @click="showSnackBar()" v-show="fileName.length">{{ progress }}% complete</progress>
+        </ajax-form>
+        <dialog class="mdl-dialog">
+        <div class="mdl-dialog__content">
+            <p>
+                {{uploadMessage}}
+            </p>
+        </div>
+        </dialog>
 
 
+
+
+        
     </div>
+
 </div>
 
 
@@ -85,12 +99,16 @@
     <!-- /End Layout -->
 
     <!-- Material Design Lite js Library -->
-    <script type="text/javascript" src="../js/material.min.js"></script>
+    <script type="text/javascript" src="../js/vendor/material.min.js"></script>
 
-      <script type="text/javascript" src="../js/vue.js"></script>
-      <script type="text/javascript" src="../js/vue-resource.min.js"></script>
+      <script type="text/javascript" src="../js/vendor/vue.js"></script>
+      <script type="text/javascript" src="../js/vendor/vue-resource.min.js"></script>
 
       <!--Inject Vue JS dependency if template-->
+      
+
+      <script src="../js/upload/upload.js"></script>
+
       
 
       <!--Inject JS dependency for Submission From-->

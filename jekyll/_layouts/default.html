@@ -20,15 +20,15 @@
     <!-- /End Layout -->
 
     <!-- Material Design Lite js Library -->
-    <script type="text/javascript" src="../js/material.min.js"></script>
+    <script type="text/javascript" src="../js/vendor/material.min.js"></script>
 
-      <script type="text/javascript" src="../js/vue.js"></script>
-      <script type="text/javascript" src="../js/vue-resource.min.js"></script>
+      <script type="text/javascript" src="../js/vendor/vue.js"></script>
+      <script type="text/javascript" src="../js/vendor/vue-resource.min.js"></script>
 
       <!--Inject Vue JS dependency if template-->
       {% if page.controllerjs %}
 
-      <script src="../js/{{page.controllerjs | downcase}}.js"></script>
+      <script src="../js/{{page.controllerjs | downcase}}/{{page.controllerjs | downcase}}.js"></script>
 
       {% endif %}
 
