@@ -76,7 +76,7 @@
             </div>
 
             <input type="submit" name="submit" value="Submit" class="mdl-button mdl-button--raised mdl-button--colored submitButton">
-            <progress min="0" max="100" value="{{ progress }}" @click="showSnackBar()" v-show="showProgess">{{ progress }}% complete</progress>
+            <progress min="0" max="100" value="{{ progress }}" @click="showSnackBar()" v-show="fileName.length">{{ progress }}% complete</progress>
         </ajax-form>
         <dialog class="mdl-dialog">
         <div class="mdl-dialog__content">
