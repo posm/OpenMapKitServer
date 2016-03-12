@@ -3,7 +3,7 @@ var settings = require('../../../settings');
 var Url = require('../../../util/url');
 
 /**
- * Provides metadata as JSON of the public directories of
+ * Provides metadata as JSON of the data directories of
  * survey submissions as well as the applicable aggregate
  * endpoints.
  */

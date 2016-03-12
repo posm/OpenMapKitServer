@@ -3,7 +3,7 @@ var fs = require('fs');
 var path = require('path');
 var Q = require('q');
 var File = require('../../../util/file');
-var submissionsDir = __dirname + '/../../public/submissions';
+var submissionsDir = __dirname + '/../../data/submissions';
 var checksumHelper = require('../helpers/checksum-hash');
 
 var appendFileDeferred = function(filePath, append) {
