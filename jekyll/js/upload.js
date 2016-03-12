@@ -20,15 +20,7 @@ var AjaxFormComponent = Vue.extend({
             required: true,
             validator: function(value){
                 switch(value.toUpperCase()){
-                    case 'CONNECT': return true
-                    case 'DELETE': return true
-                    case 'GET': return true
-                    case 'HEAD': return true
-                    case 'OPTIONS': return true
                     case 'POST': return true
-                    case 'PUT': return true
-                    case 'TRACE': return true
-                    case 'TRACK': return true
                     default: return false
                 }
             }
@@ -41,9 +33,8 @@ var AjaxFormComponent = Vue.extend({
             var files = e.target.files || e.dataTransfer.files;
             if (!files.length) return;
 
-
+            //capture values from file
             this.fileName = files[0].name;
-
             this.fileData = files[0];
 
             // fires when files has been loaded
@@ -52,8 +43,6 @@ var AjaxFormComponent = Vue.extend({
 
         },
         handleAjaxFormSubmit: function() {
-            // fires before we do anything
-            this.$dispatch('beforeFormSubmit', this);
 
             // fires whenever an error occurs
             var handleError = (function(err) {
@@ -129,24 +118,16 @@ new Vue({
     data: {
         response: {},
         progress: 0,
-        showProgess: false,
+        showProgess: true,
         uploadMessage: '',
         fileName: ''
     },
     ready: function (){
-
-        //componentHandler.upgradeAllRegistered();
         componentHandler.upgradeDom();
     },
     events: {
         getFilesName: function(el){
             this.fileName = el;
-        },
-        beforeFormSubmit: function(el) {
-            // fired after form is submitted
-            console.log('beforeFormSubmit', el);
-            this.showProgess = true;
-
         },
         afterFormSubmit: function(el) {
             // fired after fetch is called
@@ -158,10 +139,10 @@ new Vue({
             // indicate the changes
             this.response = res;
 
-            this.progress = 0;
-
+            //Success message
             this.uploadMessage = "Uploaded " + this.fileName + " file successfully";
-
+            //reset values
+            this.progress = 0;
             this.fileName = '';
 
 
@@ -177,6 +158,7 @@ new Vue({
             // handle errors
             console.log('onFormError', el, err);
             // indicate the changes
+            //Failed message
             this.uploadMessage = "Failed uploading" + this.fileName + " file"
             this.response = err;
         }
