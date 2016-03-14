@@ -139,7 +139,7 @@ new Vue({
 
         },
         NotifyWrongFile: function(){
-            this.uploadMessage = "You must POST form-data with a key of 'xls_file'' and a value of an XLSX Excel file.";
+            this.uploadMessage = "This file is not a valid XLSForm .xlsx file.";
             this.showDialod();
         },
         afterFormSubmit: function(el) {
