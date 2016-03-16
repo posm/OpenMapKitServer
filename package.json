@@ -36,6 +36,7 @@
     "libxmljs": "^0.16.1",
     "mkdirp": "^0.5.1",
     "multiparty": "^4.1.2",
+    "mv": "^2.1.1",
     "on-finished": "^2.3.0",
     "openrosa-form-submission-middleware": "^1.0.4",
     "openrosa-formlist": "^1.0.1",

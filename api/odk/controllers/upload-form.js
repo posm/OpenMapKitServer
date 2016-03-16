@@ -1,4 +1,5 @@
 var fs = require('fs');
+var mv = require('mv');
 var multiparty = require('multiparty');
 var PythonShell = require('python-shell');
 
@@ -35,7 +36,7 @@ module.exports = function (req, res, next) {
             return;
         }
         var xlsPath = formsDir + xlsFilename;
-        fs.rename(file[0].path, xlsPath, function(err) {
+        mv(file[0].path, xlsPath, function(err) {
             if (err) {
                 res.status(400).json({
                     status: 400,
