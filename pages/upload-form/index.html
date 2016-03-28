@@ -33,9 +33,9 @@
         <header class="mdl-layout__header">
 
     <div class="mdl-layout__header-row">
-      <div><img id="omkLogo" src="../img/ic_omk_nobg-web.png"></div>
+      <div><a href="/omk/pages/forms/"><img id="omkLogo" src="../img/ic_omk_nobg-web.png"></a></div>
       <!-- Title -->
-      <span class="mdl-layout-title">OpenMapKit Server</span>
+      <span class="mdl-layout-title"><a href="/omk/pages/forms/" class="pageTitle">OpenMapKit Server</a></span>
       <!-- Add spacer, to align navigation to the right -->
       <div class="mdl-layout-spacer"></div>
 
@@ -78,13 +78,6 @@
             <input type="submit" name="submit" value="Submit" class="mdl-button mdl-button--raised mdl-button--colored submitButton">
             <progress min="0" max="100" value="{{ progress }}" @click="showSnackBar()" v-show="fileName.length">{{ progress }}% complete</progress>
         </ajax-form>
-        <dialog class="mdl-dialog">
-        <div class="mdl-dialog__content">
-            <p>
-                {{uploadMessage}}
-            </p>
-        </div>
-        </dialog>
 
 
 
@@ -103,6 +96,8 @@
 
       <script type="text/javascript" src="../js/vendor/vue.js"></script>
       <script type="text/javascript" src="../js/vendor/vue-resource.min.js"></script>
+
+      <script type="text/javascript" src="../js/vendor/toast.min.js"></script>
 
       <!--Inject Vue JS dependency if template-->
       

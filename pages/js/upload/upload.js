@@ -139,8 +139,18 @@ new Vue({
 
         },
         NotifyWrongFile: function(){
-            this.uploadMessage = "You must POST form-data with a key of 'xls_file'' and a value of an XLSX Excel file.";
-            this.showDialod();
+            this.uploadMessage = "This file is not a valid XLSForm .xlsx file.";
+            //toaster
+            var toastOptions = {
+                style: {
+                    main: {
+                        background: "#f2dede",
+                        color: "#a94442",
+                        'box-shadow': '0 0 0px'
+                    }
+                }
+            };
+            iqwerty.toast.Toast(this.uploadMessage, toastOptions);
         },
         afterFormSubmit: function(el) {
             // fired after fetch is called
@@ -153,13 +163,13 @@ new Vue({
             this.response = res;
 
             //Success message
-            this.uploadMessage = "Uploaded " + this.fileName + " file successfully";
+            this.uploadMessage = "Uploaded " + this.fileName + " successfully";
             //reset values
             this.progress = 0;
             this.fileName = '';
+            //toaster
+            iqwerty.toast.Toast(this.uploadMessage, toastOptions);
 
-
-            this.showDialod();
         },
         onFormProgress: function(el, e) {
             // the form is done, but there could still be errors
@@ -174,19 +184,31 @@ new Vue({
             //Failed message
             this.uploadMessage = "Failed uploading" + this.fileName + " file";
             this.response = err;
-            this.showDialod();
+
+            //toaster
+            var toastOptions = {
+                style: {
+                    main: {
+                        background: "#f2dede",
+                        color: "#a94442",
+                        'box-shadow': '0 0 0px'
+                    }
+                }
+            };
+            iqwerty.toast.Toast(this.uploadMessage, toastOptions);
         }
     },
     methods: {
-        showDialod: function(){
 
-            self = this;
-            var dialog = document.querySelector('dialog');
-            dialog.showModal();
-            setTimeout(function () {
-                dialog.close();
-                self.showProgess = false;
-            }, 5000);
-        }
     }
 })
+
+var toastOptions = {
+    style: {
+        main: {
+            background: "#7ebc6f",
+            color: "white",
+            'box-shadow': '0 0 0px'
+        }
+    }
+};
