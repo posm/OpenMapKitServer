@@ -65,8 +65,12 @@ module.exports = function (req, res, next) {
                     });
                     return;
                 }
-                var dataObj = JSON.parse(data);
-                aggregate.push(dataObj);
+                try {
+                    var dataObj = JSON.parse(data);
+                    aggregate.push(dataObj);
+                } catch (e) {
+                    console.log('Problem parsing: ' + dataFile);
+                }
                 if (len === count && !res._headerSent) {
                     res.status(200).json(aggregate);
                 }
