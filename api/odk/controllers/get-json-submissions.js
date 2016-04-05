@@ -45,14 +45,13 @@ module.exports = function (req, res, next) {
             return;
         }
         var count = 0;
-        for (var i = 0; i < len; i++) {
-            var submissionDir = submissionDirs[i];
+        submissionDirs.forEach(function (submissionDir) {
             if (submissionDir[0] === '.' || submissionDir.indexOf('.txt') > 0) {
                 ++count;
                 if (len === count) {
                     res.status(200).json(aggregate);
                 }
-                continue;
+                return;
             }
             var dataFile = dir + '/' + submissionDir + '/data.json';
             fs.readFile(dataFile, function (err, data) {
@@ -75,6 +74,6 @@ module.exports = function (req, res, next) {
                     res.status(200).json(aggregate);
                 }
             });
-        }
+        });
     });
 };
