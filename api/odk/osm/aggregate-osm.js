@@ -80,29 +80,39 @@ module.exports = function (files, filter, cb) {
                         cb(err);
                         return;
                     }
-                    var doc = libxml.parseXmlString(xml);
-                    var rootEl = doc.root();
-                    filterOsm.user(rootEl, filter, function (rootEl, bool) {
-                        if (!bool) {
-                            checkToFireCallbacks();
-                            return;
-                        }
-                        var osmElements = rootEl.childNodes();
-                        for (var j = 0, len = osmElements.length; j < len; j++) {
-                            var osmElement = osmElements[j];
-                            // Check that the element is a node, way, or relation.
-                            var elementName = osmElement.name();
-                            if (elementName === 'node') {
-                                rewriteNegativeId(negIdRewriteHash, osmElement);
-                            } else if (elementName === 'way' || elementName === 'relation') {
-                                rewriteNegativeId(negIdRewriteHash, osmElement);
-                                // Ways and relations might need their negative refs rewritten too.
-                                rewriteNegativeRef(negIdRewriteHash, osmElement);
-                            }
-                            mainOsmElement.addChild(osmElement);
-                        }
+                    if (typeof xml !== 'string' || xml.length === 0) {
                         checkToFireCallbacks();
-                    });
+                        return;
+                    }
+                    try {
+                        var doc = libxml.parseXmlString(xml);
+                        var rootEl = doc.root();
+                        filterOsm.user(rootEl, filter, function (rootEl, bool) {
+                            if (!bool) {
+                                checkToFireCallbacks();
+                                return;
+                            }
+                            var osmElements = rootEl.childNodes();
+                            for (var j = 0, len = osmElements.length; j < len; j++) {
+                                var osmElement = osmElements[j];
+                                // Check that the element is a node, way, or relation.
+                                var elementName = osmElement.name();
+                                if (elementName === 'node') {
+                                    rewriteNegativeId(negIdRewriteHash, osmElement);
+                                } else if (elementName === 'way' || elementName === 'relation') {
+                                    rewriteNegativeId(negIdRewriteHash, osmElement);
+                                    // Ways and relations might need their negative refs rewritten too.
+                                    rewriteNegativeRef(negIdRewriteHash, osmElement);
+                                }
+                                mainOsmElement.addChild(osmElement);
+                            }
+                            checkToFireCallbacks();
+                        });
+                    } catch (err) {
+                        cb(err);
+                        return;
+                    }
+
                 });
             });
 
