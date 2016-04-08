@@ -24,7 +24,8 @@ If you want to run OpenMapKit Server for your field mapping survey, use the
 [__deployments__](deployments) is the OpenMapKit 
 deployment API. This services deployment data in the 
 [deployments data directory](data/deployments).
-Manifest files in this directory work with [posm-deployment](https://github.com/AmericanRedCross/osm-export-tool2)
+Manifest files in this directory are read by OpenMapKit Android as metadata regarding the deployment
+data provided. Deployments are created by [posm-admin](https://github.com/AmericanRedCross/posm-admin).
 to provision deployment data that is fetched by OpenMapKit Android.
 
 [__odk__](odk) is the OpenMapKit ODK API. 
