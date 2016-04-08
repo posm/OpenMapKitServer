@@ -31,7 +31,7 @@ var digestDeploymentDir = function(req, dirName, contents){
         name: dirName,
         totalSize: 0,
         valid: true,
-        files: {"osm": [], "mbtiles": []},
+        files: {osm: [], mbtiles: [], geojson: []},
         url: Url.apiUrl(req, '/omk/' + deploymentParentDir + '/' + dirName),
         listingUrl: Url.dataDirFileUrl(req, deploymentParentDir, dirName)
     };
@@ -52,14 +52,13 @@ var digestDeploymentDir = function(req, dirName, contents){
                 var fileExt = path.extname(contents[index]);
 
                 // Check the file extension, and if its a match, add to deploy object
-                if ([".osm", ".mbtiles"].indexOf(fileExt) > -1) {
+                if (['.osm', '.mbtiles', '.geojson'].indexOf(fileExt) > -1) {
                     deploymentObj.totalSize += stat.size;
                     deploymentObj.files[fileExt.substring(1)].push({
                         name: contents[index],
                         url: Url.dataDirFileUrl(req, 'deployments/' + dirName, contents[index]),
                         size: stat.size,
                         lastModified: stat.mtime
-
                     });
                 }
             });
