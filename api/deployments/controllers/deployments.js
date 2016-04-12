@@ -21,16 +21,10 @@ var digestDeploymentDir = function(req, dirName, contents){
 
     var deferred = Q.defer();
 
-    // If no manifest file, message this deployment directory as invalid
-    if (contents.indexOf('manifest.json') === -1) {
-        return {name: dirName, valid: false, message: "Unable to find manifest file."};
-    }
-
     // Create object that describes deployment
     var deploymentObj = {
         name: dirName,
         totalSize: 0,
-        valid: true,
         files: {osm: [], mbtiles: [], geojson: []},
         url: Url.apiUrl(req, '/omk/' + deploymentParentDir + '/' + dirName),
         listingUrl: Url.dataDirFileUrl(req, deploymentParentDir, dirName)
@@ -38,8 +32,18 @@ var digestDeploymentDir = function(req, dirName, contents){
 
     File.readFileDeferred(deploymentParentDirPath + '/' + dirName + '/manifest.json')
         .then(function(manifest){
-            deploymentObj.manifest = JSON.parse(manifest);
+            try {
+                deploymentObj.manifest = JSON.parse(manifest);
+            } catch (e) {
+                // no op. if the manifest is bogus, just don't use it.
+            }
 
+            return  Q.all(contents.map(function(dirItem){
+                return File.statDeferred(deploymentParentDirPath + '/' + dirName + '/' + dirItem);
+            }));
+        })
+        // no manifest, that's ok!
+        .catch(function(err){
             return  Q.all(contents.map(function(dirItem){
                 return File.statDeferred(deploymentParentDirPath + '/' + dirName + '/' + dirItem);
             }));
