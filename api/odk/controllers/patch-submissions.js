@@ -22,19 +22,15 @@ var appendFileDeferred = function(filePath, append) {
 };
 
 module.exports = function(req, res, next){
-
-    var err;
-
     var formName = path.basename(req.params.formName);
 
     var entityChecksums = req.body.finalizedOsmChecksums || null;
 
     if(!entityChecksums || !entityChecksums instanceof Array) {
-        err = new Error('Bad Request: finalizedOsmChecksums must be a string array.');
+        var err = new Error('Bad Request: finalizedOsmChecksums must be a string array.');
         err.status = 400;
         next(err);
     }
-
 
     // Get the current blacklist
     var blacklist = checksumHelper.get(formName) || null;
