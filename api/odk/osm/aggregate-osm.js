@@ -24,7 +24,22 @@ module.exports = function (files, filter, cb) {
         cb('<?xml version="1.0" encoding="UTF-8" ?><osm version="0.6" generator="OpenMapKit Server ' + appVersion + '"></osm>');
     }
 
+    // This is the number of files read so far.
+    // This includes files that have been filtered out of the result.
     var filesCompleted = 0;
+
+    // This is the number of files that have made it to the final main
+    // OSM element and passed the filters. We use this for the limit filter.
+    var filesUsed = 0;
+
+    var filesLimit = Number.POSITIVE_INFINITY;
+    if (typeof filter.limit === 'string') {
+        var limit = parseInt(filter.limit);
+        if (limit >= 0) {
+            filesLimit = limit;
+        }
+    }
+
     var mainXmlDoc = new libxml.Document();
     mainXmlDoc.node('osm').attr({
         version: '0.6',
@@ -62,7 +77,7 @@ module.exports = function (files, filter, cb) {
                     ++filesCompleted;
                     ++filesInChunkCompleted;
                     // if every single file is done
-                    if (filesCompleted === numFiles) {
+                    if (filesUsed === filesLimit || filesCompleted === numFiles) {
                         cb(null, mainXmlDoc.toString());
                     }
                     // if every file in chunk is done
@@ -106,6 +121,7 @@ module.exports = function (files, filter, cb) {
                                 }
                                 mainOsmElement.addChild(osmElement);
                             }
+                            ++filesUsed;
                             checkToFireCallbacks();
                         });
                     } catch (err) {
