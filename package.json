@@ -49,6 +49,7 @@
     "type-is": "^1.6.10",
     "xform-to-json": "^1.1.1",
     "xml2js": "^0.4.16",
+    "xmlbuilder": "^8.2.2",
     "xtend": "^4.0.1"
   },
   "devDependencies": {

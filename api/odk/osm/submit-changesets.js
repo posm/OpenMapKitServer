@@ -1,5 +1,6 @@
 var async = require('async');
 var getOsmSubmissionsDirs = require('../helpers/get-osm-submissions-dirs');
+var generateChangeset = require('../osm/generate-changeset');
 var osm2osc = require('../osm/osm2osc');
 
 var NUM_PARALLEL_SUBMISSIONS = 4;
@@ -25,7 +26,7 @@ function createAndSubmitChangesets(osmDirs, cb) {
 }
 
 function createChangesetAndOsc(osmFiles, submissionsDir, cb) {
-
+    var changeset = generateChangeset(submissionsDir);
     osm2osc(osmFiles, function (err, oscXmlStr) {
 
     });
