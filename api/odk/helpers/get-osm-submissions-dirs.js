@@ -19,7 +19,7 @@ module.exports = function (formName, cb) {
         });
     }
     var dir = settings.dataDir + '/submissions/' + formName;
-    var osmFiles = [];
+    var osmDirs = {};
 
     // All of the submission dirs in the form directory
     fs.readdir(dir, function (err, submissionDirs) {
@@ -59,11 +59,11 @@ module.exports = function (formName, cb) {
             if (dirStat.submissionDir[0] === '.') {
                 ++dirStat.count;
                 if (len === dirStat.count) {
-                    cb(null, osmFiles);
+                    cb(null, osmDirs);
                 }
                 continue;
             }
-            findOsmFilesInDir(dirStat, osmFiles, cb);
+            findOsmFilesInDir(dirStat, osmDirs, cb);
         }
     });
 };

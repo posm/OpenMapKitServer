@@ -1,5 +1,6 @@
 var async = require('async');
 var getOsmSubmissionsDirs = require('../helpers/get-osm-submissions-dirs');
+var osm2osc = require('../osm/osm2osc');
 
 var NUM_PARALLEL_SUBMISSIONS = 4;
 
@@ -14,25 +15,23 @@ module.exports = function (formName, osmApi, cb) {
 };
 
 function createAndSubmitChangesets(osmDirs, cb) {
-    var dirs = Object.keys(osmDirs);
-
-    // async.eachLimit(dirs, PARALLEL_SUBMISSIONS, function (dir, cb) {
-    //
-    // }, function ());
-
-
-    async.forEachOfLimit(osmDirs, NUM_PARALLEL_SUBMISSIONS, function (osmFiles, submissionsDir, cb) {
-        createChangeset(osmFiles, submissionsDir, cb);
-    }, function (err) {
-
+    async.forEachOfLimit(osmDirs, NUM_PARALLEL_SUBMISSIONS, createChangesetAndOsc, function (err, changeset, osc) {
+        if (err) {
+            cb(err);
+            return;
+        }
+        submitChangeset(changeset, osc, cb);
     });
 }
 
-function createChangeset(osmFiles, submissionsDir, cb) {
-    
+function createChangesetAndOsc(osmFiles, submissionsDir, cb) {
+
+    osm2osc(osmFiles, function (err, oscXmlStr) {
+
+    });
+
 }
 
-function createOsc() {
+function submitChangeset(changeset, osc, cb) {
 
 }
-

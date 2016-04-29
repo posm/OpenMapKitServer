@@ -1,7 +1,7 @@
 var fs = require('fs');
 var async = require('async');
 
-module.exports = function(osmXmlFiles, submissionsDir, cb) {
+module.exports = function(osmXmlFiles, cb) {
     async.each(osmXmlFiles, function (file, cb) {
 
         fs.readFile(file, 'utf-8', function (err, xml) {
