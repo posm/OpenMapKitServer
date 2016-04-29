@@ -81,7 +81,12 @@ module.exports = function(osmXmlFiles, cb) {
             return;
         }
 
-        var builder = new xml2js.Builder();
+        var builder = new xml2js.Builder({
+            renderOpts: {
+                pretty: false
+            },
+            headless: true
+        });
         var xml = builder.buildObject(obj);
 
         cb(null, xml);
