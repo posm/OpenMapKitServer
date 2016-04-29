@@ -2,7 +2,7 @@ var fs = require('fs');
 var settings = require('../../../settings');
 var aggregateOsm = require('../osm/aggregate-osm');
 
-var getOsmSubmissionsFiles = require('../helpers/get-osm-submissions-files');
+var getOsmSubmissionsDirs = require('../helpers/get-osm-submissions-dirs');
 
 /**
  * Aggregates together all of the OSM submissions
@@ -12,12 +12,12 @@ var getOsmSubmissionsFiles = require('../helpers/get-osm-submissions-files');
 module.exports = function (req, res, next) {
     var formName = req.params.formName;
 
-    getOsmSubmissionsFiles(formName, function (err, osmFiles) {
+    getOsmSubmissionsDirs(formName, function (err, osmDirs) {
         if (err) {
             res.status(err.status || 500).json(err);
             return;
         }
-        aggregate(osmFiles,  req, res);
+        aggregate(osmDirs,  req, res);
     });
 
 };
@@ -26,11 +26,15 @@ module.exports = function (req, res, next) {
  * Calls aggregate-osm middleware to read OSM edit files
  * and concatenate into a single OSM XML aggregation.
  *
- * @param osmFiles  - the JOSM OSM XML edits to aggregate
+ * @param osmDirs  - submission dirs with array of osm files
  * @param req       - the http request
  * @param res       - the http response
  */
-function aggregate(osmFiles, req, res) {
+function aggregate(osmDirs, req, res) {
+    var osmFiles = [];
+    for (var d in osmDirs) {
+        osmFiles = osmFiles.concat(osmDirs[d]);
+    }
     //We filter by the query parameters of the request
     aggregateOsm(osmFiles, req.query, function (err, osmXml) {
         if (err) {

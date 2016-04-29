@@ -3,9 +3,12 @@ var settings = require('../../../settings');
 
 /**
  * Gathers all of the OSM submissions for a form.
+ * Creates an object with the submissions dir
+ * and an array of corresponding files.
  * 
  * @param formName - the name (form_id) of the ODK form
- * @param cb - first param is error, second is array of osm files
+ * @param cb - first param is error, second is an object of submission dirs
+ *             with an array of osm files
  */
 module.exports = function (formName, cb) {
     if (typeof formName === 'undefined' || formName === null) {
@@ -70,10 +73,10 @@ module.exports = function (formName, cb) {
  * appends the full OSM file path to the osmFiles array.
  *
  * @param dirStat  - the counters and paths of the directory we are async iterating through
- * @param osmFiles - all of the osm files we've found so far
+ * @param osmDirs - all of the osm files we've found so far, grouped by the submission dir
  * @param cb - first param is error, second is array of osm files
  */
-function findOsmFilesInDir(dirStat, osmFiles, cb) {
+function findOsmFilesInDir(dirStat, osmDirs, cb) {
     var fullPath = dirStat.fullPath;
     fs.readdir(fullPath, function (err, files) {
         if (err) {
@@ -96,10 +99,13 @@ function findOsmFilesInDir(dirStat, osmFiles, cb) {
             var file = files[j];
             if (file.substring(file.length - 4) !== '.osm') continue; // Check if .osm file
             var longFilePath = fullPath + '/' + file;
-            osmFiles.push(longFilePath);
+            if (typeof osmDirs[fullPath] !== 'object') { // arrays are objects
+                osmDirs[fullPath] = [];
+            }
+            osmDirs[fullPath].push(longFilePath);
         }
         if (dirStat.len === dirStat.count) {
-            cb(null, osmFiles)
+            cb(null, osmDirs)
         }
     });
 }
