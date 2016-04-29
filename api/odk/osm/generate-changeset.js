@@ -2,13 +2,14 @@ var builder = require('xmlbuilder');
 
 var settings = require('../../../settings');
 var pkg = require('../../../package');
+var version = pkg.version;
 
 module.exports = function (submissionsDir) {
     var dataDir = '/omk/data' + submissionsDir.split('data')[1] + '/';
     var dirParts = submissionsDir.split('/');
 
     var tags = {};
-    tags.created_by = 'OpenMapKit Server ' + pkg.version;
+    tags.created_by = 'OpenMapKit Server ' + version;
     tags.type = 'survey';
     tags.uri = dataDir + 'data.json';
     tags.form = submissionsDir.split('submissions/')[1].split('/')[0];
@@ -26,5 +27,5 @@ module.exports = function (submissionsDir) {
         changeset.ele('tag', {k: k, v: tags[k]});
     }
     
-    return changeset.end({ pretty: true});
+    return changeset.end();
 };
