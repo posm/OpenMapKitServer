@@ -1,7 +1,4 @@
-var fs = require('fs');
-var settings = require('../../../settings');
 var aggregateOsm = require('../osm/aggregate-osm');
-
 var getOsmSubmissionsDirs = require('../helpers/get-osm-submissions-dirs');
 
 /**
