@@ -6,7 +6,7 @@ module.exports = function (req, res, next) {
     var osmApi = {
         server: req.query.server || req.body.server || 'https://www.openstreetmap.org/api',
         user: req.query.user || req.body.user,
-        password: req.query.password || req.query.password
+        pass: req.query.pass || req.query.pass
     };
 
     submitChangesets(formName, osmApi, function (err, status) {
