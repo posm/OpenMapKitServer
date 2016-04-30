@@ -70,7 +70,7 @@ function changesetCreate(osmApi, changesetXml, cb) {
             user: osmApi.user,
             pass: osmApi.pass
         },
-        body: 'changesetXml'
+        body: changesetXml
     };
 
     request(opts, function (err, response, body) {
