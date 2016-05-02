@@ -33,14 +33,7 @@ module.exports = function(req, res, next){
     }
 
     // Get the current blacklist
-    var blacklist = checksumHelper.get(formName) || null;
-
-    // If the form not yet added to the formHash map, then we need to add it and create an empty blacklist
-    if(!blacklist) {
-        var formHash = checksumHelper.get();
-        formHash.set(formName, new Map());
-        blacklist = formHash.get(formName);
-    }
+    var blacklist = checksumHelper.get(formName);
 
     // Parallel async call to find and append the finialized-osm-checksum.txt files that managed the patched checksums
     Q.all(entityChecksums.map(function(checksum){

@@ -101,10 +101,10 @@ module.exports.create = function(cb){
     });
 };
 module.exports.get = function(formName){
-
-    if(formName === undefined) {
-        return formHash;
+    var blacklist = formHash.get(formName);
+    if(!blacklist) {
+        blacklist = new Map();
+        formHash.set(formName, blacklist);
     }
-
-    return formHash.get(formName);
+    return blacklist;
 };

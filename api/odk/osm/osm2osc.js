@@ -60,13 +60,13 @@ module.exports = function(osmXmlFiles, cb) {
                 var ways = osm.way || [];
                 var relations = osm.relation || [];
 
-                for (var i = 0, nlen = nodes.length; i < nlen; i++) {
+                for (var i = 0, nlen = nodes.length; i < nlen; ++i) {
                     placeOsmElement(nodes[i], obj, 'node');
                 }
-                for (var j = 0, wlen = ways.length; j < wlen; j++) {
+                for (var j = 0, wlen = ways.length; j < wlen; ++j) {
                     placeOsmElement( ways[j], obj, 'way');
                 }
-                for (var k = 0, rlen = relations.length; k < rlen; k++) {
+                for (var k = 0, rlen = relations.length; k < rlen; ++k) {
                     placeOsmElement(relations[k], obj, 'relation');
                 }
 
