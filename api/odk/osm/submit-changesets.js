@@ -1,3 +1,4 @@
+var fs = require('fs');
 var request = require('request');
 var async = require('async');
 var getOsmSubmissionsDirs = require('../helpers/get-osm-submissions-dirs');
@@ -12,11 +13,11 @@ module.exports = function (formName, osmApi, cb) {
             cb(err);
             return;
         }
-        createAndSubmitChangesets(osmDirs, osmApi, cb);
+        createAndSubmitChangesets(formName, osmDirs, osmApi, cb);
     });
 };
 
-function createAndSubmitChangesets(osmDirs, osmApi, cb) {
+function createAndSubmitChangesets(formName, osmDirs, osmApi, cb) {
     async.forEachOfLimit(osmDirs, NUM_PARALLEL_SUBMISSIONS, createChangesetAndOsc, function (err) {
         if (err) {
             cb(err);
@@ -45,13 +46,24 @@ function createAndSubmitChangesets(osmDirs, osmApi, cb) {
                     cb(err);
                     return;
                 }
-                changesetUpload(osmApi, oscXml, function(err, diffResult) {
+                changesetUpload(osmApi, changesetId, oscXml, function(err, diffResult) {
                     if (err) {
                         cb(err);
                         return;
                     }
-                    // is there anything we should be doing with the diffResult?
-                    changesetClose(osmApi, function (err) {
+
+                    // Update the black list with all of the SHA-1 file names
+                    // of OSM files that have sucessfully been uploaded to OSM.
+                    updateBlackList(formName, osmFiles);
+
+                    // Saving the diffResult to the submissions dir
+                    saveDiffResult(submissionsDir, diffResult);
+
+                    changesetClose(osmApi, changesetId, function (err) {
+                        if (err) {
+                            cb(err);
+                            return;
+                        }
                         cb();
                     });
                 });
@@ -91,10 +103,80 @@ function changesetCreate(osmApi, changesetXml, cb) {
     });
 }
 
-function changesetUpload(osmApi, oscXml, cb) {
+function changesetUpload(osmApi, changesetId, oscXml, cb) {
+    var opts = {
+        method: 'POST',
+        headers: {'Content-Type': 'text/xml'},
+        uri: osmApi.server + '/0.6/changeset/' + changesetId + '/upload',
+        auth: {
+            user: osmApi.user,
+            pass: osmApi.pass
+        },
+        body: oscXml
+    };
+
+    request(opts, function (err, response, body) {
+        if (err) {
+            cb(err);
+            return;
+        }
+        if (response.statusCode !== 200) {
+            cb({
+                status: response.statusCode,
+                body: body,
+                msg: 'Could not upload changeset on OSM API. ' + body
+            });
+            return;
+        }
+        // NH TODO: Check to see if we ever try and cb something that is not a diffResult
+        cb(null, body);
+    });
+}
+
+function changesetClose(osmApi, changesetId, cb) {
+    var opts = {
+        method: 'PUT',
+        headers: {'Content-Type': 'text/xml'},
+        uri: osmApi.server + '/0.6/changeset/' + changesetId + '/close',
+        auth: {
+            user: osmApi.user,
+            pass: osmApi.pass
+        }
+    };
+
+    request(opts, function (err, response, body) {
+        if (err) {
+            cb(err);
+            return;
+        }
+        if (response.statusCode !== 200) {
+            cb({
+                status: response.statusCode,
+                body: body,
+                msg: 'Could not close changeset on OSM API. ' + body
+            });
+            return;
+        }
+        cb();
+    });
+}
+
+/**
+ * This is using our existing blacklist hash mechanism to determine if the submission
+ * OSM XML files indeed were submitted. We are getting the SHA-1 checksum hash of the
+ * file directly from the file name.
+ */
+function updateBlackList(formName, osmFiles) {
     
 }
 
-function changesetClose(osmApi, cb) {
-    
+/**
+ * Saving the diff result can be helpful to not only keep track that the submission
+ * has been successfully submitted, but also to see how IDs potentially have been
+ * rewritten.
+ */
+function saveDiffResult(submissionsDir, diffResult) {
+    fs.writeFile(submissionsDir + '/diffResult.xml', diffResult, function (err) {
+        // do nothing
+    });
 }
