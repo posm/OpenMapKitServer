@@ -61,13 +61,13 @@ module.exports = function(osmXmlFiles, changesetId, cb) {
                 var relations = osm.relation || [];
 
                 for (var i = 0, nlen = nodes.length; i < nlen; ++i) {
-                    placeOsmElement(nodes[i], obj, 'node');
+                    placeOsmElement(nodes[i], obj, changesetId, 'node');
                 }
                 for (var j = 0, wlen = ways.length; j < wlen; ++j) {
-                    placeOsmElement( ways[j], obj, 'way');
+                    placeOsmElement(ways[j], obj, changesetId, 'way');
                 }
                 for (var k = 0, rlen = relations.length; k < rlen; ++k) {
-                    placeOsmElement(relations[k], obj, 'relation');
+                    placeOsmElement(relations[k], obj, changesetId, 'relation');
                 }
 
                 cb();
@@ -105,9 +105,11 @@ module.exports = function(osmXmlFiles, changesetId, cb) {
  *
  * @param el - osm element
  * @param obj - xml2js object
+ * @param changesetId - the new changeset id
  * @param type - type of osm element
  */
-function placeOsmElement(el, obj, type) {
+function placeOsmElement(el, obj, changesetId, type) {
+    el.$.changeset = changesetId;
     var action = el.$.action;
     if (action === 'modify') {
         // negative element means that it is new
