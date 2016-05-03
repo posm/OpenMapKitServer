@@ -108,3 +108,13 @@ module.exports.get = function(formName){
     }
     return blacklist;
 };
+
+/**
+ * Adds a set of checksums to the blacklist hash and file.
+ * 
+ * @param formName
+ * @param finalizedOsmChecksums
+ */
+module.exports.addFinalizedChecksums = function (formName, finalizedOsmChecksums) {
+     
+};

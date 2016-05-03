@@ -5,7 +5,7 @@ var xml2js = require('xml2js');
 var pkg = require('../../../package');
 var version = pkg.version;
 
-module.exports = function(osmXmlFiles, cb) {
+module.exports = function(osmXmlFiles, changesetId, cb) {
 
     /**
      * This is the object used by xml2js which will
@@ -49,7 +49,7 @@ module.exports = function(osmXmlFiles, cb) {
     async.each(osmXmlFiles, function (file, cb) {
         fs.readFile(file, 'utf-8', function (err, osmXmlStr) {
             if (err) {
-                cb(err)
+                cb(err, changesetId);
             }
 
             var parser = new xml2js.Parser();
@@ -89,7 +89,7 @@ module.exports = function(osmXmlFiles, cb) {
         });
         var xml = builder.buildObject(obj);
 
-        cb(null, xml);
+        cb(null, xml, changesetId);
     });
 };
 

@@ -41,12 +41,12 @@ function createAndSubmitChangesets(formName, osmDirs, osmApi, cb) {
                 cb(err);
                 return;
             }
-            osm2osc(osmFiles, function (err, oscXml) {
+            osm2osc(osmFiles, changesetId, function (err, oscXml, changesetId) {
                 if (err) {
                     cb(err);
                     return;
                 }
-                changesetUpload(osmApi, changesetId, oscXml, function(err, diffResult) {
+                changesetUpload(osmApi, changesetId, oscXml, function(err, diffResult, changesetId) {
                     if (err) {
                         cb(err);
                         return;
@@ -129,7 +129,7 @@ function changesetUpload(osmApi, changesetId, oscXml, cb) {
             return;
         }
         // NH TODO: Check to see if we ever try and cb something that is not a diffResult
-        cb(null, body);
+        cb(null, body, changesetId);
     });
 }
 
