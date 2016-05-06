@@ -1,20 +1,19 @@
-var submitChangesets = require('../osm/submit-changesets');
+var submitAllChangesets = require('../osm/submit-changesets').submitAllChangesetsForForm;
+var osmApi = require('../../../settings').osmApi;
 
 module.exports = function (req, res, next) {
     var formName = req.params.formName;
 
-    var osmApi = {
-        server: req.query.server || req.body.server || 'https://www.openstreetmap.org/api',
-        user: req.query.user || req.body.user,
-        pass: req.query.pass || req.query.pass
-    };
-
-    submitChangesets(formName, osmApi, function (err, status) {
-        if (err) {
-            res.status(err.status || 500).json(err);
-            return;
+    submitAllChangesets(formName, osmApi, function (err, status) {
+        if (!res._headerSent) { // prevents trying to send multiple error responses on a single request
+            if (err) {
+                res.status(err.status || 500).json(err);
+                return;
+            }
+            res.status(status.status || 200).json(status);
+        } else {
+            // notify via web socket
         }
-        res.status(200).json(status);
     });
 
 };

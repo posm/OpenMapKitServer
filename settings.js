@@ -4,5 +4,10 @@ module.exports = {
     port: 3210,
     dataDir: __dirname + '/data',
     pagesDir: __dirname + '/pages',
-    hostUrl: 'http://omkserver.com'
+    hostUrl: 'http://omkserver.com',
+    osmApi: {
+        server: 'https://www.openstreetmap.org/api',
+        user: 'POSM',
+        pass: ''
+    }
 };

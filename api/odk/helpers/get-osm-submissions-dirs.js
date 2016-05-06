@@ -10,7 +10,7 @@ var settings = require('../../../settings');
  * @param cb - first param is error, second is an object of submission dirs
  *             with an array of osm files
  */
-module.exports = function (formName, cb) {
+module.exports = function (formName, options, cb) {
     if (typeof formName === 'undefined' || formName === null) {
         cb({
             status: 400,
@@ -63,7 +63,7 @@ module.exports = function (formName, cb) {
                 }
                 continue;
             }
-            findOsmFilesInDir(dirStat, osmDirs, cb);
+            findOsmFilesInDir(dirStat, osmDirs, options, cb);
         }
     });
 };
@@ -74,9 +74,10 @@ module.exports = function (formName, cb) {
  *
  * @param dirStat  - the counters and paths of the directory we are async iterating through
  * @param osmDirs - all of the osm files we've found so far, grouped by the submission dir
+ * @param options - options regarding what to include
  * @param cb - first param is error, second is array of osm files
  */
-function findOsmFilesInDir(dirStat, osmDirs, cb) {
+function findOsmFilesInDir(dirStat, osmDirs, options, cb) {
     var fullPath = dirStat.fullPath;
     fs.readdir(fullPath, function (err, files) {
         if (err) {
@@ -97,6 +98,12 @@ function findOsmFilesInDir(dirStat, osmDirs, cb) {
         ++dirStat.count;
         for (var j = 0, len = files.length; j < len; j++) {
             var file = files[j];
+            if (typeof options === 'object' && options != null && options.unsubmittedOnly) {
+                if (file === 'diffResult.xml') {
+                    delete osmDirs[fullPath];
+                    break;
+                }
+            }
             if (file.substring(file.length - 4) !== '.osm') continue; // Check if .osm file
             var longFilePath = fullPath + '/' + file;
             if (typeof osmDirs[fullPath] !== 'object') { // arrays are objects

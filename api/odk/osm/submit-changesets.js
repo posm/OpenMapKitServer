@@ -7,23 +7,55 @@ var osm2osc = require('../osm/osm2osc');
 
 var NUM_PARALLEL_SUBMISSIONS = 4;
 
-module.exports = function (formName, osmApi, cb) {
-    getOsmSubmissionsDirs(formName, function (err, osmDirs) {
+module.exports = {
+    submitAllChangesetsForForm: submitAllChangesetsForForm,
+    createAndSubmitChangesets: createAndSubmitChangesets
+};
+
+/**
+ * Submits all of the OSM files in a form's submissions directory
+ * that have not yet been submitted.
+ * 
+ * @param formName - the name of the form (form_id)
+ * @param osmApi   - OSM API endpoint and credentials
+ * @param cb       - callback with error or status
+ */
+function submitAllChangesetsForForm(formName, osmApi, cb) {
+    getOsmSubmissionsDirs(formName, {unsubmittedOnly: true}, function (err, osmDirs) {
         if (err) {
             cb(err);
             return;
         }
-        createAndSubmitChangesets(formName, osmDirs, osmApi, cb);
+        createAndSubmitChangesets(osmDirs, osmApi, cb);
     });
-};
+}
 
-function createAndSubmitChangesets(formName, osmDirs, osmApi, cb) {
+function createAndSubmitChangesets(osmDirs, osmApi, cb) {
+    // if case no callback is supplied, noop
+    if (typeof cb !== 'function') {
+        cb = function() {};
+    }
+
+    if (Object.keys(osmDirs).length < 1) {
+        cb(null, {
+            done: true,
+            msg: 'There are no OSM files to submit. Skipping creating and submitting changesets.',
+            status: 200
+        });
+        return;
+    }
+
     async.forEachOfLimit(osmDirs, NUM_PARALLEL_SUBMISSIONS, createChangesetAndOsc, function (err) {
         if (err) {
             cb(err);
             return;
         }
-        cb(null, {done: true}); // or something. gotta do status work
+        cb(null, {done: true});
+    });
+    cb(null, {
+        started: true,
+        msg: 'Begun creating and submitting changesets to OSM API.',
+        status: 200
     });
 
     /**
@@ -48,13 +80,10 @@ function createAndSubmitChangesets(formName, osmDirs, osmApi, cb) {
                 }
                 changesetUpload(osmApi, changesetId, oscXml, function(err, diffResult, changesetId) {
                     if (err) {
+                        saveConflict(submissionsDir, err);
                         cb(err);
                         return;
                     }
-
-                    // Update the black list with all of the SHA-1 file names
-                    // of OSM files that have sucessfully been uploaded to OSM.
-                    updateBlackList(formName, osmFiles);
 
                     // Saving the diffResult to the submissions dir
                     saveDiffResult(submissionsDir, diffResult);
@@ -128,7 +157,6 @@ function changesetUpload(osmApi, changesetId, oscXml, cb) {
             });
             return;
         }
-        // NH TODO: Check to see if we ever try and cb something that is not a diffResult
         cb(null, body, changesetId);
     });
 }
@@ -162,21 +190,19 @@ function changesetClose(osmApi, changesetId, cb) {
 }
 
 /**
- * This is using our existing blacklist hash mechanism to determine if the submission
- * OSM XML files indeed were submitted. We are getting the SHA-1 checksum hash of the
- * file directly from the file name.
- */
-function updateBlackList(formName, osmFiles) {
-    
-}
-
-/**
  * Saving the diff result can be helpful to not only keep track that the submission
  * has been successfully submitted, but also to see how IDs potentially have been
  * rewritten.
  */
 function saveDiffResult(submissionsDir, diffResult) {
     fs.writeFile(submissionsDir + '/diffResult.xml', diffResult, function (err) {
+        // do nothing
+    });
+}
+
+function saveConflict(submissionsDir, err) {
+    var jsonStr = JSON.stringify(err, null, 2);
+    fs.writeFile(submissionsDir + '/conflict.josn', jsonStr, function (err) {
         // do nothing
     });
 }
