@@ -99,7 +99,7 @@ function findOsmFilesInDir(dirStat, osmDirs, options, cb) {
         for (var j = 0, len = files.length; j < len; j++) {
             var file = files[j];
             if (typeof options === 'object' && options != null && options.unsubmittedOnly) {
-                if (file === 'diffResult.xml' || file === 'conflict.json') {
+                if (file.indexOf('diffResult') === 0 || file.indexOf('conflict') === 0) {
                     delete osmDirs[fullPath];
                     break;
                 }

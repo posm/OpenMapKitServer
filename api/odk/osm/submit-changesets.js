@@ -88,13 +88,13 @@ function createAndSubmitChangesets(osmDirs, osmApi, cb) {
                 changesetUpload(osmApi, changesetId, oscXml, function(err, diffResult, changesetId) {
                     // This isn't truly an error state. Conflicts are common and normal.
                     if (err) {
-                        saveConflict(submissionsDir, err);
+                        saveConflict(submissionsDir, err, changesetId);
                         cb();
                         return;
                     }
 
                     // Saving the diffResult to the submissions dir
-                    saveDiffResult(submissionsDir, diffResult);
+                    saveDiffResult(submissionsDir, diffResult, changesetId);
 
                     changesetClose(osmApi, changesetId, function (err) {
                         if (err) {
@@ -204,15 +204,15 @@ function changesetClose(osmApi, changesetId, cb) {
  * has been successfully submitted, but also to see how IDs potentially have been
  * rewritten.
  */
-function saveDiffResult(submissionsDir, diffResult) {
-    fs.writeFile(submissionsDir + '/diffResult.xml', diffResult, function (err) {
+function saveDiffResult(submissionsDir, diffResult, changesetId) {
+    fs.writeFile(submissionsDir + '/diffResult-' + changesetId + '.xml', diffResult, function (err) {
         // do nothing
     });
 }
 
-function saveConflict(submissionsDir, err) {
+function saveConflict(submissionsDir, err, changesetId) {
     var jsonStr = JSON.stringify(err, null, 2);
-    fs.writeFile(submissionsDir + '/conflict.json', jsonStr, function (err) {
+    fs.writeFile(submissionsDir + '/conflict-' + changesetId + '.json', jsonStr, function (err) {
         // do nothing
     });
     console.log('Conflict uploading changeset. - ' + JSON.stringify(err));
