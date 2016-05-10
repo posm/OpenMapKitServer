@@ -5,7 +5,7 @@ var getOsmSubmissionsDirs = require('../helpers/get-osm-submissions-dirs');
 var generateChangeset = require('../osm/generate-changeset');
 var osm2osc = require('../osm/osm2osc');
 
-var NUM_PARALLEL_SUBMISSIONS = 4;
+var NUM_PARALLEL_SUBMISSIONS = 3;
 
 module.exports = {
     submitAllChangesetsForForm: submitAllChangesetsForForm,

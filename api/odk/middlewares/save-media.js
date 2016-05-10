@@ -41,9 +41,10 @@ function SaveMedia (options) {
             };
 
             // Create OSM hash used by osm/submit-changesets.js
-            if (file.substring(file.length - 4) === '.osm') {
+            var fileName = file.fieldName;
+            if (fileName.substring(file.length - 4) === '.osm') {
                 var pwd = storeOptions.filesystem.path + req.submission.instanceId;
-                osmDirs[pwd] = pwd + '/' + file;
+                osmDirs[pwd] = pwd + '/' + fileName;
             }
 
             store(fs.createReadStream(file.path), storeOptions, function onSave (err, url) {
@@ -55,7 +56,7 @@ function SaveMedia (options) {
                 // Quick and dirty check whether we have processed all the files
                 if (taskCount < req.files.length) return;
                 cleanupFiles();
-                createAndSubmitChangesets(osmDirs, settings.osmApi);
+                // createAndSubmitChangesets(osmDirs, settings.osmApi);
                 next();
             });
         });
