@@ -73,7 +73,11 @@ function createAndSubmitChangesets(osmDirs, osmApi, cb) {
         var changesetXml = generateChangeset(submissionsDir);
         changesetCreate(osmApi, changesetXml, function(err, changesetId) {
             if (err) {
-                cb(err);
+                cb({
+                    status: err.status,
+                    msg: 'Error creating changeset.',
+                    err:err
+                });
                 return;
             }
             osm2osc(osmFiles, changesetId, function (err, oscXml, changesetId) {
@@ -82,9 +86,10 @@ function createAndSubmitChangesets(osmDirs, osmApi, cb) {
                     return;
                 }
                 changesetUpload(osmApi, changesetId, oscXml, function(err, diffResult, changesetId) {
+                    // This isn't truly an error state. Conflicts are common and normal.
                     if (err) {
                         saveConflict(submissionsDir, err);
-                        cb(err);
+                        cb();
                         return;
                     }
 
@@ -131,7 +136,7 @@ function changesetCreate(osmApi, changesetXml, cb) {
         }
         var changesetId = parseInt(body);
         cb(null, changesetId);
-        console.log('Opened Changeset. ID: ' + changesetId + ' - ' + JSON.stringify(opts));
+        console.log('Opened Changeset. ID: ' + changesetId + ' - ' + opts.uri);
     });
 }
 
@@ -161,7 +166,7 @@ function changesetUpload(osmApi, changesetId, oscXml, cb) {
             return;
         }
         cb(null, body, changesetId);
-        console.log('Uploaded OSC. ID: ' + changesetId + ' - ' + JSON.stringify(opts));
+        console.log('Uploaded OSC. ID: ' + changesetId + ' - ' + opts.uri);
     });
 }
 
@@ -190,7 +195,7 @@ function changesetClose(osmApi, changesetId, cb) {
             return;
         }
         cb();
-        console.log('Closed Changeset. ID: ' + changesetId + ' - ' + JSON.stringify(opts));
+        console.log('Closed Changeset. ID: ' + changesetId + ' - ' + opts.uri);
     });
 }
 
@@ -207,7 +212,8 @@ function saveDiffResult(submissionsDir, diffResult) {
 
 function saveConflict(submissionsDir, err) {
     var jsonStr = JSON.stringify(err, null, 2);
-    fs.writeFile(submissionsDir + '/conflict.josn', jsonStr, function (err) {
+    fs.writeFile(submissionsDir + '/conflict.json', jsonStr, function (err) {
         // do nothing
     });
+    console.log('Conflict uploading changeset. - ' + JSON.stringify(err));
 }
