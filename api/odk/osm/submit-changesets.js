@@ -31,9 +31,13 @@ function submitAllChangesetsForForm(formName, osmApi, cb) {
 }
 
 function createAndSubmitChangesets(osmDirs, osmApi, cb) {
-    // if case no callback is supplied, noop
+
     if (typeof cb !== 'function') {
-        cb = function() {};
+        cb = function(err) {
+            if (err) {
+                console.error('Automatic OMK submission OSM API error. ' + JSON.stringify(err));
+            }
+        };
     }
 
     if (Object.keys(osmDirs).length < 1) {
