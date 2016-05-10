@@ -13,6 +13,15 @@ module.exports = function (req, res, next) {
             res.status(status.status || 200).json(status);
         } else {
             // notify via web socket
+
+            // log events
+            if (err) {
+                console.error(JSON.stringify(err));
+                return;
+            }
+            if (status) {
+                console.log(JSON.stringify(status));
+            }
         }
     });
 

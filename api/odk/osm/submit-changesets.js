@@ -50,12 +50,15 @@ function createAndSubmitChangesets(osmDirs, osmApi, cb) {
             cb(err);
             return;
         }
-        cb(null, {done: true});
+        cb(null, {
+            done: true,
+            msg: 'Completed submitting changeset to OSM.'
+        });
     });
     cb(null, {
         started: true,
-        msg: 'Begun creating and submitting changesets to OSM API.',
-        status: 200
+        msg: 'Began creating and submitting changesets to OSM API.',
+        status: 201
     });
 
     /**
@@ -96,7 +99,6 @@ function createAndSubmitChangesets(osmDirs, osmApi, cb) {
                         cb();
                     });
                 });
-                cb();
             });
         });
     }
@@ -129,6 +131,7 @@ function changesetCreate(osmApi, changesetXml, cb) {
         }
         var changesetId = parseInt(body);
         cb(null, changesetId);
+        console.log('Opened Changeset. ID: ' + changesetId + ' - ' + JSON.stringify(opts));
     });
 }
 
@@ -158,6 +161,7 @@ function changesetUpload(osmApi, changesetId, oscXml, cb) {
             return;
         }
         cb(null, body, changesetId);
+        console.log('Uploaded OSC. ID: ' + changesetId + ' - ' + JSON.stringify(opts));
     });
 }
 
@@ -186,6 +190,7 @@ function changesetClose(osmApi, changesetId, cb) {
             return;
         }
         cb();
+        console.log('Closed Changeset. ID: ' + changesetId + ' - ' + JSON.stringify(opts));
     });
 }
 
