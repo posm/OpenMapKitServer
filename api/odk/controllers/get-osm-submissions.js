@@ -29,8 +29,8 @@ module.exports = function (req, res, next) {
  */
 function aggregate(osmDirs, req, res) {
     var osmFiles = [];
-    for (var d in osmDirs) {
-        osmFiles = osmFiles.concat(osmDirs[d]);
+    for (var i in osmDirs) {
+        osmFiles = osmFiles.concat(osmDirs[i].files);
     }
     //We filter by the query parameters of the request
     aggregateOsm(osmFiles, req.query, function (err, osmXml) {
