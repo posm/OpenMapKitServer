@@ -4,6 +4,7 @@ var async = require('async');
 var getOsmSubmissionsDirs = require('../helpers/get-osm-submissions-dirs');
 var generateChangeset = require('../osm/generate-changeset');
 var osm2osc = require('../osm/osm2osc');
+var osmApi = require('../../../settings').osmApi;
 
 var NUM_PARALLEL_SUBMISSIONS = 3;
 
@@ -12,25 +13,34 @@ module.exports = {
     createAndSubmitChangesets: createAndSubmitChangesets
 };
 
+var q = async.queue(function (osmDir, cb) {
+    createChangesetAndOsc(osmApi, osmDir.dir, osmDir.files, cb);
+}, NUM_PARALLEL_SUBMISSIONS);
+
+
+q.drain = function() {
+    console.log('All changesets in the queue have been submitted.');
+};
+
+
 /**
  * Submits all of the OSM files in a form's submissions directory
  * that have not yet been submitted.
  * 
  * @param formName - the name of the form (form_id)
- * @param osmApi   - OSM API endpoint and credentials
  * @param cb       - callback with error or status
  */
-function submitAllChangesetsForForm(formName, osmApi, cb) {
+function submitAllChangesetsForForm(formName, cb) {
     getOsmSubmissionsDirs(formName, {unsubmittedOnly: true}, function (err, osmDirs) {
         if (err) {
             cb(err);
             return;
         }
-        createAndSubmitChangesets(osmDirs, osmApi, cb);
+        createAndSubmitChangesets(osmDirs, cb);
     });
 }
 
-function createAndSubmitChangesets(osmDirs, osmApi, cb) {
+function createAndSubmitChangesets(osmDirs, cb) {
 
     if (typeof cb !== 'function') {
         cb = function(err) {
@@ -40,7 +50,7 @@ function createAndSubmitChangesets(osmDirs, osmApi, cb) {
         };
     }
 
-    if (Object.keys(osmDirs).length < 1) {
+    if (osmDirs.length < 1) {
         cb(null, {
             done: true,
             msg: 'There are no OSM files to submit. Skipping creating and submitting changesets.',
@@ -49,7 +59,7 @@ function createAndSubmitChangesets(osmDirs, osmApi, cb) {
         return;
     }
 
-    async.forEachOfLimit(osmDirs, NUM_PARALLEL_SUBMISSIONS, createChangesetAndOsc, function (err) {
+    q.push(osmDirs, function (err) {
         if (err) {
             cb(err);
             return;
@@ -59,58 +69,52 @@ function createAndSubmitChangesets(osmDirs, osmApi, cb) {
             msg: 'Completed submitting changeset to OSM.'
         });
     });
+
     cb(null, {
         started: true,
         msg: 'Began creating and submitting changesets to OSM API.',
         status: 201
     });
 
-    /**
-     * These params are essentially the object value and key of osmDirs.
-     * This is done behind the scenes of async#forEachOfLimit.
-     *
-     * @param osmFiles
-     * @param submissionsDir
-     * @param cb
-     */
-    function createChangesetAndOsc(osmFiles, submissionsDir, cb) {
-        var changesetXml = generateChangeset(submissionsDir);
-        changesetCreate(osmApi, changesetXml, function(err, changesetId) {
+}
+
+function createChangesetAndOsc(osmApi, submissionsDir, osmFiles, cb) {
+    var changesetXml = generateChangeset(submissionsDir);
+    changesetCreate(osmApi, changesetXml, function(err, changesetId) {
+        if (err) {
+            cb({
+                status: err.status,
+                msg: 'Error creating changeset.',
+                err:err
+            });
+            return;
+        }
+        osm2osc(osmFiles, changesetId, function (err, oscXml, changesetId) {
             if (err) {
-                cb({
-                    status: err.status,
-                    msg: 'Error creating changeset.',
-                    err:err
-                });
+                cb(err);
                 return;
             }
-            osm2osc(osmFiles, changesetId, function (err, oscXml, changesetId) {
+            changesetUpload(osmApi, changesetId, oscXml, function(err, diffResult, changesetId) {
+                // This isn't truly an error state. Conflicts are common and normal.
                 if (err) {
-                    cb(err);
+                    saveConflict(submissionsDir, err, changesetId);
+                    cb();
                     return;
                 }
-                changesetUpload(osmApi, changesetId, oscXml, function(err, diffResult, changesetId) {
-                    // This isn't truly an error state. Conflicts are common and normal.
+
+                // Saving the diffResult to the submissions dir
+                saveDiffResult(submissionsDir, diffResult, changesetId);
+
+                changesetClose(osmApi, changesetId, function (err) {
                     if (err) {
-                        saveConflict(submissionsDir, err, changesetId);
-                        cb();
+                        cb(err);
                         return;
                     }
-
-                    // Saving the diffResult to the submissions dir
-                    saveDiffResult(submissionsDir, diffResult, changesetId);
-
-                    changesetClose(osmApi, changesetId, function (err) {
-                        if (err) {
-                            cb(err);
-                            return;
-                        }
-                        cb();
-                    });
+                    cb();
                 });
             });
         });
-    }
+    });
 }
 
 function changesetCreate(osmApi, changesetXml, cb) {
@@ -158,7 +162,7 @@ function changesetUpload(osmApi, changesetId, oscXml, cb) {
 
     request(opts, function (err, response, body) {
         if (err) {
-            cb(err);
+            cb(err, null, changesetId);
             return;
         }
         if (response.statusCode !== 200) {
@@ -166,7 +170,7 @@ function changesetUpload(osmApi, changesetId, oscXml, cb) {
                 status: response.statusCode,
                 body: body,
                 msg: 'Could not upload changeset on OSM API. ' + body
-            });
+            }, null, changesetId);
             return;
         }
         cb(null, body, changesetId);

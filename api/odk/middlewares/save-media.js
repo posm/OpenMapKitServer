@@ -60,7 +60,7 @@ function SaveMedia (options) {
                 if (taskCount < req.files.length) return;
                 cleanupFiles();
                 if (Object.keys(osmDirs).length > 0) {
-                    createAndSubmitChangesets(osmDirs, settings.osmApi);
+                    // createAndSubmitChangesets(osmDirs);
                 }
                 next();
             });

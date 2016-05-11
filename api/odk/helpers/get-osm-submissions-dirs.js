@@ -19,7 +19,7 @@ module.exports = function (formName, options, cb) {
         });
     }
     var dir = settings.dataDir + '/submissions/' + formName;
-    var osmDirs = {};
+    var osmDirs = [];
 
     // All of the submission dirs in the form directory
     fs.readdir(dir, function (err, submissionDirs) {
@@ -96,20 +96,22 @@ function findOsmFilesInDir(dirStat, osmDirs, options, cb) {
             return;
         }
         ++dirStat.count;
+        var dirObj = {dir: fullPath, files: []}; // obj to be added to osmDirs array
+        var skip = false; // determines if we should add to osmDirs array
         for (var j = 0, len = files.length; j < len; j++) {
             var file = files[j];
             if (typeof options === 'object' && options != null && options.unsubmittedOnly) {
                 if (file.indexOf('diffResult') === 0 || file.indexOf('conflict') === 0) {
-                    delete osmDirs[fullPath];
+                    skip = true;
                     break;
                 }
             }
             if (file.substring(file.length - 4) !== '.osm') continue; // Check if .osm file
             var longFilePath = fullPath + '/' + file;
-            if (typeof osmDirs[fullPath] !== 'object') { // arrays are objects
-                osmDirs[fullPath] = [];
-            }
-            osmDirs[fullPath].push(longFilePath);
+            dirObj.files.push(longFilePath);
+        }
+        if (!skip) {
+            osmDirs.push(dirObj);
         }
         if (dirStat.len === dirStat.count) {
             cb(null, osmDirs)
