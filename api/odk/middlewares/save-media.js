@@ -2,6 +2,7 @@ var extend = require('xtend');
 var fs = require('fs');
 var persistFs = require('../helpers/persist');
 var updateFileRef = require('../helpers/update-file-ref');
+var createAndSubmitChangesets = require('../osm/submit-changesets').createAndSubmitChangesets;
 var settings = require('../../../settings.js');
 
 var defaults = {
@@ -26,6 +27,14 @@ function SaveMedia (options) {
 
         var taskCount = 0;
 
+        // Used to submit changesets for the osm files being submitted
+        // in osm/submit-changesets.js
+        var dir = settings.dataDir + '/submissions/' + req.submission.formId + '/' + req.submission.instanceId;
+        var dirObj = {
+            dir: dir,
+            files: []
+        };
+
         req.files.forEach(function (file) {
             var storeOptions = {
                 filename: req.submission.instanceId + '/' + file.originalFilename,
@@ -34,6 +43,12 @@ function SaveMedia (options) {
                     path: settings.dataDir + '/submissions/' + req.submission.formId + '/'
                 }
             };
+
+            // Create OSM hash used by osm/submit-changesets.js
+            var fileName = file.fieldName;
+            if (fileName.substring(fileName.length - 4) === '.osm') {
+                dirObj.files.push(dir + '/' + fileName);
+            }
 
             store(fs.createReadStream(file.path), storeOptions, function onSave (err, url) {
                 if (err) onError(err);
@@ -44,6 +59,9 @@ function SaveMedia (options) {
                 // Quick and dirty check whether we have processed all the files
                 if (taskCount < req.files.length) return;
                 cleanupFiles();
+                if (dirObj.files.length > 0) {
+                    createAndSubmitChangesets([dirObj]);
+                }
                 next();
             });
         });

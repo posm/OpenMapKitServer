@@ -24,7 +24,23 @@ module.exports = function (files, filter, cb) {
         cb('<?xml version="1.0" encoding="UTF-8" ?><osm version="0.6" generator="OpenMapKit Server ' + appVersion + '"></osm>');
     }
 
+    // This is the number of files read so far.
+    // This includes files that have been filtered out of the result.
     var filesCompleted = 0;
+
+    // This is the number of files that have made it to the final main
+    // OSM element and passed the filters. We use this for the limit filter.
+    var filesUsed = 0;
+
+    var limitReached = false;
+    var filesLimit = Number.POSITIVE_INFINITY;
+    if (typeof filter.limit === 'string') {
+        var limit = parseInt(filter.limit);
+        if (limit >= 0) {
+            filesLimit = limit;
+        }
+    }
+
     var mainXmlDoc = new libxml.Document();
     mainXmlDoc.node('osm').attr({
         version: '0.6',
@@ -46,6 +62,7 @@ module.exports = function (files, filter, cb) {
      * @param remainingFiles - a slice of the files that should be read in subsequent recursive calls
      */
     function processChunksOfFiles(chunkOfFiles, remainingFiles) {
+        if (limitReached) return;
         var chunkLen = chunkOfFiles.length;
         var filesInChunkCompleted = 0;
 
@@ -62,8 +79,11 @@ module.exports = function (files, filter, cb) {
                     ++filesCompleted;
                     ++filesInChunkCompleted;
                     // if every single file is done
-                    if (filesCompleted === numFiles) {
-                        cb(null, mainXmlDoc.toString());
+                    if (filesUsed === filesLimit || filesCompleted === numFiles) {
+                        if (!limitReached) {
+                            cb(null, mainXmlDoc.toString());
+                            limitReached = true;
+                        }
                     }
                     // if every file in chunk is done
                     else if (filesInChunkCompleted === chunkLen && remainingFiles.length > 0) {
@@ -76,6 +96,7 @@ module.exports = function (files, filter, cb) {
                     return;
                 }
                 fs.readFile(filePath, 'utf-8', function (err, xml) {
+                    if (limitReached) return;
                     if (err) {
                         cb(err);
                         return;
@@ -106,6 +127,7 @@ module.exports = function (files, filter, cb) {
                                 }
                                 mainOsmElement.addChild(osmElement);
                             }
+                            ++filesUsed;
                             checkToFireCallbacks();
                         });
                     } catch (err) {
