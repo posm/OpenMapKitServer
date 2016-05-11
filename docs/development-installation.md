@@ -7,6 +7,7 @@ OpenMapKit Server is a NodeJS service, so you'll need NodeJS version 4.x.
 Install dependencies:
 
 ```
+sudo apt-get install default-jre-headless
 sudo apt-get install build-essential python-pip git
 curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 sudo apt-get install nodejs
@@ -17,8 +18,14 @@ sudo apt-get install nodejs
 The ODK pyxform component requires python dependencies that are installed via pip.
 The best way to install pip on a Mac is through [Homebrew](http://brew.sh/):
 
-```
+```sh
 brew install python
+```
+
+Make sure you have installed __Java__. `pyxform` has a Java dependency (JavaRosa). Full instructions on [Stack Overflow](http://stackoverflow.com/questions/24342886/how-to-install-java-8-on-mac).
+
+```sh
+brew cask install java
 ```
 
 Also make sure you have installed [NodeJS](https://nodejs.org/) and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
@@ -27,7 +34,7 @@ Also make sure you have installed [NodeJS](https://nodejs.org/) and [git](https:
 
 Install project dependencies.
 
-```
+```sh
 git submodule init
 git submodule update
 sudo pip install -r requirements.txt
@@ -36,7 +43,7 @@ npm install
 
 ### Turn on server
 
-```
+```sh
 npm start
 ```
 
@@ -45,7 +52,7 @@ npm start
 We are using node version 4.*. If you are having problems with another
 version, use [node version manager](https://github.com/creationix/nvm).
 
-```
+```sh
 nvm install
 nvm use
 ```
