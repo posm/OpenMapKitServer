@@ -30,6 +30,7 @@
   "homepage": "https://github.com/AmericanRedCross/OpenMapKitServer#readme",
   "dependencies": {
     "async": "^1.5.2",
+    "basic-auth": "^1.0.4",
     "body-parser": "^1.14.2",
     "cors": "^2.7.1",
     "debug": "^2.2.0",

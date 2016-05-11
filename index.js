@@ -17,6 +17,7 @@ var odkOpenRosa = require('./api/odk/odk-openrosa-routes');
 var odkAggregate = require('./api/odk/odk-aggregate-routes');
 var deployments = require('./api/deployments/deployment-routes');
 var error = require('./api/odk/controllers/error-handler');
+var auth = require('./util/auth');
 var pkg = require('./package');
 var app = express();
 
@@ -39,6 +40,13 @@ app.get('/omk/info', info);
 // prevent the user from having to add a prefix in ODK Collect
 // server path.
 app.use('/', odkOpenRosa);
+
+/**
+ * Authentication for all omk routes.
+ * Note that OpenRosa routes pass through without auth.
+ */
+app.use('/omk', auth);
+
 
 // Open Data Kit Aggregate
 
