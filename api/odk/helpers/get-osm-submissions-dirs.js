@@ -111,7 +111,9 @@ function findOsmFilesInDir(dirStat, osmDirs, options, cb) {
             dirObj.files.push(longFilePath);
         }
         if (!skip) {
-            osmDirs.push(dirObj);
+            if (dirObj.files.length > 0) {
+                osmDirs.push(dirObj);    
+            }
         }
         if (dirStat.len === dirStat.count) {
             cb(null, osmDirs)

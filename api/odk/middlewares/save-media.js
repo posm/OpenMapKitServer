@@ -29,7 +29,11 @@ function SaveMedia (options) {
 
         // Used to submit changesets for the osm files being submitted
         // in osm/submit-changesets.js
-        var osmDirs = {};
+        var dir = settings.dataDir + '/submissions/' + req.submission.formId + '/' + req.submission.instanceId;
+        var dirObj = {
+            dir: dir,
+            files: []
+        };
 
         req.files.forEach(function (file) {
             var storeOptions = {
@@ -43,11 +47,7 @@ function SaveMedia (options) {
             // Create OSM hash used by osm/submit-changesets.js
             var fileName = file.fieldName;
             if (fileName.substring(fileName.length - 4) === '.osm') {
-                var pwd = storeOptions.filesystem.path + req.submission.instanceId;
-                if (typeof osmDirs[pwd] !== 'object') {
-                    osmDirs[pwd] = [];
-                }
-                osmDirs[pwd].push(pwd + '/' + fileName);
+                dirObj.files.push(dir + '/' + fileName);
             }
 
             store(fs.createReadStream(file.path), storeOptions, function onSave (err, url) {
@@ -59,8 +59,8 @@ function SaveMedia (options) {
                 // Quick and dirty check whether we have processed all the files
                 if (taskCount < req.files.length) return;
                 cleanupFiles();
-                if (Object.keys(osmDirs).length > 0) {
-                    // createAndSubmitChangesets(osmDirs);
+                if (dirObj.files.length > 0) {
+                    createAndSubmitChangesets([dirObj]);
                 }
                 next();
             });
