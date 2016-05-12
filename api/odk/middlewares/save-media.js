@@ -59,7 +59,7 @@ function SaveMedia (options) {
                 // Quick and dirty check whether we have processed all the files
                 if (taskCount < req.files.length) return;
                 cleanupFiles();
-                if (dirObj.files.length > 0) {
+                if (dirObj.files.length > 0 && settings.osmApi) {
                     createAndSubmitChangesets([dirObj]);
                 }
                 next();
