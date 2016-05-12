@@ -41,11 +41,17 @@ app.get('/omk/info', info);
 // server path.
 app.use('/', odkOpenRosa);
 
+
 /**
- * Authentication for all omk routes.
+ * Authentication routes.
+ *
  * Note that OpenRosa routes pass through without auth.
+ * We can't lock down /omk/data/forms route, because that
+ * breaks /formList
  */
-app.use('/omk', auth);
+app.use('/omk/odk', auth);
+app.use('/omk/data/submissions', auth);
+app.use('/omk/pages', auth);
 
 
 // Open Data Kit Aggregate
