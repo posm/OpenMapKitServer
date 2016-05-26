@@ -97,13 +97,13 @@ function createChangesetAndOsc(osmApi, submissionsDir, osmFiles, cb) {
             changesetUpload(osmApi, changesetId, oscXml, function(err, diffResult, changesetId) {
                 // This isn't truly an error state. Conflicts are common and normal.
                 if (err) {
-                    saveConflict(submissionsDir, err, changesetId);
+                    saveConflictAndUpdateDataJson(submissionsDir, err, changesetId);
                     cb();
                     return;
                 }
 
-                // Saving the diffResult to the submissions dir
-                saveDiffResult(submissionsDir, diffResult, changesetId);
+                // Saving the diffResult to the submissions dir and update data.json
+                saveDiffResultAndUpdateDataJson(submissionsDir, diffResult, changesetId);
 
                 changesetClose(osmApi, changesetId, function (err) {
                     if (err) {
@@ -121,7 +121,7 @@ function changesetCreate(osmApi, changesetXml, cb) {
     var opts = {
         method: 'PUT',
         headers: {'Content-Type': 'text/xml'},
-        uri: osmApi.server + '/0.6/changeset/create',
+        uri: osmApi.server + '/api/0.6/changeset/create',
         auth: {
             user: osmApi.user,
             pass: osmApi.pass
@@ -152,7 +152,7 @@ function changesetUpload(osmApi, changesetId, oscXml, cb) {
     var opts = {
         method: 'POST',
         headers: {'Content-Type': 'text/xml'},
-        uri: osmApi.server + '/0.6/changeset/' + changesetId + '/upload',
+        uri: osmApi.server + '/api/0.6/changeset/' + changesetId + '/upload',
         auth: {
             user: osmApi.user,
             pass: osmApi.pass
@@ -182,7 +182,7 @@ function changesetClose(osmApi, changesetId, cb) {
     var opts = {
         method: 'PUT',
         headers: {'Content-Type': 'text/xml'},
-        uri: osmApi.server + '/0.6/changeset/' + changesetId + '/close',
+        uri: osmApi.server + '/api/0.6/changeset/' + changesetId + '/close',
         auth: {
             user: osmApi.user,
             pass: osmApi.pass
@@ -212,16 +212,46 @@ function changesetClose(osmApi, changesetId, cb) {
  * has been successfully submitted, but also to see how IDs potentially have been
  * rewritten.
  */
-function saveDiffResult(submissionsDir, diffResult, changesetId) {
-    fs.writeFile(submissionsDir + '/diffResult-' + changesetId + '.xml', diffResult, function (err) {
+function saveDiffResultAndUpdateDataJson(submissionsDir, diffResult, changesetId) {
+    var diffResultFileName = 'diffResult-' + changesetId + '.xml';
+    fs.writeFile(submissionsDir + '/' + diffResultFileName, diffResult, function (err) {
         // do nothing
     });
+    updateDataJson(submissionsDir, changesetId, diffResultFileName, null);
 }
 
-function saveConflict(submissionsDir, err, changesetId) {
+function saveConflictAndUpdateDataJson(submissionsDir, err, changesetId) {
+    var conflictFileName = 'conflict-' + changesetId + '.json';
     var jsonStr = JSON.stringify(err, null, 2);
-    fs.writeFile(submissionsDir + '/conflict-' + changesetId + '.json', jsonStr, function (err) {
+    fs.writeFile(submissionsDir + '/' + conflictFileName, jsonStr, function (err) {
         // do nothing
     });
     console.log('Conflict uploading changeset. - ' + JSON.stringify(err));
+    updateDataJson(submissionsDir, changesetId, null, conflictFileName);
+}
+
+function updateDataJson(submissionsDir, changesetId, diffResultFileName, conflictFileName) {
+    var dataJsonPath = submissionsDir + '/data.json';
+    fs.readFile(dataJsonPath, function (err, data) {
+        if (err) {
+            return;
+        }
+        var dataObj = JSON.parse(data);
+        delete dataObj.osmApi;
+        dataObj.osmApi = {
+            changesetId: changesetId,
+            changesetUrl: osmApi.server + '/changeset/' + changesetId
+        };
+        if (diffResultFileName) {
+            dataObj.osmApi.diffResult = diffResultFileName;
+        } else if (conflictFileName) {
+            dataObj.osmApi.conflict = conflictFileName;
+        }
+
+        var dataJsonStr = JSON.stringify(dataObj, null, 2);
+        fs.writeFile(dataJsonPath, dataJsonStr, function (err) {
+            // do nothing
+        });
+        
+    });
 }
