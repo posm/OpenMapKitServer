@@ -143,7 +143,6 @@ $(function() {
 
     $(".areas").hide();
     $("#submissionPagespinner").show();
-    
 
     $(".csv textarea").blur(function() {
         showCSV(true);
