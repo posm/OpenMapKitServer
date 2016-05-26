@@ -1,7 +1,6 @@
 var extend = require('xtend');
 var fs = require('fs');
 var persistFs = require('../helpers/persist');
-var updateFileRef = require('../helpers/update-file-ref');
 var createAndSubmitChangesets = require('../osm/submit-changesets').createAndSubmitChangesets;
 var settings = require('../../../settings.js');
 
@@ -54,7 +53,6 @@ function SaveMedia (options) {
                 if (err) onError(err);
                 // store a reference to where the file is now stored on the file object
                 file.url = url;
-                updateFileRef(req.submission.json, file);
                 taskCount++;
                 // Quick and dirty check whether we have processed all the files
                 if (taskCount < req.files.length) return;
