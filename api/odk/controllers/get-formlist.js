@@ -69,7 +69,7 @@ function addSubmissionCount(xformJson, cb) {
                 console.log('Form: ' + form.formID + ' has no submissions.');
             } else {
                 // add number of files as total submissions
-                form.totalSubmissions = files.length;
+                form.totalSubmissions = directoryCount(files);
                 // return xformsJson after looping through all forms
                 if (index == xformJson.length - 1) {
                     cb(xformJson);
@@ -77,4 +77,21 @@ function addSubmissionCount(xformJson, cb) {
             }
         });
     })
+}
+
+/**
+ * The number of submissions is the number of directories in the submission directory.
+ * We could be really correct and use fs.stat, but this should suffice.
+ *
+ * @param files
+ */
+function directoryCount(files) {
+    var count = 0;
+    for (var i = 0, len = files.length; i < len; i++) {
+        var f = files[i];
+        // dont show hidden files like .DS_Store and files with extensions
+        if (f.indexOf('.') > -1) continue;
+        ++count;
+    }
+    return count;
 }
