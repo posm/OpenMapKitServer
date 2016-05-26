@@ -60,6 +60,8 @@
 
     <div class="mdl-grid">
 
+        <div v-show="!formList.xforms" class="mdl-spinner mdl-js-spinner is-active"></div>
+
          
 
         <div class="demo-card-square mdl-card mdl-shadow--2dp" v-if="formList.xforms" v-for="val in formList.xforms.xform">
@@ -67,7 +69,7 @@
                 <h2 class="mdl-card__title-text">{{ val.name }}</h2>
             </div>
             <div class="mdl-card__supporting-text">
-                Number of Submissions: 34<br>
+                Number of Submissions: {{ val.totalSubmissions }}<br>
                 Form ID: {{ val.formID }}
 
             </div>
