@@ -2,6 +2,8 @@ var xml2js = require('xml2js');
 var parser = new xml2js.Parser({explicitArray: false, attrkey: "attributes"});
 var createFormList = require('openrosa-formlist');
 var getFormUrls = require('../helpers/get-form-urls');
+var settings = require('../../../settings');
+var fs = require('fs');
 
 /**
  * Searches for XForm XML Files on the file system and
@@ -23,16 +25,23 @@ module.exports = function (req, res, next) {
         var formListOptions = {
             headers: options.headers
         };
-        createFormList(formUrls, formListOptions, function(err, xml) {
+        createFormList(formUrls, formListOptions, function (err, xml) {
             if (err) return next(err);
 
             // Default is XML, but JSON is an option
-            if(json) {
+            if (json) {
                 parser.parseString(xml, function (err, result) {
                     if (result === undefined) {
                         res.status(200).json(null);
                     } else {
-                        res.status(200).json(result);
+                        if (typeof result.xforms.xform == "object") {
+                            addSubmissionCount(result.xforms.xform, function (xformJson) {
+                                result.xforms.xform = xformJson;
+                                res.status(200).json(result);
+                            });
+                        } else {
+                            res.status(200).json(null);
+                        }
                     }
                 });
 
@@ -43,3 +52,46 @@ module.exports = function (req, res, next) {
         });
     });
 };
+
+/**
+ * Get list of forms and add totalSubmissions property
+ * @param xformJson
+ */
+function addSubmissionCount(xformJson, cb) {
+    // loop through each form
+    var count = 0;
+    xformJson.forEach(function (form) {
+        // add totalSubmission to xformJson object
+        form.totalSubmissions = 0;
+        // loop thourgh each forms submission directory
+        fs.readdir(settings.dataDir + '/submissions/' + form.formID, function (err, files) {
+            if (err) {
+                console.log('Form: ' + form.formID + ' has no submissions.');
+            } else {
+                // add number of files as total submissions
+                form.totalSubmissions = directoryCount(files);
+                // return xformsJson after looping through all forms
+            }
+            if (++count === xformJson.length) {
+                cb(xformJson);
+            }
+        });
+    })
+}
+
+/**
+ * The number of submissions is the number of directories in the submission directory.
+ * We could be really correct and use fs.stat, but this should suffice.
+ *
+ * @param files
+ */
+function directoryCount(files) {
+    var count = 0;
+    for (var i = 0, len = files.length; i < len; i++) {
+        var f = files[i];
+        // dont show hidden files like .DS_Store and files with extensions
+        if (f.indexOf('.') > -1) continue;
+        ++count;
+    }
+    return count;
+}

@@ -25,9 +25,13 @@ OMK.fetchJSON = function (url) {
     if (!url) return;
 
     $.get(url, function(data, status, xhr) {
-        $('.fetching').hide();
+        $(".areas").show();
+        $("#submissionPagespinner").hide();
         doCSV(data);
     }).fail(function(xhr, status, errorThrown) {
+        var form = getParam('form');
+        $("#submissionPagespinner").hide();
+        $("#alert").text("No data has been submitted for " + form + '.');
         console.log("Error fetching ODK submissions!");
         console.log(xhr);
         console.log(status);
