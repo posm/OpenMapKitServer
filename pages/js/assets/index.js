@@ -141,6 +141,9 @@ function doCSV(json) {
 
 $(function() {
 
+    $(".areas").hide();
+    $("#submissionPagespinner").show();
+
     $(".csv textarea").blur(function() {
         showCSV(true);
     }).click(function() {
