@@ -58,9 +58,9 @@ module.exports = function (req, res, next) {
  * @param xformJson
  */
 function addSubmissionCount(xformJson, cb) {
-
     // loop through each form
-    xformJson.forEach(function (form, index) {
+    var count = 0;
+    xformJson.forEach(function (form) {
         // add totalSubmission to xformJson object
         form.totalSubmissions = 0;
         // loop thourgh each forms submission directory
@@ -71,9 +71,9 @@ function addSubmissionCount(xformJson, cb) {
                 // add number of files as total submissions
                 form.totalSubmissions = directoryCount(files);
                 // return xformsJson after looping through all forms
-                if (index == xformJson.length - 1) {
-                    cb(xformJson);
-                }
+            }
+            if (++count === xformJson.length) {
+                cb(xformJson);
             }
         });
     })
