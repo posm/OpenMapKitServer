@@ -4,7 +4,6 @@ var createFormList = require('openrosa-formlist');
 var getFormUrls = require('../helpers/get-form-urls');
 var settings = require('../../../settings');
 var fs = require('fs');
-var _ = require('underscore');
 
 /**
  * Searches for XForm XML Files on the file system and
@@ -62,22 +61,20 @@ function addSubmissionCount(xformJson, cb) {
 
     // loop through each form
     xformJson.forEach(function (form, index) {
-        try {
-            // add totalSubmission to xformJson object
-            form = _.extend(form, {totalSubmissions: 0});
-            var submissionsDir = fs.readdirSync(settings.dataDir + '/submissions/' + form.formID);
-            form.totalSubmissions = submissionsDir.length;
-
-            // return callback when end of xformJson array is reached
-            if (index == xformJson.length - 1) {
-                cb(xformJson);
+        // add totalSubmission to xformJson object
+        form.totalSubmissions = 0;
+        // loop thourgh each forms submission directory
+        fs.readdir(settings.dataDir + '/submissions/' + form.formID, function (err, files) {
+            if (err) {
+                console.log('Form: ' + form.formID + ' has no submissions.');
+            } else {
+                // add number of files as total submissions
+                form.totalSubmissions = files.length;
+                // return xformsJson after looping through all forms
+                if (index == xformJson.length - 1) {
+                    cb(xformJson);
+                }
             }
-        } catch (err) {
-            // will fire if directory doesn't exist (form has no submissions)
-            // return callback when end of array is reached
-            if (index == xformJson.length - 1) {
-                cb(xformJson);
-            }
-        }
+        });
     })
 }
