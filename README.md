@@ -32,8 +32,9 @@ to provision deployment data that is fetched by OpenMapKit Android.
 This is a REST API that handles all of the ODK business logic, including communicating with ODK Collect,
 as well as serving and ingesting ODK XForm data.
 
-[__pages__](pages) is the pages directory where 
-all of the web pages and UI live.
+[__jekyll__](jekyll) is where the front end pages live.
+
+[__pages__](pages) is where the Jekyll project is built. The pages are served from here.
 
 [__data__](data) is where all of the data is stored on the server's file system.
 
@@ -61,45 +62,9 @@ __ODK Collect__ > __General Settings__ > __Configure platform settings__ > __URL
 
     http://{{your_host_url}}/pages/upload-form/
 
-#### Edit your OSM submissions and finalize to OpenStreetMap:
 
-    http://{{your_host_url}}/pages/id/
+## API
 
-You need to submit some data first to see something. Pick which form you 
-want in the top right (once you've submitted some data).
-
-Download your aggregated OSM XML by selecting your form and pressing 
-__Download__ in the top right.
-
-#### See your ODK submissions:
-
-    http://{{your_host_url}}/omk/odk/submissions/{{form}}.json
-
-#### See your OSM submissions:
-
-This is where you can see what OpenMapKit Android users submitted to 
-OpenMapKit Server.
-
-    http://{{your_host_url}}/omk/odk/submissions/{{form}}.osm
-
-To filter your OSM submissions by user, do the following:
-
-    http://{{your_host_url}}/omk/odk/submissions/{{form}}.osm?user={{osm_user}}
-
-To filter by date:
-
-    http://{{your_host_url}}/omk/odk/submissions/{{form}}.osm?submitTimeStart=2015-12-28
-
-or
-
-    http://{{your_host_url}}/omk/odk/submissions/{{form}}.osm?submitTimeStart=2015-12-28&submitTimeEnd=2015-12-30
-
-A UI for filtering in iD is coming soon...
-
-You can browse the data on your server at:
-
-    http://{{your_host_url}}/omk/data
-
-
+Check out the [API Documentation](docs/api.md) for details about the REST API.
 
 [![ZenHub] (https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png)] (https://zenhub.io)
