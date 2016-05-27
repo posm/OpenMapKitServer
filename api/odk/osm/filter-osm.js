@@ -16,16 +16,10 @@ filter.file = function (filePath, filterObj, cb) {
 
     // Get path metadata, get the form name from path, get the form blacklist
     var pathMeta = path.parse(filePath);
-    var parsedPath = pathMeta.dir.split('/');
+    var pathDir = pathMeta.dir;
+    var parsedPath = pathDir.split('/');
     var formName = parsedPath[parsedPath.length - 2];
     var formBlacklist = formHash.get(formName) || null;
-
-
-    // if a blacklist for this form exists and the filename is found in the blacklist, filter it.
-    if(formBlacklist && formBlacklist.has(pathMeta.name)) {
-        cb(filePath, false);
-        return;
-    }
 
     // if there is no filter
     if (typeof filterObj !== 'object' || filterObj === null) {
@@ -33,71 +27,124 @@ filter.file = function (filePath, filterObj, cb) {
         return;
     }
 
-    fs.stat(filePath, function (err, stats) {
-        // lets just let it pass through in err state
-        if (err) {
-            cb(filePath, true);
-            return;
-        }
-
-        var submitTime = stats.birthtime.getTime();
-
-        if (typeof filterObj.submitTimeStart === 'string' && typeof filterObj.submitTimeEnd === 'string') {
-            var submitTimeStart = new Date(filterObj.submitTimeStart).getTime();
-            var submitTimeEnd = new Date(filterObj.submitTimeEnd).getTime();
-            // if invalid start time
-            if (isNaN(submitTimeStart)) {
-                cb(filePath, false);
-                return;
-            }
-            // if invalid end time
-            if (isNaN(submitTimeEnd)) {
-                cb(filePath, false);
-                return;
-            }
-            if (submitTime >= submitTimeStart && submitTime <= submitTimeEnd) {
-                cb(filePath, true);
-                return;
-            }
+    // blacklist filter
+    if (filterObj.blacklist) {
+        // if a blacklist for this form exists and the filename is found in the blacklist, filter it.
+        if(formBlacklist && formBlacklist.has(pathMeta.name)) {
             cb(filePath, false);
             return;
         }
-
-        if (typeof filterObj.submitTimeStart === 'string') {
-            var submitTimeStart = new Date(filterObj.submitTimeStart).getTime();
-            // if invalid start time
-            if (isNaN(submitTimeStart)) {
-                cb(filePath, false);
-                return;
-            }
-            if (submitTime >= submitTimeStart) {
-                cb(filePath, true);
-                return;
-            }
-            cb(filePath, false);
-            return;
-        }
-
-        if (typeof filterObj.submitTimeEnd === 'string') {
-            var submitTimeEnd = new Date(filterObj.submitTimeEnd).getTime();
-            // if invalid end time
-            if (isNaN(submitTimeEnd)) {
-                cb(filePath, false);
-                return;
-            }
-            if (submitTime <= submitTimeEnd) {
-                cb(filePath, true);
-                return;
-            }
-            cb(filePath, false);
-            return;
-        }
-
-
-        // No submission time filter, pass through
         cb(filePath, true);
+        return;
+    }
 
-    });
+    // unsubmitted & conflict filters
+    var unsubmitted = filterObj.unsubmitted;
+    var conflict = filterObj.conflict;
+    if (unsubmitted || conflict) {
+        fs.readdir(pathDir, function (err, files) {
+            var isConflict = false;
+            var isSubmitted = false;
+            for (var i = 0, len = files.length; i < len; i++) {
+                var file = files[i];
+                if (file.indexOf('conflict') > -1) {
+                    isConflict = true;
+                    isSubmitted = true; // if its a conflict, we consider it submitted
+                    break;
+                }
+                if (file.indexOf('diffResult') > -1) {
+                    isSubmitted = true;
+                    break;
+                }
+            }
+            if (conflict && isConflict) {
+                cb(filePath, true);
+                return;
+            }
+            if (unsubmitted && !isSubmitted) {
+                cb(filePath, true);
+                return;
+            }
+            // otherwise, it is submitted, and we dont want it
+            cb(filePath, false);
+        });
+        return;
+    }
+
+    // submitTime filters
+    if (typeof filterObj.submitTimeStart === 'string' || typeof filterObj.submitTimeEnd === 'string') {
+        fs.stat(filePath, function (err, stats) {
+            // lets just let it pass through in err state
+            if (err) {
+                cb(filePath, true);
+                return;
+            }
+
+            var submitTime = stats.birthtime.getTime();
+
+            // submitTimeStart and submitTimeEnd filter
+            if (typeof filterObj.submitTimeStart === 'string' && typeof filterObj.submitTimeEnd === 'string') {
+                var submitTimeStart = new Date(filterObj.submitTimeStart).getTime();
+                var submitTimeEnd = new Date(filterObj.submitTimeEnd).getTime();
+                // if invalid start time
+                if (isNaN(submitTimeStart)) {
+                    cb(filePath, false);
+                    return;
+                }
+                // if invalid end time
+                if (isNaN(submitTimeEnd)) {
+                    cb(filePath, false);
+                    return;
+                }
+                if (submitTime >= submitTimeStart && submitTime <= submitTimeEnd) {
+                    cb(filePath, true);
+                    return;
+                }
+                cb(filePath, false);
+                return;
+            }
+
+            // submitTimeStart filter
+            if (typeof filterObj.submitTimeStart === 'string') {
+                var submitTimeStart = new Date(filterObj.submitTimeStart).getTime();
+                // if invalid start time
+                if (isNaN(submitTimeStart)) {
+                    cb(filePath, false);
+                    return;
+                }
+                if (submitTime >= submitTimeStart) {
+                    cb(filePath, true);
+                    return;
+                }
+                cb(filePath, false);
+                return;
+            }
+
+            // submitTimeEnd filter
+            if (typeof filterObj.submitTimeEnd === 'string') {
+                var submitTimeEnd = new Date(filterObj.submitTimeEnd).getTime();
+                // if invalid end time
+                if (isNaN(submitTimeEnd)) {
+                    cb(filePath, false);
+                    return;
+                }
+                if (submitTime <= submitTimeEnd) {
+                    cb(filePath, true);
+                    return;
+                }
+                cb(filePath, false);
+                return;
+            }
+
+
+            // No submission time filter, pass through
+            cb(filePath, true);
+        });
+        return;
+    }
+
+    // no filters
+    cb(filePath, true);
 };
 
 
