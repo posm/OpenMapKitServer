@@ -90,7 +90,7 @@ function renderCSV(objects) {
         tr = document.createElement("tr");
         for (field in rows[i]) {
             var td = document.createElement("td");
-            var cell = createHyperLinkIfNeeded(rows[i][field]);
+            var cell = createHyperLinkIfNeeded(rows[i][field], objects[i-1]);
             $(td)
                 .html(cell)
                 .attr("title", rows[i][field]);
@@ -171,10 +171,23 @@ $(function() {
     OMK.fetch();
 });
 
-function createHyperLinkIfNeeded(field) {
+function createHyperLinkIfNeeded(field, object) {
     if (typeof field === 'string') {
+        // a hyperlink
         if (field.indexOf('http') === 0) {
             return '<a target="_blank" href="' + field + '">' + field + '</a>';
+        }
+        if (typeof object === 'object') {
+            // a file with an extension, discern a link
+            var metaInstanceId = object['meta/instanceId'];
+            var formId = object['meta/formId'];
+            if (typeof metaInstanceId === 'string'
+                && typeof formId === 'string'
+                && field[field.length - 4] === '.') {
+                var uuid = metaInstanceId.replace('uuid:', '');
+                var href = OMK.omkServerUrl() + '/omk/data/submissions/' + formId + '/' + uuid + '/' + field;
+                return '<a target="_blank" href="' + href + '">' + field + '</a>';
+            }
         }
     }
     return field;
