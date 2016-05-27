@@ -118,11 +118,6 @@ function doCSV(json) {
     for (var row in inArray)
         outArray[outArray.length] = parseObject(inArray[row]);
 
-    $("h2.rows.count").append(" (" + outArray.length + ")");
-
-    var count = outArray.length;
-
-
 
     var csv = $.csv.fromObjects(outArray);
     // excerpt and render first 10 rows
@@ -168,7 +163,14 @@ $(function() {
         $(".drop").hide();
     });
 
-    OMK.fetch();
+    // submit changeset click event
+    $("#submit-OSM-changesets").click(function(){
+        OMK.submitChangeset();
+    });
+
+    OMK.fetch(function(){
+        OMK.getFormMetaData();
+    });
 });
 
 function createHyperLinkIfNeeded(field, object) {

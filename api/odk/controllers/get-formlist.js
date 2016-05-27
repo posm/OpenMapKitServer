@@ -19,6 +19,7 @@ module.exports = function (req, res, next) {
 
     // Look for "json" query param
     var json = req.query.json || false;
+    var formId = req.query.formid;
 
     getFormUrls(options, function (err, formUrls) {
         if (err) return next(err);
@@ -36,7 +37,13 @@ module.exports = function (req, res, next) {
                     } else {
                         if (typeof result.xforms.xform == "object") {
                             addSubmissionCount(result.xforms.xform, function (xformJson) {
-                                result.xforms.xform = xformJson;
+                                if(formId){
+                                    result.xforms.xform = xformJson.filter(function(arr){
+                                        return arr.formID == formId;
+                                    });
+                                } else {
+                                    result.xforms.xform = xformJson;
+                                }
                                 res.status(200).json(result);
                             });
                         } else {

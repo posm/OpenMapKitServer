@@ -54,5 +54,10 @@ ul a {
 }
 
 #submissionPagespinner {
-    margin: auto;
+    margin: 40px auto;
+
+}
+
+#submissionCard {
+    display: none;
 }

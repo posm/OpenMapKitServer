@@ -61,21 +61,23 @@
     <div class="mask">
         <div class="mdl-grid grid-menu mdl-cell mdl-cell--12-col">
             <!-- Mdl Card -->
-            <div class="mdl-cell mdl-cell--12-col mdl-card wide-card mdl-shadow--0dp">
+            <div id="submissionCard" class="mdl-cell mdl-cell--12-col mdl-card wide-card mdl-shadow--0dp">
                 <div class="mdl-cell--12-col mdl-card__title">
-                    <h2 class="rows count mdl-card__title-text">OpenMapKit Form Submissions</h2>
+                    <h2 class="rows count mdl-card__title-text"></h2>
                 </div>
 
                 <div class="mdl-card__actions mdl-card--border">
                     <!-- Left aligned menu on top of button  -->
                     <button id="odk-options" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                        <!--<i class="material-icons">more_vert</i>-->
                         ODK Data
                     </button>
 
                     <button id="osm-options" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                        <!--<i class="material-icons">more_vert</i>-->
                         OSM Data
+                    </button>
+
+                    <button id="submit-OSM-changesets" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                        Submit OSM
                     </button>
 
                     <ul class="mdl-menu mdl-menu--bottom-right- mdl-js-menu mdl-js-ripple-effect" for="odk-options">
@@ -116,6 +118,11 @@
 
         </section>
     </div>
+</div>
+
+<div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
+    <div class="mdl-snackbar__text"></div>
+    <button class="mdl-snackbar__action" type="button"></button>
 </div>
 
 <link rel="stylesheet" href="../css/submissions.css">
