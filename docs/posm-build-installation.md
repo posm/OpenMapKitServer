@@ -34,11 +34,9 @@ have to throw much hardware at it.
 
 2. Create a `settings.local` file in `/root/etc` with the following content:
 
-        posm_domain="local"
-        posm_hostname="posm.$posm_domain"
         posm_ip="54.191.109.128"
 
- Replace the IP address for `posm_ip` with the actual public IP or your server.
+ Replace the IP address for `posm_ip` with the actual public IP or your server. If you are on Amazon, this should be your Elastic IP.
 
 3. Execute `bootstrap.sh` and tell it to only install NGINX and OpenMapKit Server.
 
