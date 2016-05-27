@@ -152,7 +152,7 @@ $(function() {
         $(this).focus().select();
     });
 
-    $(".csv .raw").click(function() {
+    $(".showRawCSV").click(function() {
         showCSV(false);
         $(".csv textarea").focus().select();
         return false;
