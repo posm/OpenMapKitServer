@@ -118,7 +118,7 @@ function doCSV(json) {
     for (var row in inArray)
         outArray[outArray.length] = parseObject(inArray[row]);
 
-    $("span.rows.count").text("" + outArray.length);
+    $("h2.rows.count").append(" (" + outArray.length + ")");
 
     var count = outArray.length;
 

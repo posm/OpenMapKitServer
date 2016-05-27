@@ -7,3 +7,52 @@
 .areas {
     display: none;
 }
+
+.grid-menu{
+    position: fixed;
+    z-index: 10;
+    padding: 0;
+    margin: 0 5px;
+}
+
+.grid-lower{
+    position: relative;
+    z-index: 1;
+    top: 95px;
+}
+
+.wide-card {
+    background: white center / cover;
+    min-height: 100px;
+}
+
+.wide-card .mdl-card__title {
+    color: black;
+}
+
+.rows.count {
+    font-size: 20px;
+    margin: auto
+}
+
+.mask {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 125px;
+    background-color: #fff;
+    position: fixed;
+    z-index: 2;
+}
+
+.mdl-card__actions {
+    text-align: center;
+}
+
+ul a {
+    text-decoration: none;
+}
+
+#submissionPagespinner {
+    margin: auto;
+}

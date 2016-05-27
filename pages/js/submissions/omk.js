@@ -26,10 +26,12 @@ OMK.fetchJSON = function (url) {
 
     $.get(url, function(data, status, xhr) {
         $(".areas").show();
+        $("#OMKmenuCard").show();
         $("#submissionPagespinner").hide();
         doCSV(data);
     }).fail(function(xhr, status, errorThrown) {
         var form = getParam('form');
+        $("#OMKmenuCard").show();
         $("#submissionPagespinner").hide();
         $("#alert").text("No data has been submitted for " + form + '.');
         console.log("Error fetching ODK submissions!");
