@@ -26,28 +26,19 @@ controllerjs: forms
                     View Submissions
                 </a>
                 <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
-                   href='/omk/pages/id/#background=Bing&form_id={{ val.formID }}&map=2.00/0.0/0.0'>
-                    Edit OSM
+                   href="/omk/data/forms/{{ val.formID }}.xlsx">
+                    XLSX Form
                 </a>
 
-                <!--<button id="{{ val.formID }}" class="mdl-button mdl-button&#45;&#45;icon mdl-button&#45;&#45;colored">-->
-                    <!--<i class="material-icons">more vert</i>-->
-                <!--</button>-->
                 <button id="{{ val.formID }}"
                         class="mdl-button mdl-js-button mdl-button--icon buttonRight">
                     <i class="material-icons">more_vert</i>
                 </button>
                 <ul class="mdl-menu mdl-menu--top-right mdl-js-menu" for="{{ val.formID }}">
                     <li class="mdl-menu__item">
-                        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
-                        href="/omk/data/forms/{{ val.formID }}.xlsx">
-                        Download XLS
-                        </a>
-                    </li>
-                    <li class="mdl-menu__item">
-                        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
-                           href="/omk/data/forms/{{ val.formID }}.xml">
-                            Download XFORM
+                        <a target="_blank" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
+                                href="/omk/data/forms/{{ val.formID }}.xml">
+                            Download XForm XML
                         </a>
                     </li>
                 </ul>
