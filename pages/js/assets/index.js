@@ -90,8 +90,9 @@ function renderCSV(objects) {
         tr = document.createElement("tr");
         for (field in rows[i]) {
             var td = document.createElement("td");
+            var cell = createHyperLinkIfNeeded(rows[i][field]);
             $(td)
-                .html(rows[i][field])
+                .html(cell)
                 .attr("title", rows[i][field]);
             tr.appendChild(td);
         }
@@ -169,3 +170,12 @@ $(function() {
 
     OMK.fetch();
 });
+
+function createHyperLinkIfNeeded(field) {
+    if (typeof field === 'string') {
+        if (field.indexOf('http') === 0) {
+            return '<a target="_blank" href="' + field + '">' + field + '</a>';
+        }
+    }
+    return field;
+}
