@@ -32,7 +32,6 @@
 
 .rows.count {
     font-size: 20px;
-    margin: auto
 }
 
 .mask {
@@ -43,10 +42,6 @@
     background-color: #fff;
     position: fixed;
     z-index: 2;
-}
-
-.mdl-card__actions {
-    text-align: center;
 }
 
 ul a {
