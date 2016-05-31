@@ -63,3 +63,7 @@ Data that has not been submitted successfully or with a conflict will
 be retried. If you do have a conflict in your data. You can resubmit
 it by fixing the OSM XML and removing the `conflict.json` file from
 the submission directory.
+
+Currently the UI does not give detailed updates on the progress of the
+submission job, however, you can find that in the log output of OpenMapKit Server.
+On a POSM installation, that log can be found in [`/var/log/omk-server.log`](https://github.com/AmericanRedCross/posm-build/blob/beb7aed9adf469151c1d60be4193afc285c0b687/kickstart/etc/omk-server.upstart#L29)
