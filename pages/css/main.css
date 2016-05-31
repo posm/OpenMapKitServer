@@ -393,7 +393,9 @@ a {
 .csv {
   color: black;
   margin-top: 30px;
-  width: 100%; }
+  width: 100%;
+  position: relative;
+  display: none; }
 
 .csv textarea {
   background-color: #f5f5f5;

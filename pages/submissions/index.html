@@ -58,44 +58,55 @@
 
     <div id="submissionsPage" class="page-content">
 
-    <div class="mdl-grid">
+    <div class="mask">
+        <div class="mdl-grid grid-menu mdl-cell mdl-cell--12-col">
+            <!-- Mdl Card -->
+            <div id="submissionCard" class="mdl-cell mdl-cell--12-col mdl-card wide-card mdl-shadow--0dp">
+                <div class="mdl-cell--12-col mdl-card__title">
+                    <h2 class="rows count mdl-card__title-text"></h2>
+                </div>
 
-        <!--<h1>OpenMapKit Form Submissions</h1>-->
-        <div class="typo-styles__demo mdl-typography--display-1">
-            OpenMapKit Form Submissions
+                <div class="mdl-card__actions mdl-card--border">
+                    <!-- Left aligned menu on top of button  -->
+                    <button id="odk-options" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                        ODK Data
+                    </button>
 
-            <p id="alert"></p>
+                    <button id="osm-options" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                        OSM Data
+                    </button>
+
+                    <a id="submit-OSM-changesets" href="#">
+                    <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                        Submit to OSM
+                    </button>
+                    </a>
+
+                    <ul class="mdl-menu mdl-menu--bottom-right- mdl-js-menu mdl-js-ripple-effect" for="odk-options">
+                        <a href="#">
+                            <li class="showRawCSV mdl-menu__item">View CSV</li>
+                        </a>
+                        <a download="data.csv" href="#" class="download">
+                            <li class="mdl-menu__item">Download CSV</li>
+                        </a>
+                        <a id="downloadJson" download="data.json" href="#">
+                            <li class="mdl-menu__item">Download JSON</li>
+                        </a>
+                    </ul>
+
+                    <ul id="osm-options-list" class="mdl-menu mdl-menu--bottom-right- mdl-js-menu mdl-js-ripple-effect" for="osm-options">
+                        <a name="" href="#"><li class="mdl-menu__item">All OSM</li></a>
+                        <a name="unsumbitted" href="#"><li class="mdl-menu__item">Unsubmitted OSM</li></a>
+                        <a name="conflicting"  href="#"><li class="mdl-menu__item">Conflicting OSM</li></a>
+                    </ul>
+                </div>
+            </div>
+            <!-- Mdl Card -->
+            <div id="submissionPagespinner" class="mdl-spinner mdl-js-spinner is-active"></div>
         </div>
-
-        <div id="submissionPagespinner" class="mdl-spinner mdl-js-spinner is-active"></div>
+    </div>
+    <div class="mdl-grid grid-lower">
         <section class="csv">
-
-    <span class="rendered">
-
-        <ul class='mdl-list'>
-            <li class="mdl-list__item">
-                <!-- Number badge on icon -->
-                <!--<div id="badgeCount" class="mdl-badge" data-badge>Total submissions</div>-->
-                <span class="rows count"></span>&nbsp;total submissions
-            </li>
-
-
-
-            <li class="mdl-list__item"><a download="data.csv" href="#" class="download">
-                <button class="mdl-button mdl-js-button mdl-button--raised">
-                    Download CSV
-                </button></a></li>
-            <li class="mdl-list__item raw"><a href="#">
-                <button class="mdl-button mdl-js-button mdl-button--raised">
-                show the raw data
-                </button></a></li>
-            <li class="mdl-list__item"><a id="downloadJson" download="data.json" href="#">
-                <button class="mdl-button mdl-js-button mdl-button--raised">
-                    Download JSON
-                </button></a>
-            </li>
-        </ul>
-    </span>
 
             <div class="table rendered">
                 <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
@@ -108,9 +119,12 @@
             </div>
 
         </section>
-
-
     </div>
+</div>
+
+<div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
+    <div class="mdl-snackbar__text"></div>
+    <button class="mdl-snackbar__action" type="button"></button>
 </div>
 
 <link rel="stylesheet" href="../css/submissions.css">

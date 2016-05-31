@@ -26,7 +26,7 @@ function parseObject(obj, path) {
     }
     else if (scalar) {
         var d = {};
-        var endPath = path.substr(0, path.length-1);
+        var endPath = path.substr(0, path.length - 1);
         d[endPath] = obj;
         return d;
     }
@@ -41,8 +41,8 @@ function arrayFrom(json) {
         if ($.type(next) == "array")
             return next;
         if ($.type(next) == "object") {
-          for (var key in next)
-             queue.push(next[key]);
+            for (var key in next)
+                queue.push(next[key]);
         }
         next = queue.shift();
     }
@@ -86,11 +86,11 @@ function renderCSV(objects) {
 
     // render body of table
     var tbody = document.createElement("tbody");
-    for (var i=1; i<rows.length; i++) {
+    for (var i = 1; i < rows.length; i++) {
         tr = document.createElement("tr");
         for (field in rows[i]) {
             var td = document.createElement("td");
-            var cell = createHyperLinkIfNeeded(rows[i][field], objects[i-1]);
+            var cell = createHyperLinkIfNeeded(rows[i][field], objects[i - 1]);
             $(td)
                 .html(cell)
                 .attr("title", rows[i][field]);
@@ -118,11 +118,6 @@ function doCSV(json) {
     for (var row in inArray)
         outArray[outArray.length] = parseObject(inArray[row]);
 
-    $("span.rows.count").text("" + outArray.length);
-
-    var count = outArray.length;
-
-
 
     var csv = $.csv.fromObjects(outArray);
     // excerpt and render first 10 rows
@@ -140,35 +135,72 @@ function doCSV(json) {
     $("#downloadJson").attr("href", OMK.jsonUrl()).attr("download", getParam('form') + ".json");
 }
 
-$(function() {
+$(function () {
+
+    var formId = getParam('form');
 
     $(".areas").hide();
     $("#submissionPagespinner").show();
 
-    $(".csv textarea").blur(function() {
+    $(".csv textarea").blur(function () {
         showCSV(true);
-    }).click(function() {
+    }).click(function () {
         // highlight csv on click
         $(this).focus().select();
     });
 
-    $(".csv .raw").click(function() {
+    $(".showRawCSV").click(function () {
         showCSV(false);
         $(".csv textarea").focus().select();
         return false;
     });
 
     // if there's no CSV to download, don't download anything
-    $(".csv a.download").click(function() {
+    $(".csv a.download").click(function () {
         return !!$(".csv textarea").val();
     });
 
     // go away
-    $("body").click(function() {
+    $("body").click(function () {
         $(".drop").hide();
     });
 
-    OMK.fetch();
+    // add href to submit changeset button
+    $("#submit-OSM-changesets")
+        .prop("href", "/omk/odk/submit-changesets/" + formId)
+        // submit changeset click event
+        .click(function (e) {
+            e.preventDefault();
+            OMK.submitChangeset();
+        });
+
+    // process osm downloads
+    $("#osm-options-list a")
+        .click(function (e) {
+            var url = $(this).prop("href");
+            OMK.downloadOSM(url, this)
+        })
+        .each(function (i, o) {
+            var filter = $(o).prop("name");
+            // get all
+            if (filter == "") {
+                $(o).prop("href", "/omk/odk/submissions/" + formId + ".osm");
+                $(o).prop("download", "/omk/odk/submissions/" + formId + ".osm");
+                // get unsubmitted
+            } else if (filter == "unsumbitted") {
+                $(o).prop("href", "/omk/odk/submissions/" + formId + ".osm?unsubmitted=true");
+                $(o).prop("download", "/omk/odk/submissions/" + formId + ".osm?unsubmitted=true");
+                // get conflicting
+            } else if (filter == "conflicting") {
+                $(o).prop("href", "/omk/odk/submissions/" + formId + ".osm?conflicting=true");
+                $(o).prop("download", "/omk/odk/submissions/" + formId + ".osm?conflicting=true");
+            }
+        });
+
+    // get form name & number of submission
+    OMK.fetch(function () {
+        OMK.getFormMetaData();
+    });
 });
 
 function createHyperLinkIfNeeded(field, object) {
