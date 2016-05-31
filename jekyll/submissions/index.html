@@ -27,9 +27,11 @@ omk: omk
                         OSM Data
                     </button>
 
-                    <button id="submit-OSM-changesets" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                        Submit OSM
+                    <a id="submit-OSM-changesets" href="#">
+                    <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                        Submit to OSM
                     </button>
+                    </a>
 
                     <ul class="mdl-menu mdl-menu--bottom-right- mdl-js-menu mdl-js-ripple-effect" for="odk-options">
                         <a href="#">
@@ -43,10 +45,10 @@ omk: omk
                         </a>
                     </ul>
 
-                    <ul class="mdl-menu mdl-menu--bottom-right- mdl-js-menu mdl-js-ripple-effect" for="osm-options">
-                        <li class="mdl-menu__item">All OSM</li>
-                        <li class="mdl-menu__item">Unsubmitted OSM</li>
-                        <li class="mdl-menu__item">Conflicting OSM</li>
+                    <ul id="osm-options-list" class="mdl-menu mdl-menu--bottom-right- mdl-js-menu mdl-js-ripple-effect" for="osm-options">
+                        <a name="" href="#"><li class="mdl-menu__item">All OSM</li></a>
+                        <a name="unsumbitted" href="#"><li class="mdl-menu__item">Unsubmitted OSM</li></a>
+                        <a name="conflicting"  href="#"><li class="mdl-menu__item">Conflicting OSM</li></a>
                     </ul>
                 </div>
             </div>

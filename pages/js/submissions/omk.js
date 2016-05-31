@@ -86,3 +86,18 @@ OMK.submitChangeset = function () {
     });
 
 }
+
+OMK.downloadOSM = function (url, element) {
+    $.get(url, function(data, status, xhr) {
+
+    }).fail(function(xhr, status, errorThrown) {
+        // notify user if download fails
+        var notification = document.querySelector('.mdl-js-snackbar');
+        notification.MaterialSnackbar.showSnackbar(
+            {
+                message: xhr.responseJSON.msg
+            }
+        )
+    });
+}
+
