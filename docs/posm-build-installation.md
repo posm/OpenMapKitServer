@@ -55,14 +55,14 @@ You can start / stop / restart the `omk-service` like any Ubuntu Upstart service
     
 ## Your Data
 
-All of your data are stored in `/opt/omk/OpenMapKitServer/public`. 
+All of your data are stored in `/opt/omk/OpenMapKitServer/data`. 
 
 You can scp / sftp the 
 
-forms `/opt/omk/OpenMapKitServer/public/forms`
+forms `/opt/omk/OpenMapKitServer/data/forms`
 
-deployments `/opt/omk/OpenMapKitServer/public/deployments`
+deployments `/opt/omk/OpenMapKitServer/data/deployments`
 
-submissions `/opt/omk/OpenMapKitServer/public/submissions`
+submissions `/opt/omk/OpenMapKitServer/data/submissions`
 
 from the server to backup and access your data. There is no database, so all of your data are in these files.
