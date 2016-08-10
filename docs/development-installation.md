@@ -47,6 +47,9 @@ npm install
 npm start
 ```
 
+If `npm start` is failing, run `npm start --verbose` to see detailed log execution. 
+You might encounter `Error: Could not locate the bindings file`. Run `npm install libxmljs` to fix this.
+
 ### NodeJS Version Problems
 
 We are using node version 4.*. If you are having problems with another
