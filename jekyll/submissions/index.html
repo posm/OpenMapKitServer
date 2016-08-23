@@ -1,6 +1,8 @@
 ---
 layout: default
 jquery: jquery-2.1.1.min
+datatable: jquery.datatables.min
+datatable-material: datatables.material.min
 csv: jquery.csv
 index: index
 omk: omk
@@ -37,7 +39,7 @@ omk: omk
                         <a href="#">
                             <li class="showRawCSV mdl-menu__item">View CSV</li>
                         </a>
-                        <a download="data.csv" href="#" class="download">
+                        <a id="downloadCsv" download="data.csv" href="#" class="download">
                             <li class="mdl-menu__item">Download CSV</li>
                         </a>
                         <a id="downloadJson" download="data.json" href="#">
@@ -60,7 +62,8 @@ omk: omk
         <section class="csv">
 
             <div class="table rendered">
-                <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                <table id="submission-table" 
+                class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
 
                 </table>
             </div>
@@ -79,3 +82,4 @@ omk: omk
 </div>
 
 <link rel="stylesheet" href="../css/submissions.css">
+<link rel="stylesheet" href="../css/datatables.material.min.css">

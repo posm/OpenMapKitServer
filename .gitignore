@@ -38,6 +38,7 @@ data/submissions/*
 data/deployments/**/*.osm
 data/deployments/**/*.mbtiles
 data/deployments/**/*.md
+data/forms/*
 
 ############## Jekyll Stuff ##################
 jekyll/.sass-cache/

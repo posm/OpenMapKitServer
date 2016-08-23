@@ -106,6 +106,8 @@ function renderCSV(objects) {
     setTimeout(function () {
         componentHandler.upgradeAllRegistered();
     }, 1000);
+
+    $('#submission-table').DataTable();
 }
 
 function doCSV(json) {
@@ -131,7 +133,7 @@ function doCSV(json) {
     // thanks to http://jsfiddle.net/terryyounghk/KPEGU/
     // and http://stackoverflow.com/questions/14964035/how-to-export-javascript-array-info-to-csv-on-client-side
     var uri = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
-    $(".csv a.download").attr("href", uri).attr("download", getParam('form') + ".csv");
+    $("#downloadCsv").attr("href", uri).attr("download", getParam('form') + ".csv");
     $("#downloadJson").attr("href", OMK.jsonUrl()).attr("download", getParam('form') + ".json");
 }
 
