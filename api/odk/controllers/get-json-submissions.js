@@ -1,5 +1,7 @@
-var fs = require('fs');
+// var fs = require('fs');
+var fs = require('graceful-fs');
 var settings = require('../../../settings');
+var JSONStream = require('JSONStream');
 
 /**
  * Aggregates together all of the survey submissions
@@ -19,7 +21,7 @@ module.exports = function (req, res, next) {
     }
     var dir = settings.dataDir + '/submissions/' + formName;
     var aggregate = [];
-
+    var dataErrors = [];
     // All of the submission dirs in the form directory
     fs.readdir(dir, function (err, submissionDirs) {
         if (err) {
@@ -48,32 +50,41 @@ module.exports = function (req, res, next) {
         submissionDirs.forEach(function (submissionDir) {
             if (submissionDir[0] === '.' || submissionDir.indexOf('.txt') > 0) {
                 ++count;
-                if (len === count) {
-                    res.status(200).json(aggregate);
-                }
-                return;
+                sendResponse(len, count, aggregate, []);
             }
             var dataFile = dir + '/' + submissionDir + '/data.json';
-            fs.readFile(dataFile, function (err, data) {
-                ++count;
-                if (err) {
-                    res.status(500).json({
+            var dataContent = '';
+            // memory efficient
+            try {
+                var stream = fs.createReadStream(dataFile),
+                parser = JSONStream.parse();
+                stream.pipe(parser);
+                parser.on('root', function (obj) {
+                    // console.log('objects', obj)
+                    ++count;
+                    aggregate.push(obj);
+                    sendResponse(len, count, aggregate, [])
+                });
+            } catch(e) {
+                dataErrors.push({
                         status: 500,
                         msg: 'Problem reading data.json file in submission directory. dataFile: ' + dataFile,
-                        err: err
+                        err: e
                     });
-                    return;
-                }
-                try {
-                    var dataObj = JSON.parse(data);
-                    aggregate.push(dataObj);
-                } catch (e) {
-                    console.log('Problem parsing: ' + dataFile);
-                }
-                if (len === count && !res._headerSent) {
-                    res.status(200).json(aggregate);
-                }
-            });
+                sendResponse(len, count, aggregate, dataErrors);
+            }
         });
     });
+
+    function sendResponse (len, count, data, error) {
+        if (len === count) {
+            if (error.length > 0){
+                // send the first error in the bunch
+                res.status(500).json(error[0]);
+            } else {
+                res.status(200).json(data);
+            }
+        return;
+    }
+    }
 };
