@@ -50,7 +50,7 @@ module.exports = function (req, res, next) {
         submissionDirs.forEach(function (submissionDir) {
             if (submissionDir[0] === '.' || submissionDir.indexOf('.txt') > 0) {
                 ++count;
-                sendResponse(len, count, aggregate, []);
+                aggregationCallbackCheck(len, count, aggregate, []);
                 return;
             }
             var dataFile = dir + '/' + submissionDir + '/data.json';
@@ -64,7 +64,7 @@ module.exports = function (req, res, next) {
                     // console.log('objects', obj)
                     ++count;
                     aggregate.push(obj);
-                    sendResponse(len, count, aggregate, []);
+                    aggregationCallbackCheck(len, count, aggregate, []);
                 });
             } catch(e) {
                 dataErrors.push({
@@ -72,12 +72,12 @@ module.exports = function (req, res, next) {
                         msg: 'Problem reading data.json file in submission directory. dataFile: ' + dataFile,
                         err: e
                     });
-                sendResponse(len, count, aggregate, dataErrors);
+                aggregationCallbackCheck(len, count, aggregate, dataErrors);
             }
         });
     });
 
-    function sendResponse (len, count, data, error) {
+    function aggregationCallbackCheck(len, count, data, error) {
         if (len === count) {
             if (error.length > 0){
                 // send the first error in the bunch
