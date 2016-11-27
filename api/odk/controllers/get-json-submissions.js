@@ -65,7 +65,6 @@ module.exports = function (req, res, next) {
                     ++count;
                     aggregate.push(obj);
                     sendResponse(len, count, aggregate, []);
-                    return;
                 });
             } catch(e) {
                 dataErrors.push({
@@ -74,7 +73,6 @@ module.exports = function (req, res, next) {
                         err: e
                     });
                 sendResponse(len, count, aggregate, dataErrors);
-                return;
             }
         });
     });
