@@ -51,6 +51,7 @@ module.exports = function (req, res, next) {
             if (submissionDir[0] === '.' || submissionDir.indexOf('.txt') > 0) {
                 ++count;
                 sendResponse(len, count, aggregate, []);
+                return;
             }
             var dataFile = dir + '/' + submissionDir + '/data.json';
             var dataContent = '';
@@ -63,7 +64,7 @@ module.exports = function (req, res, next) {
                     // console.log('objects', obj)
                     ++count;
                     aggregate.push(obj);
-                    sendResponse(len, count, aggregate, [])
+                    sendResponse(len, count, aggregate, []);
                 });
             } catch(e) {
                 dataErrors.push({
@@ -84,7 +85,6 @@ module.exports = function (req, res, next) {
             } else {
                 res.status(200).json(data);
             }
-        return;
-    }
+        }
     }
 };
