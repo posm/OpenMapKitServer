@@ -1,4 +1,4 @@
-var aggregate = require('../helpers/aggregate-submissions.js');
+var aggregate = require('../helpers/aggregate-submissions');
 
 /**
  * Aggregates together all of the survey submissions
