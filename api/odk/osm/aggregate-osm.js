@@ -21,7 +21,7 @@ module.exports = function (files, filter, cb) {
 
     // Empty OSM XML if no files.
     if (numFiles === 0) {
-        cb('<?xml version="1.0" encoding="UTF-8" ?><osm version="0.6" generator="OpenMapKit Server ' + appVersion + '"></osm>');
+        cb(null, '<?xml version="1.0" encoding="UTF-8" ?><osm version="0.6" generator="OpenMapKit Server ' + appVersion + '"></osm>');
     }
 
     // This is the number of files read so far.
