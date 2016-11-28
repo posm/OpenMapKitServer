@@ -1,8 +1,10 @@
-// var fs = require('fs');
-var fs = require('graceful-fs');
+var fs = require('fs');
+// var fs = require('graceful-fs');
 var settings = require('../../../settings');
 var JSONStream = require('JSONStream');
 var async = require('async');
+
+var ASYNC_LIMIT = 10;
 
 /**
  * Aggregates together all of the survey submissions
@@ -48,7 +50,7 @@ module.exports = function (req, res, next) {
             return;
         }
 
-        async.each(submissionDirs, function (submissionDir, callback) {
+        async.eachLimit(submissionDirs, ASYNC_LIMIT, function (submissionDir, callback) {
             // If it's not a directory, we just skip processing that path.
             if (submissionDir[0] === '.' || submissionDir.indexOf('.txt') > 0) {
                 callback(); // ok, but skipping
