@@ -2,6 +2,7 @@
 var fs = require('graceful-fs');
 var settings = require('../../../settings');
 var JSONStream = require('JSONStream');
+var async = require('async');
 
 /**
  * Aggregates together all of the survey submissions
@@ -46,45 +47,40 @@ module.exports = function (req, res, next) {
             res.status(200).json([]);
             return;
         }
-        var count = 0;
-        submissionDirs.forEach(function (submissionDir) {
+
+        async.each(submissionDirs, function (submissionDir, callback) {
+            // If it's not a directory, we just skip processing that path.
             if (submissionDir[0] === '.' || submissionDir.indexOf('.txt') > 0) {
-                ++count;
-                aggregationCallbackCheck(len, count, aggregate, []);
+                callback(); // ok, but skipping
                 return;
             }
+            // Otherwise, we want to open up the data.json in the submission dir.
             var dataFile = dir + '/' + submissionDir + '/data.json';
-            var dataContent = '';
-            // memory efficient
             try {
-                var stream = fs.createReadStream(dataFile),
-                parser = JSONStream.parse();
+                var stream = fs.createReadStream(dataFile);
+                var parser = JSONStream.parse();
                 stream.pipe(parser);
                 parser.on('root', function (obj) {
-                    // console.log('objects', obj)
-                    ++count;
                     aggregate.push(obj);
-                    aggregationCallbackCheck(len, count, aggregate, []);
+                    callback(); // ok submission
                 });
             } catch(e) {
-                dataErrors.push({
-                        status: 500,
-                        msg: 'Problem reading data.json file in submission directory. dataFile: ' + dataFile,
-                        err: e
-                    });
-                aggregationCallbackCheck(len, count, aggregate, dataErrors);
+                callback({
+                    status: 500,
+                    msg: 'Problem reading data.json file in submission directory. dataFile: ' + dataFile,
+                    err: e
+                }); // we have an error, break out of all async iteration
+            }
+        }, function (err) {
+            // an error occurred...
+            if (err) {
+                res.status(500).json(err);
+            }
+            // it was a success
+            else {
+                res.status(200).json(aggregate);
             }
         });
     });
 
-    function aggregationCallbackCheck(len, count, data, error) {
-        if (len === count) {
-            if (error.length > 0){
-                // send the first error in the bunch
-                res.status(500).json(error[0]);
-            } else {
-                res.status(200).json(data);
-            }
-        }
-    }
 };
