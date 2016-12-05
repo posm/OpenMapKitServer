@@ -7,7 +7,7 @@ var aggregate = require('../helpers/aggregate-submissions');
  */
 module.exports = function (req, res, next) {
 
-    aggregate(req.params.formName, errorCallback, aggregateCallback);
+    aggregate(req, errorCallback, aggregateCallback);
 
     function errorCallback(err) {
         res.status(err.status).json(err);

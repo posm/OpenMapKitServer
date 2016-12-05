@@ -5,9 +5,34 @@ var async = require('async');
 
 var ASYNC_LIMIT = 10;
 
-module.exports = function (formName, errorCallback, aggregateCallback) {
+module.exports = function (req, errorCallback, aggregateCallback) {
+    var formName = req.params.formName;
+    var limit = parseInt(req.query.limit);
+    var offset = req.query.offset;
+
+    // default to 100 for limit
+    if (isNaN(limit) || !Number.isInteger(limit) || limit < 1) {
+        limit = 100;
+    }
+
+    // check if valid offset. we paginate with valid offset.
+    if (typeof offset !== 'undefined' && offset !== null) {
+        offset = parseInt(offset);
+        if (isNaN(offset) || !Number.isInteger(offset) || offset < 0) {
+            errorCallback({
+                status: 400,
+                err: 'BAD_OFFSET',
+                msg: 'If you specify an offset for pagination, it must be an integer greater than 0.',
+                path: '/odk/submissions/:formName.json'
+            });
+            return;
+        }
+        // otherwise ok
+    }
+    // otherwise we don't have an offset
+
     if (typeof formName === 'undefined' || formName === null) {
-        res.status(400).json({
+        errorCallback({
             status: 400,
             err: 'MISSING_PARAM',
             msg: 'You must specify a parameter for the formName in this end point.',
@@ -18,6 +43,7 @@ module.exports = function (formName, errorCallback, aggregateCallback) {
     var dir = settings.dataDir + '/submissions/' + formName;
     var aggregate = [];
     // All of the submission dirs in the form directory
+    // Note that fs.readdir is always in alphabetical order on POSIX systems.
     fs.readdir(dir, function (err, submissionDirs) {
         if (err) {
             if (err.errno === -2) {
@@ -36,6 +62,13 @@ module.exports = function (formName, errorCallback, aggregateCallback) {
             });
             return;
         }
+
+        // if offset, we do pagination
+        if (typeof offset !== 'undefined' && offset !== null) {
+            submissionDirs = submissionDirs.slice(offset, offset + limit);
+        }
+
+        // no results
         if (submissionDirs.length === 0) {
             aggregateCallback([]);
             return;
