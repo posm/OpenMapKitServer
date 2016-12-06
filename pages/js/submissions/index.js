@@ -19,7 +19,7 @@ function parseObject(obj, path) {
     if (type == "array" || type == "object") {
         var d = {};
         for (var i in obj) {
-            var newD = parseObject(obj[i], path + i + "/");
+            var newD = parseObject(obj[i], path + i + ".");
             $.extend(d, newD);
         }
         return d;
@@ -102,28 +102,27 @@ function renderCSV(objects) {
     table.appendChild(thead);
     table.appendChild(tbody);
 
-    //register the mdl Table
-    setTimeout(function () {
-        componentHandler.upgradeAllRegistered();
-    }, 1000);
-
-    $('#submission-table').DataTable();
+    OMK._dataTable = $('#submission-table').DataTable({
+        "deferRender": true
+    });
 }
 
-function doCSV(json) {
-    // 1) find the primary array to iterate over
-    // 2) for each item in that array, recursively flatten it into a tabular object
-    // 3) turn that tabular object into a CSV row using jquery-csv
+function createFlatObjects(json) {
     var inArray = arrayFrom(json);
 
     var outArray = [];
-    for (var row in inArray)
+    for (var row in inArray) {
         outArray[outArray.length] = parseObject(inArray[row]);
+    }
+    return outArray;
+}
 
+function doCSV(json) {
+    var flatObjects = createFlatObjects(json);
 
-    var csv = $.csv.fromObjects(outArray);
+    var csv = $.csv.fromObjects(flatObjects);
     // excerpt and render first 10 rows
-    renderCSV(outArray);
+    renderCSV(flatObjects);
     showCSV(true);
 
     // show raw data if people really want it
@@ -201,7 +200,10 @@ $(function () {
 
     // get form name & number of submission
     OMK.fetch(function () {
-        OMK.getFormMetaData();
+        $("#submissionPagespinner").hide();
+        $(".areas").show();
+        $(".csv").show();
+        $("#submissionCard").show();
     });
 });
 

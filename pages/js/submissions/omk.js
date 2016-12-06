@@ -1,7 +1,15 @@
 window.OMK = {};
 
+OMK._paginationOffset = 0;
+OMK._PAGINATION_LIMIT = 5000;
+
 OMK.fetch = function (cb) {
-    OMK.fetchJSON(OMK.jsonUrl(), cb);
+    OMK.getFormMetaData(function(metadata) {
+        OMK.fetchJSON(OMK.jsonUrl() + '?offset=0&limit=' + OMK._PAGINATION_LIMIT, function() {
+            cb();
+            // OMK.paginate(metadata.total);
+        });
+    });
 };
 
 OMK.jsonUrl = function () {
@@ -9,7 +17,6 @@ OMK.jsonUrl = function () {
     if (!json) {
         var form = getParam('form');
         if (form) {
-            $('h1').html(capitalizeFirstLetter(form.replace(/_/g,' ')));
             json = OMK.omkServerUrl() + '/omk/odk/submissions/' + form + '.json';
         }
     }
@@ -38,6 +45,31 @@ OMK.fetchJSON = function (url,cb) {
     });
 };
 
+OMK.jsonPaginationUrl = function() {
+    return OMK.jsonUrl() + '?offset=' + OMK._paginationOffset + '&limit=' + OMK._PAGINATION_LIMIT;
+};
+
+OMK.paginate = function (total) {
+    setTimeout(function() {
+        OMK._paginationOffset += OMK._PAGINATION_LIMIT;
+        if (OMK._paginationOffset < total) {
+            $.get(OMK.jsonPaginationUrl(), function (data, status, xhr) {
+                OMK.addPaginationData(data);
+                OMK.paginate(total);
+            });
+        }
+    }, 1000);
+};
+
+OMK.addPaginationData = function (data) {
+    var flatObjects = createFlatObjects(data);
+    var rows = $.csv.fromObjects(flatObjects, {justArrays: true});
+    for (var i = 1, len = rows.length; i < len; i++) {
+        var row = rows[i];
+        OMK._dataTable.row.add(row).draw(false);
+    }
+};
+
 /**
  * Determines the OMK Server endpoint.
  *
@@ -48,22 +80,22 @@ OMK.omkServerUrl = function () {
     return (omkServer ? omkServer : window.location.origin);
 };
 
-OMK.getFormMetaData = function () {
+OMK.getFormMetaData = function (cb) {
     var formId = getParam('form');
 
     $.get('/formList?json=true&formid=' + formId, function(data, status, xhr) {
         // get title and total submissions
         var title = data.xforms.xform[0].name;
-        $("h2.rows.count").text(title + " (" + data.xforms.xform[0].totalSubmissions + ")");
-
-        $("#submissionPagespinner").hide();
-        $(".areas").show();
-        $(".csv").show();
-        $("#submissionCard").show();
+        var total = data.xforms.xform[0].totalSubmissions;
+        $("h2.rows.count").text(title + " (" + total + ")");
+        cb({
+            title: title,
+            total: total
+        });
 
     }).fail(function(xhr, status, errorThrown) {
         var form = getParam('form');
-        console.log("Error fetching ODK submissions!");
+        console.log("Error fetching ODK form metadata!");
         console.log(xhr);
         console.log(status);
         console.log(errorThrown);
@@ -85,7 +117,7 @@ OMK.submitChangeset = function () {
         // snackbar
     });
 
-}
+};
 
 OMK.downloadOSM = function (url, element) {
     $.get(url, function(data, status, xhr) {
@@ -99,5 +131,5 @@ OMK.downloadOSM = function (url, element) {
             }
         )
     });
-}
+};
 
