@@ -18,7 +18,7 @@ module.exports = function (opts, cb) {
     // check if valid offset. we paginate with valid offset.
     if (offset != null) {
         offset = parseInt(offset);
-        if (isNaN(offset) || !Number.isInteger(offset) || offset < 0) {
+        if (isNaN(offset) || offset < 0) {
             cb({
                 status: 400,
                 err: 'BAD_OFFSET',
