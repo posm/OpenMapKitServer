@@ -14,7 +14,7 @@ module.exports = function (req, res, next) {
         offset: req.query.offset
     };
 
-    aggregate(opts, errorCallback, function (err, aggregate) {
+    aggregate(opts, function (err, aggregate) {
         if (err) {
             res.status(err.status).json(err);
             return;
