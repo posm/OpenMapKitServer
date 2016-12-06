@@ -7,14 +7,18 @@ var aggregate = require('../helpers/aggregate-submissions');
  */
 module.exports = function (req, res, next) {
 
-    aggregate(req, errorCallback, aggregateCallback);
+    var opts = {
+        formName: req.params.formName,
+        limit: req.query.limit,
+        offset: req.query.offset
+    };
 
-    function errorCallback(err) {
-        res.status(err.status).json(err);
-    }
-
-    function aggregateCallback(aggregate) {
+    aggregate(opts, function(err, aggregate) {
+        if (err) {
+            res.status(err.status).json(err);
+            return;
+        }
         res.status(200).json(aggregate);
-    }
+    });
 
 };

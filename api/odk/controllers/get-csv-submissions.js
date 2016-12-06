@@ -8,14 +8,17 @@ var json2csv = require('json2csv');
  */
 module.exports = function (req, res, next) {
 
-    aggregate(req, errorCallback, aggregateCallback);
+    var opts = {
+        formName: req.params.formName,
+        limit: req.query.limit,
+        offset: req.query.offset
+    };
 
-    function errorCallback(err) {
-        res.status(err.status).json(err);
-    }
-
-    function aggregateCallback(aggregate) {
-
+    aggregate(opts, errorCallback, function (err, aggregate) {
+        if (err) {
+            res.status(err.status).json(err);
+            return;
+        }
         try {
             var csv = json2csv({
                 data: aggregate,
@@ -33,8 +36,7 @@ module.exports = function (req, res, next) {
                 err: err
             });
         }
-
-    }
+    });
 
 };
 
