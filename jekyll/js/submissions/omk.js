@@ -1,7 +1,30 @@
 window.OMK = {};
 
+OMK._paginationOffset = 0;
+OMK._PAGINATION_LIMIT = 5000;
+
 OMK.fetch = function (cb) {
-    OMK.fetchJSON(OMK.jsonUrl(), cb);
+    OMK.getFormMetaData(function(metadata) {
+        OMK.fetchJSON(OMK.jsonUrl() + '?offset=0&limit=' + OMK._PAGINATION_LIMIT, function() {
+            cb();
+            // pagination too slow
+            // OMK.paginate(metadata.total);
+
+            if (OMK._PAGINATION_LIMIT < metadata.total) {
+                var toastOptions = {
+                    style: {
+                        main: {
+                            background: "#f2dede",
+                            color: "#a94442",
+                            'box-shadow': '0 0 0px'
+                        }
+                    }
+                };
+                iqwerty.toast.Toast('The data set is large. We have loaded ' + OMK._PAGINATION_LIMIT +
+                    ' of ' + metadata.total + ' submissions. Download the ODK CSV or JSON data to get the rest.', toastOptions);
+            }
+        });
+    });
 };
 
 OMK.jsonUrl = function () {
@@ -9,11 +32,15 @@ OMK.jsonUrl = function () {
     if (!json) {
         var form = getParam('form');
         if (form) {
-            $('h1').html(capitalizeFirstLetter(form.replace(/_/g,' ')));
             json = OMK.omkServerUrl() + '/omk/odk/submissions/' + form + '.json';
         }
     }
     return json;
+};
+
+OMK.csvUrl = function () {
+    var form = getParam('form');
+    return OMK.omkServerUrl() + '/omk/odk/submissions/' + form + '.csv';
 };
 
 //Function to capitalise first character for strings
@@ -38,6 +65,37 @@ OMK.fetchJSON = function (url,cb) {
     });
 };
 
+OMK.jsonPaginationUrl = function() {
+    return OMK.jsonUrl() + '?offset=' + OMK._paginationOffset + '&limit=' + OMK._PAGINATION_LIMIT;
+};
+
+/**
+ * Doing recursive loads of pagination of data is quite slow and halts the UI.
+ * We're going to disable this for now...
+ *
+ * @param total
+ */
+OMK.paginate = function (total) {
+    setTimeout(function() { // timeouts dont completely fix the UI from halting...
+        OMK._paginationOffset += OMK._PAGINATION_LIMIT;
+        if (OMK._paginationOffset < total) {
+            $.get(OMK.jsonPaginationUrl(), function (data, status, xhr) {
+                OMK.addPaginationData(data);
+                OMK.paginate(total);
+            });
+        }
+    }, 1000);
+};
+
+OMK.addPaginationData = function (data) {
+    var flatObjects = createFlatObjects(data);
+    var rows = $.csv.fromObjects(flatObjects, {justArrays: true});
+    for (var i = 1, len = rows.length; i < len; i++) {
+        var row = rows[i];
+        OMK._dataTable.row.add(row).draw(false);
+    }
+};
+
 /**
  * Determines the OMK Server endpoint.
  *
@@ -48,22 +106,22 @@ OMK.omkServerUrl = function () {
     return (omkServer ? omkServer : window.location.origin);
 };
 
-OMK.getFormMetaData = function () {
+OMK.getFormMetaData = function (cb) {
     var formId = getParam('form');
 
     $.get('/formList?json=true&formid=' + formId, function(data, status, xhr) {
         // get title and total submissions
         var title = data.xforms.xform[0].name;
-        $("h2.rows.count").text(title + " (" + data.xforms.xform[0].totalSubmissions + ")");
-
-        $("#submissionPagespinner").hide();
-        $(".areas").show();
-        $(".csv").show();
-        $("#submissionCard").show();
+        var total = data.xforms.xform[0].totalSubmissions;
+        $("h2.rows.count").text(title + " (" + total + ")");
+        cb({
+            title: title,
+            total: total
+        });
 
     }).fail(function(xhr, status, errorThrown) {
         var form = getParam('form');
-        console.log("Error fetching ODK submissions!");
+        console.log("Error fetching ODK form metadata!");
         console.log(xhr);
         console.log(status);
         console.log(errorThrown);
@@ -85,7 +143,7 @@ OMK.submitChangeset = function () {
         // snackbar
     });
 
-}
+};
 
 OMK.downloadOSM = function (url, element) {
     $.get(url, function(data, status, xhr) {
@@ -99,5 +157,5 @@ OMK.downloadOSM = function (url, element) {
             }
         )
     });
-}
+};
 
