@@ -128,11 +128,7 @@ function doCSV(json) {
     // show raw data if people really want it
     $(".csv textarea").val(csv);
 
-    // download link to entire CSV as data
-    // thanks to http://jsfiddle.net/terryyounghk/KPEGU/
-    // and http://stackoverflow.com/questions/14964035/how-to-export-javascript-array-info-to-csv-on-client-side
-    var uri = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
-    $("#downloadCsv").attr("href", uri).attr("download", getParam('form') + ".csv");
+    $("#downloadCsv").attr("href", OMK.csvUrl()).attr("download", getParam('form') + ".csv");
     $("#downloadJson").attr("href", OMK.jsonUrl()).attr("download", getParam('form') + ".json");
 }
 

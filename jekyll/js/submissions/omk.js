@@ -7,7 +7,22 @@ OMK.fetch = function (cb) {
     OMK.getFormMetaData(function(metadata) {
         OMK.fetchJSON(OMK.jsonUrl() + '?offset=0&limit=' + OMK._PAGINATION_LIMIT, function() {
             cb();
+            // pagination too slow
             // OMK.paginate(metadata.total);
+
+            if (OMK._PAGINATION_LIMIT < metadata.total) {
+                var toastOptions = {
+                    style: {
+                        main: {
+                            background: "#f2dede",
+                            color: "#a94442",
+                            'box-shadow': '0 0 0px'
+                        }
+                    }
+                };
+                iqwerty.toast.Toast('The data set is large. We have loaded ' + OMK._PAGINATION_LIMIT +
+                    ' of ' + metadata.total + ' submissions. Download the ODK CSV or JSON data to get the rest.', toastOptions);
+            }
         });
     });
 };
@@ -21,6 +36,11 @@ OMK.jsonUrl = function () {
         }
     }
     return json;
+};
+
+OMK.csvUrl = function () {
+    var form = getParam('form');
+    return OMK.omkServerUrl() + '/omk/odk/submissions/' + form + '.csv';
 };
 
 //Function to capitalise first character for strings
@@ -49,8 +69,14 @@ OMK.jsonPaginationUrl = function() {
     return OMK.jsonUrl() + '?offset=' + OMK._paginationOffset + '&limit=' + OMK._PAGINATION_LIMIT;
 };
 
+/**
+ * Doing recursive loads of pagination of data is quite slow and halts the UI.
+ * We're going to disable this for now...
+ *
+ * @param total
+ */
 OMK.paginate = function (total) {
-    setTimeout(function() {
+    setTimeout(function() { // timeouts dont completely fix the UI from halting...
         OMK._paginationOffset += OMK._PAGINATION_LIMIT;
         if (OMK._paginationOffset < total) {
             $.get(OMK.jsonPaginationUrl(), function (data, status, xhr) {
