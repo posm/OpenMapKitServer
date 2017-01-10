@@ -126,7 +126,18 @@ module.exports = function (options) {
             })
         }
 
-        form.parse(req)
+        // IMPORTANT! - log parsed file upon upload completion
+        form.parse(req, function(err, fields, files){
+            Object.keys(fields).forEach(function(name) {
+                console.log('got field named ' + name);
+            });
+
+            Object.keys(files).forEach(function(name) {
+                console.log('got file named ' + name);
+            });
+
+            console.log('Upload completed!');
+        })
     }
 
     return function (req, res, next) {

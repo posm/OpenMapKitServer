@@ -1,0 +1,23 @@
+.mdl-button:hover {
+    background-color: transparent;
+}
+
+#enketo-dialog  a:focus{
+    outline:none;
+}
+
+#enketo-dialog .mdl-dialog__content p {
+    text-align: left;
+    font-size: 18px;
+}
+
+#enketo-dialog .mdl-dialog__content {
+    padding: 20px 15px;
+    color: rgba(0,0,0, 0.54);
+}
+
+#enketo-dialog .mdl-dialog__title {
+    padding: 24px 15px 0;
+    margin: 0;
+    font-size: 2rem;
+}
