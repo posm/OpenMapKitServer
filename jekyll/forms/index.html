@@ -7,11 +7,13 @@ controllerjs: forms
 
     <div class="mdl-grid">
 
+        {% raw %}
+
         <div v-show="!formList.xforms" class="mdl-spinner mdl-js-spinner is-active"></div>
 
-        {% raw %} 
+        <div class="demo-card-square mdl-card mdl-shadow--2dp" v-if="formList.xforms"
+             v-for="val in formList.xforms.xform">
 
-        <div class="demo-card-square mdl-card mdl-shadow--2dp" v-if="formList.xforms" v-for="val in formList.xforms.xform">
             <div class="mdl-card__title mdl-card--expand">
                 <h2 class="mdl-card__title-text">{{ val.name }}</h2>
             </div>
@@ -37,25 +39,39 @@ controllerjs: forms
                 <ul class="mdl-menu mdl-menu--top-right mdl-js-menu" for="{{ val.formID }}">
                     <li class="mdl-menu__item">
                         <a target="_blank" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
-                                href="/omk/data/forms/{{ val.formID }}.xml">
+                           href="/omk/data/forms/{{ val.formID }}.xml">
                             Download XForm XML
                         </a>
                     </li>
+
+                    <!-- only show if enketo is enabled -->
+                    <li id="get-enketo-url" class="mdl-menu__item"
+                        v-if="enketo.enabled === true" v-on:click="getEnketoURL(val.formID)">
+                        <div class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Fetch Enketo URL</div>
+                    </li>
+
                 </ul>
             </div>
         </div>
 
-
         {% endraw %}
 
-
-
-
-
-
-
-
-
-
+        <!-- Enketo Dialog -->
+        <dialog id="enketo-dialog" class="mdl-dialog">
+            <h6 class="mdl-dialog__title">Enketo Express</h6>
+            <div class="mdl-dialog__content">
+                <p>Fill out survey online with Enketo Express</p>
+            </div>
+            <div class="mdl-dialog__actions">
+                <a id="open-enketo-url" href="#" target="_blank">
+                    <button type="button" class="mdl-button mdl-js-button mdl-button--raised">Open</button>
+                </a>
+                <button type="button" class="mdl-button mdl-js-button mdl-button--raised close">Close</button>
+            </div>
+        </dialog>
     </div>
+
 </div>
+
+<link rel="stylesheet" href="../css/forms.css">
+<link rel="stylesheet" href="../css/dialog-polyfill.css">
