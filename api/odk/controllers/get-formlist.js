@@ -36,7 +36,11 @@ module.exports = function (req, res, next) {
                         res.status(200).json(null);
                     } else {
                         if (typeof result.xforms.xform == "object") {
-                            addSubmissionCount(result.xforms.xform, function (xformJson) {
+
+                            // make sure xform is an array
+                            var xformarr = result.xforms.xform.length === undefined ? [result.xforms.xform] : result.xforms.xform;
+
+                            addSubmissionCount(xformarr, function (xformJson) {
                                 if(formId){
                                     result.xforms.xform = xformJson.filter(function(arr){
                                         return arr.formID == formId;
