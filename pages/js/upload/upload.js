@@ -70,7 +70,7 @@ var AjaxFormComponent = Vue.extend({
                         this.fileData = null;
                         this.fileName = null;
                     } else {
-                        this.$dispatch('onFormError', this, xhr.statusText);
+                        this.$dispatch('onFormError', this, xhr.response);
                     }
                 }
             }).bind(this);
@@ -182,7 +182,7 @@ new Vue({
             console.log('onFormError', el, err);
             // indicate the changes
             //Failed message
-            this.uploadMessage = "Failed uploading " + this.fileName;
+            this.uploadMessage = "Failed uploading <code>" + this.fileName + "</code>: " + err.msg;
             this.response = err;
 
             //toaster

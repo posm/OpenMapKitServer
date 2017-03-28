@@ -36,6 +36,15 @@ module.exports = function (req, res, next) {
             return;
         }
         var xlsPath = formsDir + xlsFilename;
+
+        if (fs.existsSync(xlsPath)) {
+          return res.status(400).json({
+            status: 400,
+            msg: 'A form already exists with that name. Please rename and re-upload.'
+          });
+        }
+
+
         mv(file[0].path, xlsPath, function(err) {
             if (err) {
                 res.status(400).json({
