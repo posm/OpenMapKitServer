@@ -27,8 +27,8 @@ module.exports = function (req, res, next) {
         }
 
         // We move the XLSForm from temp to the forms directory.
-        var xlsFilename = file[0].originalFilename;
-        if (xlsFilename.indexOf('.xlsx') < 0) {
+        var xlsFilename = file[0].originalFilename.replace(' ', '_');
+        if (xlsFilename.toLowerCase().indexOf('.xlsx') < 0) {
             res.status(400).json({
                 status: 400,
                 msg: 'Only xlsx format is supported. Older XLS formats, and as well as other spreadsheet formats are not supported by pyxform. Please save your spreadsheet as .xlsx in your spreadsheet application.'
@@ -47,7 +47,7 @@ module.exports = function (req, res, next) {
             }
 
             // Convert XLS to XForm with pyxform
-            var xFormFilename = xlsFilename.replace('.xlsx', '.xml');
+            var xFormFilename = xlsFilename.replace(/.xlsx/i, '.xml');
             var xFormPath = formsDir + xFormFilename;
             var options = {
                 scriptPath: __dirname + '/../pyxform/pyxform/',
