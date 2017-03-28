@@ -27,7 +27,14 @@ module.exports = function (req, res, next) {
             headers: options.headers
         };
         createFormList(formUrls, formListOptions, function (err, xml) {
-            if (err) return next(err);
+            if (err) {
+              // patch around openrosa-formlist not passing proper Errors
+              if (!(err instanceof Error)) {
+                err = new Error(err);
+              }
+
+              return next(err);
+            }
 
             // Default is XML, but JSON is an option
             if (json) {
