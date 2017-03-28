@@ -21,12 +21,16 @@ module.exports = function (req, res, next) {
     var json = req.query.json || false;
     var formId = req.query.formid;
 
-    getFormUrls(options, function (err, formUrls) {
-        if (err) return next(err);
+    return getFormUrls(options, function (err, formUrls) {
+        if (err) {
+          return next(err);
+        }
+
         var formListOptions = {
             headers: options.headers
         };
-        createFormList(formUrls, formListOptions, function (err, xml) {
+
+        return createFormList(formUrls, formListOptions, function (err, xml) {
             if (err) {
               // patch around openrosa-formlist not passing proper Errors
               if (!(err instanceof Error)) {
@@ -38,7 +42,7 @@ module.exports = function (req, res, next) {
 
             // Default is XML, but JSON is an option
             if (json) {
-                parser.parseString(xml, function (err, result) {
+                return parser.parseString(xml, function (err, result) {
                     if (result === undefined) {
                         res.status(200).json(null);
                     } else {
@@ -62,11 +66,10 @@ module.exports = function (req, res, next) {
                         }
                     }
                 });
-
-            } else {
-                res.set('content-type', 'text/xml; charset=utf-8');
-                res.status(200).send(xml);
             }
+
+            res.set('content-type', 'text/xml; charset=utf-8');
+            res.status(200).send(xml);
         });
     });
 };

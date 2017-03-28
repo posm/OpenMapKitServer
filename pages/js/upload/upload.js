@@ -182,7 +182,7 @@ new Vue({
             console.log('onFormError', el, err);
             // indicate the changes
             //Failed message
-            this.uploadMessage = "Failed uploading" + this.fileName + " file";
+            this.uploadMessage = "Failed uploading " + this.fileName;
             this.response = err;
 
             //toaster
