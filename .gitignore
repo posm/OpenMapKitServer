@@ -41,4 +41,4 @@ data/deployments/**/*.md
 data/forms/*
 
 ############## Jekyll Stuff ##################
-jekyll/.sass-cache/
+.sass-cache/
