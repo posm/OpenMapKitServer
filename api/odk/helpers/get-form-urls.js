@@ -1,16 +1,19 @@
 var fs = require('fs');
+var path = require('path');
 
 var settings = require('../../../settings.js');
 
 module.exports = function (options, cb) {
-    fs.readdir(settings.dataDir + '/forms', function (err, files) {
-        if (err) return cb(err);
-        var urls = [];
-        for (var i = 0; i < files.length; i++) {
-            var f = files[i];
-            if (f.indexOf('.xml') === -1) continue; // Needs to be XML
-            urls.push(options.baseUrl + '/' + f);
+    return fs.readdir(settings.dataDir + '/forms', function (err, files) {
+        if (err) {
+          return cb(err);
         }
-        cb(null, urls);
+
+        var urls = files
+          .filter(f => f.indexOf('.xml') >= 0)
+          .filter(f => fs.statSync(path.join(settings.dataDir, 'forms', f)).size > 0)
+          .map(f => options.baseUrl + '/' + f);
+
+        return cb(null, urls);
     });
 };
