@@ -187,6 +187,9 @@ new Vue({
 
             //toaster
             var toastOptions = {
+                settings: {
+                    duration: 300e3
+                },
                 style: {
                     main: {
                         background: "#f2dede",
