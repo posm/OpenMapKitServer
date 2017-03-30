@@ -44,6 +44,6 @@ function aggregate(osmDirs, req, res) {
             }
             return;
         }
-        res.set('Content-Type', 'text/xml').status(200).end(osmXml);
+        res.set('Content-Type', 'application/xml').status(200).end(osmXml);
     });
 }
