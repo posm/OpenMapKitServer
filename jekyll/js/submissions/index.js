@@ -211,8 +211,8 @@ function createHyperLinkIfNeeded(field, object) {
         }
         if (typeof object === 'object') {
             // a file with an extension, discern a link
-            var metaInstanceId = object['meta/instanceId'];
-            var formId = object['meta/formId'];
+            var metaInstanceId = object['meta.instanceId'];
+            var formId = object['meta.formId'];
             if (typeof metaInstanceId === 'string'
                 && typeof formId === 'string'
                 && field[field.length - 4] === '.') {
