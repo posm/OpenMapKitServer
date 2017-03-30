@@ -43,6 +43,11 @@ OMK.csvUrl = function () {
     return OMK.omkServerUrl() + '/omk/odk/submissions/' + form + '.csv';
 };
 
+OMK.attachmentUrl = function () {
+    var form = getParam('form');
+    return OMK.omkServerUrl() + '/omk/odk/submissions/' + form + '.zip';
+};
+
 //Function to capitalise first character for strings
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);

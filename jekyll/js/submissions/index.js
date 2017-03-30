@@ -130,6 +130,7 @@ function doCSV(json) {
 
     $("#downloadCsv").attr("href", OMK.csvUrl()).attr("download", getParam('form') + ".csv");
     $("#downloadJson").attr("href", OMK.jsonUrl()).attr("download", getParam('form') + ".json");
+    $("#downloadAttachments").attr("href", OMK.attachmentUrl()).attr("download", getParam('form') + ".zip");
 }
 
 $(function () {
