@@ -91,7 +91,9 @@ const getForms = (callback) => {
  */
 module.exports = function (req, res, next) {
   const filesToRemove = [];
-  const cleanup = () => filesToRemove.forEach(x => fs.unlink(x, () => null));
+  const cleanup = () => filesToRemove
+    .filter(x => x != null)
+    .forEach(x => fs.unlink(x, () => null));
 
   const showError = err => {
     cleanup();
