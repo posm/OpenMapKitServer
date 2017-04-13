@@ -21,7 +21,7 @@ const loadXForm = (xformPath, callback) => {
     }
 
     try {
-      const instanceName = path.basename(xformPath, path.extname(xformPath));
+      const instanceName = Object.keys(xpath.evalFirst(form, '//h:head/model/instance'))[0];
       const fieldNames = Object
         .keys(xpath.evalFirst(form, `//model/instance/${instanceName}`))
         .filter(x => x !== '$');
