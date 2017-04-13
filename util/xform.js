@@ -36,7 +36,15 @@ const loadXForm = (xformPath, callback) => {
         return obj;
       }, {});
 
+      const assets = xpath
+        .find(form, '//h:head/model/itext/translation/text/value')
+        .map(x => x._)
+        .filter(x => x != null)
+        .filter(x => x.match(/jr:\/\/(images|audio|video)/i))
+        .map(x => x.replace(/jr:\/\/(images|audio|video)\//i, ''));
+
       return callback(null, {
+        assets,
         path: xformPath,
         fields,
         filename: path.basename(xformPath),

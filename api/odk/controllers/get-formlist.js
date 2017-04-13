@@ -27,7 +27,8 @@ module.exports = function (req, res, next) {
         }
 
         var formListOptions = {
-            headers: options.headers
+            headers: options.headers,
+            manifestUrl: `${req.protocol}://${req.headers.host}/omk/odk/manifest/\${formId}.xml`
         };
 
         return createFormList(formUrls, formListOptions, function (err, xml) {

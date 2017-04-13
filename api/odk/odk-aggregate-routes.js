@@ -3,6 +3,7 @@ var getSubmissionsList = require('./controllers/get-submissionslist');
 var getJsonSubmissions = require('./controllers/get-json-submissions');
 var getCsvSubmissions = require('./controllers/get-csv-submissions');
 var getOsmSubmissions = require('./controllers/get-osm-submissions');
+var getManifest = require('./controllers/get-manifest');
 var getSubmissionAttachments = require('./controllers/get-submission-attachments');
 var patchSubmissions = require('./controllers/patch-submissions');
 var uploadForm = require('./controllers/upload-form');
@@ -23,6 +24,8 @@ router.route('/submissions/:formName.zip').get(getSubmissionAttachments);
  * XLSForm Upload Endpoint
  */
 router.route('/upload-form').post(uploadForm);
+
+router.route('/manifest/:formName.xml').get(getManifest);
 
 /**
  * Creates changesets for submissions and submits to

@@ -47,6 +47,7 @@
     "on-finished": "^2.3.0",
     "openrosa-form-submission-middleware": "^1.0.4",
     "openrosa-formlist": "^1.0.1",
+    "openrosa-manifest": "^0.0.1",
     "python-shell": "^0.2.0",
     "q": "^1.4.1",
     "recursive-readdir": "^1.3.0",

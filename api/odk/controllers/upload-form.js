@@ -5,6 +5,7 @@ const os = require('os');
 const path = require('path');
 
 const async = require('async');
+const mkdirp = require('mkdirp');
 const multiparty = require('multiparty');
 const mv = require('mv');
 const PythonShell = require('python-shell');
@@ -66,18 +67,36 @@ module.exports = function (req, res, next) {
       });
     }
 
-    if (!Array.isArray(files.xls_file) || files.xls_file.length !== 1) {
+    const uploads = Object.keys(files).map(f => ({
+      originalFilename: files[f][0].originalFilename,
+      path: files[f][0].path
+    }));
+
+    const assets = uploads
+      .filter(x => path.extname(x.originalFilename).toLowerCase() !== '.xlsx');
+
+    if (uploads.length === 0) {
       return showError({
         status: 400,
-        msg: 'You must POST form-data with a key of "xls_file" and a value of an XLSX Excel file.'
+        msg: 'You must POST form-data with at least one file.'
+      });
+    }
+
+    uploads.forEach(x => filesToRemove.push(x.path));
+
+    const xls = uploads.filter(x => path.extname(x.originalFilename).toLowerCase() === '.xlsx').pop();
+
+    if (xls == null) {
+      return showError({
+        status: 400,
+        msg: 'You must upload an XLSForm.'
       });
     }
 
     // pyxform defaults to using the filename as its ID if none was otherwise provided, so preserve it (replacing spaces with _s)
-    const xlsPath = path.join(os.tmpdir(), files.xls_file[0].originalFilename.replace(' ', '_'));
-    filesToRemove.push(files.xls_file[0].path);
+    const xlsPath = path.join(os.tmpdir(), xls.originalFilename.replace(' ', '_'));
 
-    return mv(files.xls_file[0].path, xlsPath, err => {
+    return mv(xls.path, xlsPath, err => {
       filesToRemove.push(xlsPath);
       if (err) {
         console.warn(err.stack);
@@ -119,9 +138,9 @@ module.exports = function (req, res, next) {
               });
             }
 
-            const xlsFilename = path.basename(xlsPath);
+            const xlsFilename = xform.id + '.xlsx';
             const targetXlsPath = path.join(formsDir, xlsFilename);
-            const xformFilename = path.basename(xlsPath, path.extname(xlsPath)) + '.xml';
+            const xformFilename = xform.id + '.xml';
             const targetXformPath = path.join(formsDir, xformFilename);
 
             const filenames = forms.map(x => x.filename);
@@ -138,7 +157,7 @@ module.exports = function (req, res, next) {
             if (ids.indexOf(xform.id) >= 0) {
               return showError({
                 status: 400,
-                msg: 'A form already exists with that ID. Please change the ID and re-upload.'
+                msg: `A form already exists with that ID (${xform.id}). Please change the ID and re-upload.`
               });
             }
 
@@ -156,10 +175,42 @@ module.exports = function (req, res, next) {
               });
             }
 
-            return async.parallel([
+            // validate the list of assets against what the form references
+
+            const assetFilenames = assets.map(x => x.originalFilename);
+
+            const extraAssets = assetFilenames
+              .filter(x => xform.assets.indexOf(x) < 0);
+
+            const missingAssets = xform.assets
+              .filter(x => assetFilenames.indexOf(x) < 0);
+
+            if (missingAssets.length > 0) {
+              return showError({
+                status: 400,
+                msg: `Referenced assets are missing: ${missingAssets.join(', ')}`
+              });
+            }
+
+            if (extraAssets.length > 0) {
+              console.warn(`Ignoring extra assets: ${extraAssets.join(', ')}`);
+            }
+
+            const moveOperations = [
               async.apply(mv, xlsPath, targetXlsPath),
               async.apply(mv, xformPath, targetXformPath)
-            ], err => {
+            ];
+
+            if (assets.length > 0) {
+              moveOperations.push(async.apply(async.series, [
+                async.apply(mkdirp, path.join(formsDir, xform.id)),
+                async.apply(async.parallel, assets
+                  .filter(x => xform.assets.indexOf(x.originalFilename) >= 0)
+                  .map(x => async.apply(mv, x.path, path.join(formsDir, xform.id, x.originalFilename))))
+              ]));
+            }
+
+            return async.parallel(moveOperations, err => {
               if (err) {
                 filesToRemove.push(targetXlsPath);
                 filesToRemove.push(targetXformPath);
@@ -175,7 +226,7 @@ module.exports = function (req, res, next) {
 
               return res.status(201).json({
                 status: 201,
-                msg: `Converted ${xlsFilename} to an XForm and saved both to the forms directory.`,
+                msg: `Converted ${xlsFilename} to an XForm and saved everything to the forms directory.`,
                 xFormUrl: `${req.protocol}://${req.headers.host}/omk/data/forms/${xformFilename}`,
                 xlsFormUrl: `${req.protocol}://${req.headers.host}/omk/data/forms/${xlsFilename}`
               });
