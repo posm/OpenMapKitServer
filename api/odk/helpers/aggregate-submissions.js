@@ -1,19 +1,21 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 
-var JSONStream = require('JSONStream');
-var async = require('async');
+const async = require('async');
+const JSONStream = require('JSONStream');
+const xpath = require('xml2js-xpath');
 
-var settings = require('../../../settings');
+const settings = require('../../../settings');
+const { getFormMetadata } = require('../../../util/xform');
 
-var ASYNC_LIMIT = 10;
+const ASYNC_LIMIT = 10;
 
-module.exports = function (opts, callback) {
-  var formName = opts.formName;
-  var limit = parseInt(opts.limit);
-  var offset = opts.offset;
+module.exports = (opts, callback) => {
+  const { formName } = opts;
+  let { offset } = opts;
+  let limit = parseInt(opts.limit);
 
   // default to 100 for limit
   if (isNaN(limit) || limit < 1) {
@@ -46,69 +48,98 @@ module.exports = function (opts, callback) {
     });
   }
 
-  var dir = settings.dataDir + '/submissions/' + formName;
-  var aggregate = [];
-
-  // All of the submission dirs in the form directory
-  // Note that fs.readdir is always in alphabetical order on POSIX systems.
-  return fs.readdir(dir, function (err, submissionDirs) {
+  return getFormMetadata(formName, (err, meta) => {
     if (err) {
-      if (err.errno === -2) {
-        // trying to open a directory that is not there.
-        // TODO pass an Error
-        return callback({
-          status: 404,
-          msg: 'You are trying to aggregate the ODK submissions for a form that has no submissions. Please submit at least one survey to see data. Also, check to see if you spelled the form name correctly. Form name: ' + formName,
-          err
-        });
-      }
-
-      // TODO pass an error
       return callback({
         status: 500,
-        msg: 'Problem reading submissions directory.',
-        err: err
+        msg: 'Could not read form metadata.',
+        err
       });
     }
 
-    // if offset, we do pagination
-    if (offset != null) {
-      submissionDirs = submissionDirs.slice(offset, offset + limit);
-    }
+    const selectFields = Object.keys(meta.fields).filter(k => meta.fields[k] === 'select');
+    const selectItems = selectFields.reduce((obj, k) => {
+      obj[k] = xpath.find(meta.form, `//h:body/select[@ref='/${meta.instanceName}/${k}']/item`)
+        .reduce((obj2, item) => {
+          obj2[item.label[0]] = item.value[0];
 
-    return async.eachLimit(submissionDirs, ASYNC_LIMIT, function (submissionDir, next) {
-      // If it's not a directory, we just skip processing that path.
-      if (submissionDir[0] === '.' || submissionDir.indexOf('.txt') > 0) {
-        return next(); // ok, but skipping
-      }
-      // Otherwise, we want to open up the data.json in the submission dir.
-      var dataFile = path.join(dir, submissionDir, 'data.json');
-      try {
-        var parser = fs.createReadStream(dataFile).pipe(JSONStream.parse());
+          return obj2;
+        }, {});
 
-        parser.on('data', data => {
-          aggregate.push(data);
+      return obj;
+    }, {});
 
-          return next(); // ok submission
-        });
+    const dir = settings.dataDir + '/submissions/' + formName;
+    const aggregate = [];
 
-        parser.on('error', err => next(err));
-      } catch (err) {
-        // TODO pass an Error
-        return next({
-          status: 500,
-          msg: 'Problem reading data.json file in submission directory. dataFile: ' + dataFile,
-          err
-        }); // we have an error, break out of all async iteration
-      }
-    }, function (err) {
-      // an error occurred...
+    // All of the submission dirs in the form directory
+    // Note that fs.readdir is always in alphabetical order on POSIX systems.
+    return fs.readdir(dir, (err, submissionDirs) => {
       if (err) {
-        return callback(err);
+        if (err.errno === -2) {
+          // trying to open a directory that is not there.
+          // TODO pass an Error
+          return callback({
+            status: 404,
+            msg: 'You are trying to aggregate the ODK submissions for a form that has no submissions. Please submit at least one survey to see data. Also, check to see if you spelled the form name correctly. Form name: ' + formName,
+            err
+          });
+        }
+
+        // TODO pass an error
+        return callback({
+          status: 500,
+          msg: 'Problem reading submissions directory.',
+          err: err
+        });
       }
 
-      // it was a success
-      return callback(null, aggregate);
+      // if offset, we do pagination
+      if (offset != null) {
+        submissionDirs = submissionDirs.slice(offset, offset + limit);
+      }
+
+      return async.eachLimit(submissionDirs, ASYNC_LIMIT, (submissionDir, next) => {
+        // If it's not a directory, we just skip processing that path.
+        // TODO use fs.stat() and check for stats.isFile()
+        if (submissionDir[0] === '.' || submissionDir.indexOf('.txt') > 0) {
+          return next(); // ok, but skipping
+        }
+        // Otherwise, we want to open up the data.json in the submission dir.
+        const dataFile = path.join(dir, submissionDir, 'data.json');
+        try {
+          const parser = fs.createReadStream(dataFile).pipe(JSONStream.parse());
+
+          parser.on('data', data => {
+            const submission = Object.keys(data).reduce((obj, k) => {
+              obj[k] = data[k];
+
+              if (meta.fields[k] === 'select') {
+                const values = data[k].split(' ');
+
+                Object.keys(selectItems[k]).forEach(itemKey => {
+                  obj[`${k}/${selectItems[k][itemKey]}`] = values.indexOf(selectItems[k][itemKey]) >= 0;
+                });
+              }
+
+              return obj;
+            }, {});
+
+            aggregate.push(submission);
+
+            return next(); // ok submission
+          });
+
+          parser.on('error', err => next(err));
+        } catch (err) {
+          // TODO pass an Error
+          return next({
+            status: 500,
+            msg: 'Problem reading data.json file in submission directory. dataFile: ' + dataFile,
+            err
+          }); // we have an error, break out of all async iteration
+        }
+      }, err => callback(err, aggregate));
     });
   });
 };

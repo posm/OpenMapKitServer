@@ -9,9 +9,10 @@ const multiparty = require('multiparty');
 const mv = require('mv');
 const PythonShell = require('python-shell');
 const tempy = require('tempy');
-const { parseString } = require('xml2js');
 
 const settings = require('../../../settings');
+const { getForms, loadXForm } = require('../../../util/xform');
+
 const formsDir = settings.dataDir + '/forms/';
 
 /**
@@ -33,52 +34,6 @@ const xlsToXForm = (xlsPath, callback) => {
     }
 
     return callback(null, xformPath);
-  });
-};
-
-const loadXForm = (xformPath, callback) => {
-  return async.waterfall([
-    async.apply(fs.readFile, xformPath),
-    parseString
-  ], (err, obj) => {
-    if (err) {
-      return callback(err);
-    }
-
-    try {
-      const key = Object.keys(obj['h:html']['h:head'][0]['model'][0]['instance'][0])[0];
-
-      return callback(null, {
-        path: xformPath,
-        filename: path.basename(xformPath),
-        title: obj['h:html']['h:head'][0]['h:title'][0],
-        id: obj['h:html']['h:head'][0]['model'][0]['instance'][0][key][0]['$']['id'],
-        form: obj
-      });
-    } catch (err) {
-      return callback(new Error(`Failed while parsing ${xformPath}: ${err.message}`));
-    }
-  });
-};
-
-const getForms = (callback) => {
-  return fs.readdir(formsDir, (err, forms) => {
-    if (err) {
-      return callback(err);
-    }
-
-    return async.waterfall([
-      async.apply(async.map,
-        forms
-          .filter(x => x.match(/\.xml$/i))
-          .map(x => path.join(formsDir, x)),
-        /* eslint handle-callback-err: 0 */
-        (filename, callback) =>
-          loadXForm(filename, (err, form) =>
-            // ignore errors
-            callback(null, form))),
-      (forms, callback) => callback(null, forms.filter(x => x != null))
-    ], callback);
   });
 };
 
