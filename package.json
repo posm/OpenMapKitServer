@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/AmericanRedCross/OpenMapKitServer#readme",
   "dependencies": {
-    "JSONStream": "^0.10.0",
+    "JSONStream": "^1.3.1",
     "archiver": "^1.3.0",
     "async": "^1.5.2",
     "basic-auth": "^1.0.4",

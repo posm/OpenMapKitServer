@@ -6,19 +6,16 @@ var aggregate = require('../helpers/aggregate-submissions');
  * as one JSON response.
  */
 module.exports = function (req, res, next) {
+  return aggregate({
+    formName: req.params.formName,
+    limit: req.query.limit,
+    offset: req.query.offset
+  }, (err, aggregate) => {
+    if (err) {
+      console.warn(err.stack);
+      return res.status(err.status).json(err);
+    }
 
-    var opts = {
-        formName: req.params.formName,
-        limit: req.query.limit,
-        offset: req.query.offset
-    };
-
-    aggregate(opts, function(err, aggregate) {
-        if (err) {
-            res.status(err.status).json(err);
-            return;
-        }
-        res.status(200).json(aggregate);
-    });
-
+    return res.status(200).json(aggregate);
+  });
 };
