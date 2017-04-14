@@ -36,12 +36,17 @@ const loadXForm = (xformPath, callback) => {
         return obj;
       }, {});
 
-      const assets = xpath
-        .find(form, '//h:head/model/itext/translation/text/value')
-        .map(x => x._)
-        .filter(x => x != null)
-        .filter(x => x.match(/jr:\/\/(images|audio|video)/i))
-        .map(x => x.replace(/jr:\/\/(images|audio|video)\//i, ''));
+      let assets = [];
+      try {
+        assets = xpath
+          .find(form, '//h:head/model/itext/translation/text/value')
+          .map(x => x._)
+          .filter(x => x != null)
+          .filter(x => x.match(/jr:\/\/(images|audio|video)/i))
+          .map(x => x.replace(/jr:\/\/(images|audio|video)\//i, ''));
+      } catch (err) {
+        // noop
+      }
 
       return callback(null, {
         assets,
