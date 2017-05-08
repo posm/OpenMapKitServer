@@ -67,7 +67,7 @@ __ODK Collect__ > __General Settings__ > __Configure platform settings__ > __URL
 
 Check out the [API Documentation](docs/api.md) for details about the REST API.
 
-[![ZenHub] (https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png)] (https://zenhub.io)
+[![ZenHub](https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png)](https://zenhub.io)
 
 
 ## Miscellany
