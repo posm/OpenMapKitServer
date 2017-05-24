@@ -150,7 +150,7 @@ module.exports = function (req, res, next) {
             if (filenames.indexOf(xformFilename) >= 0) {
               return showError({
                 status: 400,
-                msg: 'A form already exists with that filename. Please rename and re-upload.'
+                msg: `A form already exists with that filename (${xformFilename}). Please rename and re-upload.`
               });
             }
 
@@ -171,7 +171,7 @@ module.exports = function (req, res, next) {
             if (fs.existsSync(targetXformPath)) {
               return showError({
                 status: 400,
-                msg: 'A form already exists with that name. Please rename and re-upload.'
+                msg: `A form already exists with that name (${xformFilename}). Please rename and re-upload.`
               });
             }
 
