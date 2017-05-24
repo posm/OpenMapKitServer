@@ -1,6 +1,6 @@
 {
   "name": "open-map-kit-server",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "OpenMapKit Server is the lightweight server component of OpenMapKit that handles the collection and aggregation of OpenStreetMap and OpenDataKit data.",
   "main": "index.js",
   "scripts": {
