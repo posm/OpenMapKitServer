@@ -60,7 +60,9 @@ module.exports = (req, res, next) => {
           xml
             .ele("data")
             .raw(
-              body.replace(/\<\?xml.+\?\>/, '').replace(/^\<(\w+)/, `<$1 instanceID="uuid:${instanceId}"`)
+              body
+                .replace(/\<\?xml.+\?\>/, "")
+                .replace(/^\<(\w+)/, `<$1 instanceID="uuid:${instanceId}"`)
             )
             .up();
 
