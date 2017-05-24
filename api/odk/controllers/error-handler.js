@@ -1,5 +1,8 @@
 module.exports = function (err, req, res, next) {
-    console.error(err.status, err.stack);
+    if (err.status) {
+      console.error('Custom error status: ', err.status);
+    }
+    console.error(err.stack);
     var message = {
         status: err.status || 500,
         msg: err.message || '^_^ Something went wrong. ^_^',
