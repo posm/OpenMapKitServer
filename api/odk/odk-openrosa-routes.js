@@ -7,6 +7,7 @@ var SaveMedia = require('./middlewares/save-media');
 
 var saveForm = require('./controllers/save-form');
 var getFormlist = require('./controllers/get-formlist');
+var getSubmissionList = require('./controllers/get-submission-list');
 
 /**
  * OpenRosa Endpoints that ODK Collect uses.
@@ -20,5 +21,9 @@ router.route('/submission')
     .post(ProcessSubmission())
     .post(SaveMedia({store: 'odk'}))
     .post(saveForm);
+
+// support for ODK Briefcase
+router.route('/view/submissionList')
+    .get(getSubmissionList);
 
 module.exports = router;
