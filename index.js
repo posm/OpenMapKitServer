@@ -39,6 +39,7 @@ app.get('/omk/info', info);
 // It's better to stay on top level of routes to
 // prevent the user from having to add a prefix in ODK Collect
 // server path.
+app.use('/view', auth);
 app.use('/', odkOpenRosa);
 
 
