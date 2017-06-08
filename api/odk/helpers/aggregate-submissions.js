@@ -57,7 +57,7 @@ module.exports = (opts, callback) => {
       });
     }
 
-    const selectFields = Object.keys(meta.fields).filter(k => meta.fields[k] === 'select');
+    const selectFields = Object.keys((meta || {}).fields).filter(k => meta.fields[k] === 'select');
     const selectItems = selectFields.reduce((obj, k) => {
       obj[k] = xpath.find(meta.form, `//h:body/select[@ref='/${meta.instanceName}/${k}']/item`)
         .reduce((obj2, item) => {
