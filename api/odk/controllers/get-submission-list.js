@@ -43,7 +43,7 @@ module.exports = (req, res, next) => {
         .ele("idList");
 
       files
-        .slice(offset, count)
+        .slice(offset, offset + count)
         .forEach(uuid => xml.ele("id", `uuid:${uuid}`).up());
 
       let resumptionCursor = req.query.cursor || null;
