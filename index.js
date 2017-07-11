@@ -9,17 +9,36 @@ try {
     process.exit();
 }
 
+var httpAuth = require('http-auth');
+var md5 = require('http-auth/src/auth/utils').md5;
 var express = require('express');
 var bodyParser = require('body-parser');
 var directory = require('serve-index');
 var cors = require('cors');
+
 var odkOpenRosa = require('./api/odk/odk-openrosa-routes');
 var odkAggregate = require('./api/odk/odk-aggregate-routes');
 var deployments = require('./api/deployments/deployment-routes');
 var error = require('./api/odk/controllers/error-handler');
-var auth = require('./util/auth');
 var pkg = require('./package');
+
 var app = express();
+var auth = (req, res, next) => next();
+
+if (settings.auth != null && settings.auth.user != null && settings.auth.pass != null) {
+  var digest = httpAuth.digest({
+    realm: 'Authorization Required'
+  }, (username, callback) => {
+    if (username === settings.auth.user) {
+      return callback(md5(`${settings.auth.user}:Authorization Required:${settings.auth.pass}`));
+    }
+
+    return callback();
+    callback(username === settings.auth.user.toLowerCase() && password === settings.auth.pass.toLowerCase());
+  });
+
+  auth = httpAuth.connect(digest);
+}
 
 // Enable CORS always.
 app.use(cors());
@@ -39,6 +58,7 @@ app.get('/omk/info', info);
 // It's better to stay on top level of routes to
 // prevent the user from having to add a prefix in ODK Collect
 // server path.
+app.use('/formList', auth);
 app.use('/view', auth);
 app.use('/', odkOpenRosa);
 
