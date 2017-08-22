@@ -16,7 +16,7 @@ and running OpenMapKit Server in your development environment.
 ## [Production Installation](docs/posm-build-installation.md)
 
 If you want to run OpenMapKit Server for your field mapping survey, use the 
-[POSM Build Installation](docs/posm-build-installation.md) instructions.
+[POSM Build Installation](docs/posm-build-installation.md) instructions and [POSM documentation](http://posm.io/).
 
 
 ## Project Structure
