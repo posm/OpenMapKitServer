@@ -12,6 +12,8 @@ try {
 var httpAuth = require('http-auth');
 var md5 = require('http-auth/src/auth/utils').md5;
 var express = require('express');
+var passport = require('passport');
+var Strategy = require('passport-local').Strategy;
 var bodyParser = require('body-parser');
 var directory = require('serve-index');
 var cors = require('cors');
@@ -20,33 +22,82 @@ var odkOpenRosa = require('./api/odk/odk-openrosa-routes');
 var odkAggregate = require('./api/odk/odk-aggregate-routes');
 var deployments = require('./api/deployments/deployment-routes');
 var error = require('./api/odk/controllers/error-handler');
+var authentication = require('./util/auth');
 var pkg = require('./package');
 
 var app = express();
 var auth = (req, res, next) => next();
 
-if (settings.auth != null && settings.auth.user != null && settings.auth.pass != null) {
-  var digest = httpAuth.digest({
-    realm: 'Authorization Required'
-  }, (username, callback) => {
-    if (username === settings.auth.user) {
-      return callback(md5(`${settings.auth.user}:Authorization Required:${settings.auth.pass}`));
-    }
 
-    return callback();
-    callback(username === settings.auth.user.toLowerCase() && password === settings.auth.pass.toLowerCase());
+passport.use(new Strategy(
+  function(username, password, cb) {
+    authentication.findByUsername(username, function(err, user) {
+      if (err) { return cb(err); }
+      if (!user) { return cb(null, false); }
+      if (user.password != password) { return cb(null, false); }
+      return cb(null, user);
+    });
+}));
+passport.serializeUser(function(user, cb) {
+  cb(null, user.id);
+});
+
+passport.deserializeUser(function(id, cb) {
+  authentication.findById(id, function (err, user) {
+    if (err) { return cb(err); }
+    cb(null, user);
   });
+});
 
-  auth = httpAuth.connect(digest);
-}
+
+// if (settings.auth != null && settings.auth.user != null && settings.auth.pass != null) {
+//   var digest = httpAuth.digest({
+//     realm: 'Authorization Required'
+//   }, (username, callback) => {
+//     if (username === settings.auth.user) {
+//       return callback(md5(`${settings.auth.user}:Authorization Required:${settings.auth.pass}`));
+//     }
+//
+//     return callback();
+//     callback(username === settings.auth.user.toLowerCase() && password === settings.auth.pass.toLowerCase());
+//   });
+//
+//   auth = httpAuth.connect(digest);
+// }
 
 // Enable CORS always.
 app.use(cors());
 
 // Body parser
+app.use(require('morgan')('combined'));
+app.use(require('cookie-parser')());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
+app.use(passport.initialize());
+app.use(passport.session());
 
+
+app.get('/current-user',
+  function(req, res) {
+    if (req.user) {
+      res.json({ username: req.user.username, role: req.user.role});
+    } else {
+      res.status(401).json({error: 'User not authenticated'});
+    }
+  });
+
+app.post('/login',
+  passport.authenticate('local', { failureRedirect: '/omk/pages/login/' }),
+  function(req, res) {
+    res.redirect('/');
+  });
+
+app.get('/logout',
+  function(req, res){
+    req.logout();
+    res.redirect('/');
+});
 // Basic Info
 app.get('/', redirectToForms);
 app.get('/omk', redirectToForms);

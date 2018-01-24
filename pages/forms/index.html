@@ -43,16 +43,17 @@
         <i class="material-icons">more_vert</i>
       </button>
 
-      <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="menu-lower-left">
+      <ul id="main-menu" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="menu-lower-left">
         
-        <li><a href="/omk/pages/forms" class="mdl-menu__item">Forms</a></li>
+          <li><a href="/omk/pages/forms" class="mdl-menu__item">Forms</a></li>
         
-        <li><a href="/omk/pages/upload-form/" class="mdl-menu__item">Upload Form</a></li>
+          <li><a href="/omk/pages/upload-form/" class="mdl-menu__item">Upload Form</a></li>
         
+        <li v-if="isAuthenticated"><a href="/logout/" class="mdl-menu__item">Logout</a></li>
+        <li v-else><a href="/omk/pages/login/" class="mdl-menu__item">Login</a></li>
       </ul>
     </div>
   </header>
-
 
     
 
@@ -141,6 +142,7 @@
 
       <script type="text/javascript" src="../js/vendor/toast.min.js"></script>
       <script type="text/javascript" src="../js/vendor/dialog-polyfill.js"></script>
+      <script src="../js/auth/index.js"></script>
 
       <!--Inject Vue JS dependency if template-->
       

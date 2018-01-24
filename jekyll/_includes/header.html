@@ -11,11 +11,12 @@
         <i class="material-icons">more_vert</i>
       </button>
 
-      <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="menu-lower-left">
+      <ul id="main-menu" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="menu-lower-left">
         {% for option in site.more_vert %}
-        <li><a href="{{ option[1].link }}" class="mdl-menu__item">{{ option[1].name }}</a></li>
+          <li><a href="{{ option[1].link }}" class="mdl-menu__item">{{ option[1].name }}</a></li>
         {% endfor %}
+        <li v-if="isAuthenticated"><a href="/logout/" class="mdl-menu__item">Logout</a></li>
+        <li v-else><a href="/omk/pages/login/" class="mdl-menu__item">Login</a></li>
       </ul>
     </div>
   </header>
-
