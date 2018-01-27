@@ -9,27 +9,34 @@ try {
     process.exit();
 }
 
-var httpAuth = require('http-auth');
-var md5 = require('http-auth/src/auth/utils').md5;
 var express = require('express');
-var passport = require('passport');
-var Strategy = require('passport-local').Strategy;
 var bodyParser = require('body-parser');
 var directory = require('serve-index');
 var cors = require('cors');
+var passport = require('passport');
+var BasicStrategy = require('passport-http').BasicStrategy;
+var LocalStrategy = require('passport-local').Strategy;
 
 var odkOpenRosa = require('./api/odk/odk-openrosa-routes');
 var odkAggregate = require('./api/odk/odk-aggregate-routes');
 var deployments = require('./api/deployments/deployment-routes');
 var error = require('./api/odk/controllers/error-handler');
-var authentication = require('./util/auth');
 var pkg = require('./package');
+var authentication = require('./util/auth');
 
 var app = express();
 var auth = (req, res, next) => next();
 
-
-passport.use(new Strategy(
+passport.use(new BasicStrategy(
+  function(username, password, cb) {
+    authentication.findByUsername(username, function(err, user) {
+      if (err) { return cb(err); }
+      if (!user) { return cb(null, false); }
+      if (user.password != password) { return cb(null, false); }
+      return cb(null, user);
+    });
+}));
+passport.use(new LocalStrategy(
   function(username, password, cb) {
     authentication.findByUsername(username, function(err, user) {
       if (err) { return cb(err); }
@@ -49,22 +56,6 @@ passport.deserializeUser(function(id, cb) {
   });
 });
 
-
-// if (settings.auth != null && settings.auth.user != null && settings.auth.pass != null) {
-//   var digest = httpAuth.digest({
-//     realm: 'Authorization Required'
-//   }, (username, callback) => {
-//     if (username === settings.auth.user) {
-//       return callback(md5(`${settings.auth.user}:Authorization Required:${settings.auth.pass}`));
-//     }
-//
-//     return callback();
-//     callback(username === settings.auth.user.toLowerCase() && password === settings.auth.pass.toLowerCase());
-//   });
-//
-//   auth = httpAuth.connect(digest);
-// }
-
 // Enable CORS always.
 app.use(cors());
 
@@ -77,6 +68,10 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: false, save
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Basic Info
+app.get('/', redirectToForms);
+app.get('/omk', redirectToForms);
+app.get('/omk/info', info);
 
 app.get('/current-user',
   function(req, res) {
@@ -88,21 +83,17 @@ app.get('/current-user',
   });
 
 app.post('/login',
-  passport.authenticate('local', { failureRedirect: '/omk/pages/login/' }),
+  passport.authenticate('local', { failureRedirect: '/omk/pages/login/', session: true }),
   function(req, res) {
     res.redirect('/');
-  });
+});
 
 app.get('/logout',
   function(req, res){
     req.logout();
+    req.session.destroy();
     res.redirect('/');
 });
-// Basic Info
-app.get('/', redirectToForms);
-app.get('/omk', redirectToForms);
-app.get('/omk/info', info);
-
 
 // Open Data Kit OpenRosa
 
@@ -112,7 +103,6 @@ app.get('/omk/info', info);
 app.use('/formList', auth);
 app.use('/view', auth);
 app.use('/', odkOpenRosa);
-
 
 /**
  * Authentication routes.
@@ -124,7 +114,6 @@ app.use('/', odkOpenRosa);
 app.use('/omk/odk', auth);
 app.use('/omk/data/submissions', auth);
 app.use('/omk/pages', auth);
-
 
 // Open Data Kit Aggregate
 
@@ -149,14 +138,14 @@ app.use(error);
 module.exports = app;
 
 function info(req, res) {
-    res.status(200).json({
-        name: settings.name,
-        description: settings.description,
-        status: 200,
-        service: 'omk-server',
-        npm: pkg.name,
-        version: pkg.version
-    });
+  res.status(200).json({
+    name: settings.name,
+    description: settings.description,
+    status: 200,
+    service: 'omk-server',
+    npm: pkg.name,
+    version: pkg.version
+  });
 }
 
 function redirectToForms(req, res, next) {
