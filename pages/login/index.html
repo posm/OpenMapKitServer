@@ -57,9 +57,15 @@
 
     
 
-    <div class="page-content">
+    <div class="page-content" id="login-form">
   <div class="mdl-grid">
     <form action="/login/" method="post">
+      <div v-if="failure" class="mdl-color--red-200 mdl-dialog__content">
+        <span>
+          <i class="material-icons">warning</i>
+          <span> Login failed. Check your user and password and try again.</span>
+        </span>
+      </div>
       <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--12-col">
         <input type="text" id="username" name="username" class="mdl-textfield__input"/>
         <label for="username" class="mdl-textfield__label">Username:</label>
@@ -94,7 +100,7 @@
       <!--Inject Vue JS dependency if template-->
       
 
-      <script src="../js/forms/forms.js"></script>
+      <script src="../js/login/login.js"></script>
 
       
 

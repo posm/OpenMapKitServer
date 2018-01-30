@@ -83,7 +83,10 @@ app.get('/current-user',
   });
 
 app.post('/login',
-  passport.authenticate('local', { failureRedirect: '/omk/pages/login/', session: true }),
+  passport.authenticate(
+    'local',
+    {failureRedirect: '/omk/pages/login/?failure=true', session: true}
+  ),
   function(req, res) {
     res.redirect('/');
 });
