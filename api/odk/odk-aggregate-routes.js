@@ -35,7 +35,7 @@ router.route('/manifest/:formName.xml').get(getManifest);
  * an OSM Editing API
  */
 router.route('/submit-changesets/:formName')
-                .get(submitChangesets)
-                .put(submitChangesets);
+                .get(adminPermission, submitChangesets)
+                .put(adminPermission, submitChangesets);
 
 module.exports = router;
