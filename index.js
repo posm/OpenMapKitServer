@@ -23,6 +23,7 @@ var deployments = require('./api/deployments/deployment-routes');
 var error = require('./api/odk/controllers/error-handler');
 var pkg = require('./package');
 var authentication = require('./util/auth');
+var adminDVPermission = require('permission')(['admin', 'data-viewer']);
 
 var app = express();
 var auth = (req, res, next) => next();
@@ -120,7 +121,7 @@ app.use('/', odkOpenRosa);
  * breaks /formList
  */
 app.use('/omk/odk', auth);
-app.use('/omk/data/submissions', auth);
+app.use('/omk/data/submissions', adminDVPermission);
 app.use('/omk/pages', auth);
 
 // Open Data Kit Aggregate
