@@ -1,4 +1,5 @@
 [
   {"id": 1, "username": "admin", "password": "admin", "role": "admin"},
-  {"id": 2, "username": "dataviewer", "password": "dataviewer", "role": "data-viewer"}
+  {"id": 2, "username": "dataviewer", "password": "dataviewer", "role": "data-viewer"},
+  {"id": 3, "username": "user", "password": "user", "role": "user"}
 ]

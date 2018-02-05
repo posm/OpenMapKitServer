@@ -1,9 +1,9 @@
-
 new Vue({
-  el: '#main-menu',
+  el: '.auth-required',
   data: {
     isAuthenticated: false,
-    username: null
+    username: null,
+    role: null
   },
   ready: function() {
     this.getAuthentication();
@@ -14,9 +14,11 @@ new Vue({
         if (response.ok) {
           this.$set('isAuthenticated', true);
           this.$set('username', response.data.username);
+          this.$set('role', response.data.role);
         } else {
           this.$set('isAuthenticated', false);
           this.$set('username', null);
+          this.$set('role', null);
         }
       });
     }

@@ -11,7 +11,11 @@
         <i class="material-icons">more_vert</i>
       </button>
 
-      <ul id="main-menu" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="menu-lower-left">
+      <ul
+        id="main-menu"
+        class="auth-required mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+        for="menu-lower-left"
+      >
         {% for option in site.more_vert %}
           <li><a href="{{ option[1].link }}" class="mdl-menu__item">{{ option[1].name }}</a></li>
         {% endfor %}

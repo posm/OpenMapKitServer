@@ -64,7 +64,11 @@ app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
+app.use(
+  require('express-session')(
+    { secret: 'keyboard cat', resave: false, saveUninitialized: false }
+  )
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -80,7 +84,8 @@ app.get('/current-user',
     } else {
       res.status(401).json({error: 'User not authenticated'});
     }
-  });
+  }
+);
 
 app.post('/login',
   passport.authenticate(

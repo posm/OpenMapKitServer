@@ -43,7 +43,11 @@
         <i class="material-icons">more_vert</i>
       </button>
 
-      <ul id="main-menu" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="menu-lower-left">
+      <ul
+        id="main-menu"
+        class="auth-required mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+        for="menu-lower-left"
+      >
         
           <li><a href="/omk/pages/forms" class="mdl-menu__item">Forms</a></li>
         
@@ -57,76 +61,84 @@
 
     
 
-    <div id="submissionsPage" class="page-content">
-  <div class="mask">
-    <div class="mdl-grid grid-menu mdl-cell mdl-cell--12-col">
-      <!-- Mdl Card -->
-      <div id="submissionCard" class="mdl-cell mdl-cell--12-col mdl-card wide-card mdl-shadow--0dp">
-        <div class="mdl-cell--12-col mdl-card__title">
-          <h2 class="rows count mdl-card__title-text"></h2>
-        </div>
+    <div id="submissionsPage" class="auth-required page-content">
+  <div v-if="['admin', 'data-viewer'].includes(role)">
+    <div class="mask">
+      <div class="mdl-grid grid-menu mdl-cell mdl-cell--12-col">
+        <!-- Mdl Card -->
+        <div id="submissionCard" class="mdl-cell mdl-cell--12-col mdl-card wide-card mdl-shadow--0dp">
+          <div class="mdl-cell--12-col mdl-card__title">
+            <h2 class="rows count mdl-card__title-text"></h2>
+          </div>
 
-        <div class="mdl-card__actions mdl-card--border">
-          <!-- Left aligned menu on top of button  -->
-          <button id="odk-options" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-            ODK Data
-          </button>
-
-          <button id="osm-options" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-            OSM Data
-          </button>
-
-          <a id="submit-OSM-changesets" href="#">
-            <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-              Submit to OSM
+          <div class="mdl-card__actions mdl-card--border">
+            <!-- Left aligned menu on top of button  -->
+            <button id="odk-options" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+              ODK Data
             </button>
-          </a>
 
-          <ul class="mdl-menu mdl-menu--bottom-right- mdl-js-menu mdl-js-ripple-effect" for="odk-options">
-            <a id="downloadCsv" download="data.csv" href="#" class="download">
-              <li class="mdl-menu__item">Download CSV</li>
-            </a>
-            <a id="downloadJson" download="data.json" href="#">
-              <li class="mdl-menu__item">Download JSON</li>
-            </a>
-            <a id="downloadAttachments" download="data.zip" href="#">
-              <li class="mdl-menu__item">Download Attachments</li>
-            </a>
-          </ul>
+            <button id="osm-options" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+              OSM Data
+            </button>
 
-          <ul id="osm-options-list" class="mdl-menu mdl-menu--bottom-right- mdl-js-menu mdl-js-ripple-effect" for="osm-options">
-            <a name="" href="#">
-              <li class="mdl-menu__item">All OSM</li>
+            <a id="submit-OSM-changesets" href="#">
+              <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                Submit to OSM
+              </button>
             </a>
-            <a name="unsumbitted" href="#">
-              <li class="mdl-menu__item">Unsubmitted OSM</li>
-            </a>
-            <a name="conflicting" href="#">
-              <li class="mdl-menu__item">Conflicting OSM</li>
-            </a>
-          </ul>
+
+            <ul class="mdl-menu mdl-menu--bottom-right- mdl-js-menu mdl-js-ripple-effect" for="odk-options">
+              <a id="downloadCsv" download="data.csv" href="#" class="download">
+                <li class="mdl-menu__item">Download CSV</li>
+              </a>
+              <a id="downloadJson" download="data.json" href="#">
+                <li class="mdl-menu__item">Download JSON</li>
+              </a>
+              <a id="downloadAttachments" download="data.zip" href="#">
+                <li class="mdl-menu__item">Download Attachments</li>
+              </a>
+            </ul>
+
+            <ul id="osm-options-list" class="mdl-menu mdl-menu--bottom-right- mdl-js-menu mdl-js-ripple-effect" for="osm-options">
+              <a name="" href="#">
+                <li class="mdl-menu__item">All OSM</li>
+              </a>
+              <a name="unsumbitted" href="#">
+                <li class="mdl-menu__item">Unsubmitted OSM</li>
+              </a>
+              <a name="conflicting" href="#">
+                <li class="mdl-menu__item">Conflicting OSM</li>
+              </a>
+            </ul>
+          </div>
         </div>
+        <!-- Mdl Card -->
+        <div id="submissionPagespinner" class="mdl-spinner mdl-js-spinner is-active"></div>
       </div>
-      <!-- Mdl Card -->
-      <div id="submissionPagespinner" class="mdl-spinner mdl-js-spinner is-active"></div>
+    </div>
+    <div class="mdl-grid grid-lower">
+      <section class="csv">
+        <div class="table rendered">
+          <table id="submission-table" class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+          </table>
+        </div>
+        <div class="areas">
+          <textarea class="editing" readonly></textarea>
+        </div>
+      </section>
+    </div>
+    <div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
+      <div class="mdl-snackbar__text"></div>
+      <button class="mdl-snackbar__action" type="button"></button>
     </div>
   </div>
-  <div class="mdl-grid grid-lower">
-    <section class="csv">
-      <div class="table rendered">
-        <table id="submission-table" class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
-        </table>
+  <div v-else class="mdl-grid mdl-cell mdl-cell--12-col">
+    <div class="mask">
+      <div class="mdl-grid grid-menu mdl-cell mdl-cell--12-col">
+        <p>Access to submissions is restricted to admin and data-viewer users.</p>
       </div>
-      <div class="areas">
-        <textarea class="editing" readonly></textarea>
-      </div>
-    </section>
+    </div>
   </div>
-</div>
-
-<div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
-  <div class="mdl-snackbar__text"></div>
-  <button class="mdl-snackbar__action" type="button"></button>
 </div>
 
 <link rel="stylesheet" href="../css/submissions.css">
@@ -144,7 +156,7 @@
 
       <script type="text/javascript" src="../js/vendor/toast.min.js"></script>
       <script type="text/javascript" src="../js/vendor/dialog-polyfill.js"></script>
-      <script src="../js/auth/index.js"></script>
+      <script src="../js/auth/auth.js"></script>
 
       <!--Inject Vue JS dependency if template-->
       
