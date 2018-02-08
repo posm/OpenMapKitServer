@@ -16,9 +16,8 @@
         class="auth-required mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
         for="menu-lower-left"
       >
-        {% for option in site.more_vert %}
-          <li><a href="{{ option[1].link }}" class="mdl-menu__item">{{ option[1].name }}</a></li>
-        {% endfor %}
+        <li><a href="/omk/pages/forms" class="mdl-menu__item">Forms</a></li>
+        <li v-if="role === 'admin'"><a href="/omk/pages/upload-form/" class="mdl-menu__item">Upload Form</a></li>
         <li v-if="isAuthenticated"><a href="/logout/" class="mdl-menu__item">Logout</a></li>
         <li v-else><a href="/omk/pages/login/" class="mdl-menu__item">Login</a></li>
       </ul>
