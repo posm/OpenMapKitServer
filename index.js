@@ -15,6 +15,7 @@ var directory = require('serve-index');
 var cors = require('cors');
 var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
+var DigestStrategy = require('passport-http').DigestStrategy;
 var LocalStrategy = require('passport-local').Strategy;
 
 var odkOpenRosa = require('./api/odk/odk-openrosa-routes');
@@ -26,7 +27,31 @@ var authentication = require('./util/auth');
 var adminDVPermission = require('permission')(['admin', 'data-viewer']);
 
 var app = express();
-var auth = (req, res, next) => next();
+
+var noAuth = (req, res, next) => next();
+var auth = (req, res, next) => {
+  if (req.user && req.user.username) {
+    return next();
+  } else {
+    passport.authenticate(
+      ['local', 'basic', 'digest'],
+      function(err, user, info) {
+        if (err) return next(err);
+        if (!user) {
+          return res.status(403).json({
+            message: "access forbidden"
+          });
+        }
+        // Manually establish the session...
+        req.login(user, function(err) {
+          if (err) return next(err);
+          return next();
+        });
+      },
+      { session: false }
+    )(req, res, next);
+  }
+};
 
 passport.use(new BasicStrategy(
   function(username, password, cb) {
@@ -35,6 +60,14 @@ passport.use(new BasicStrategy(
       if (!user) { return cb(null, false); }
       if (user.password != password) { return cb(null, false); }
       return cb(null, user);
+    });
+}));
+passport.use(new DigestStrategy({ qop: 'auth' },
+  function(username, password, cb) {
+    authentication.findByUsername(username, function(err, user) {
+      if (err) { return cb(err); }
+      if (!user) { return cb(null, false); }
+      return cb(null, user, user.password);
     });
 }));
 passport.use(new LocalStrategy(
@@ -109,8 +142,8 @@ app.get('/logout',
 // It's better to stay on top level of routes to
 // prevent the user from having to add a prefix in ODK Collect
 // server path.
-app.use('/formList', auth);
-app.use('/view', auth);
+app.use('/formList', noAuth);
+app.use('/view', noAuth);
 app.use('/', odkOpenRosa);
 
 /**
@@ -122,7 +155,7 @@ app.use('/', odkOpenRosa);
  */
 app.use('/omk/odk', auth);
 app.use('/omk/data/submissions', adminDVPermission);
-app.use('/omk/pages', auth);
+app.use('/omk/pages', noAuth);
 
 // Open Data Kit Aggregate
 
