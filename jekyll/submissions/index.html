@@ -6,10 +6,11 @@ datatable-material: datatables.material.min
 csv: jquery.csv
 index: index
 omk: omk
+controllerjs: admindv
 ---
 
-<div id="submissionsPage" class="auth-required page-content">
-  <div v-if="['admin', 'data-viewer'].includes(role)">
+<div id="submissionsPage" class="admin-dv-restricted page-content">
+  <div v-if="adminDVPermission">
     <div class="mask">
       <div class="mdl-grid grid-menu mdl-cell mdl-cell--12-col">
         <!-- Mdl Card -->
