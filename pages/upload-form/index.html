@@ -58,8 +58,8 @@
 
     
 
-    <div id="uploadPage" class="page-content">
-  <div class="mdl-grid">
+    <div id="uploadPage" class="page-content admin-dv-restricted">
+  <div class="mdl-grid" v-if="role == 'admin'">
     <form action="/omk/odk/upload-form" class="dropzone" id="dropzone">
       <div class="dropzone-area">
         <div class="dropzone-text">
@@ -72,6 +72,13 @@
         </div>
       </div>
     </form>
+  </div>
+  <div v-else class="mdl-grid mdl-cell mdl-cell--12-col">
+    <div class="mask">
+      <div class="mdl-grid grid-menu mdl-cell mdl-cell--12-col">
+        <p>Access to upload form is restricted to admin users.</p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -154,6 +161,10 @@ Dropzone.options.dropzone = {
       <script src="../js/auth/auth.js"></script>
 
       <!--Inject Vue JS dependency if template-->
+      
+
+      <script src="../js/admindv/admindv.js"></script>
+
       
 
       <!--Inject JS dependency for Submission From-->
