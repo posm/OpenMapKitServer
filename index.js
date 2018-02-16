@@ -155,7 +155,6 @@ app.use('/', odkOpenRosa);
  */
 app.use('/omk/odk', auth);
 app.use('/omk/data/submissions', adminDVPermission);
-app.use('/omk/pages', noAuth);
 
 // Open Data Kit Aggregate
 
@@ -171,9 +170,9 @@ app.use('/omk/deployments', deployments);
 // Public Data & Static Assets
 app.use('/omk/data', express.static(settings.dataDir));
 app.use('/omk/data', directory(settings.dataDir));
-app.use('/omk/pages', express.static(settings.pagesDir));
-app.use('/omk/pages', directory(settings.pagesDir));
-
+if (process.env.NODE_ENV === 'production') {
+  app.use('/app', express.static('client/build'));
+}
 // Handle errors
 app.use(error);
 
@@ -191,5 +190,5 @@ function info(req, res) {
 }
 
 function redirectToForms(req, res, next) {
-    res.redirect('/omk/pages/forms');
+    res.redirect('/client');
 }

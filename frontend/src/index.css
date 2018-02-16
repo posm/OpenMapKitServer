@@ -1,0 +1,14 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+.default-green-bg {
+  background-color: #7ebc6f !important;
+}
+.default-green {
+  color: #7ebc6f !important;
+}
+.main-logo {
+  height: 40px;
+}
