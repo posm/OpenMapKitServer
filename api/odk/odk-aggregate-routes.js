@@ -16,7 +16,9 @@ var adminDVPermission = require('permission')(['admin', 'data-viewer']);
 var adminPermission = require('permission')(['admin']);
 
 router.route('/submissions').get(getSubmissionsList);
-router.route('/submissions/:formName.json').get(adminDVPermission, getJsonSubmissions);
+router.route(
+  '/submissions/:formName.json'
+).get(adminDVPermission, getJsonSubmissions);
 router.route('/submissions/:formName.csv').get(adminDVPermission, getCsvSubmissions);
 router.route('/submissions/:formName.osm')
                 .get(adminDVPermission, getOsmSubmissions)

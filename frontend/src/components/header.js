@@ -18,12 +18,12 @@ export class Header extends React.Component {
             </NavbarHeading>
         </NavbarGroup>
         <NavbarGroup align="right">
-            <Button className="pt-minimal" iconName="home">Home</Button>
-            <Button className="pt-minimal" iconName="document">Files</Button>
+            <Button className="pt-minimal" icon="home">Home</Button>
+            <Button className="pt-minimal" icon="document">Files</Button>
             <NavbarDivider />
-            <Button className="pt-minimal" iconName="user"></Button>
-            <Button className="pt-minimal" iconName="notifications"></Button>
-            <Button className="pt-minimal" iconName="cog"></Button>
+            <Button className="pt-minimal" icon="user"></Button>
+            <Button className="pt-minimal" icon="notifications"></Button>
+            <Button className="pt-minimal" icon="cog"></Button>
         </NavbarGroup>
       </Navbar>
     );

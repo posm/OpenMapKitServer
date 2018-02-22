@@ -121,20 +121,33 @@ app.get('/current-user',
   }
 );
 
-app.post('/login',
-  passport.authenticate(
-    'local',
-    {failureRedirect: '/omk/pages/login/?failure=true', session: true}
-  ),
-  function(req, res) {
-    res.redirect('/');
+app.post('/login', function(req, res, next) {
+  console.log(req.body);
+  if (req.body.username && req.body.password) {
+    authentication.findByUsername(req.body.username, function(err, user) {
+      if ((err || !user) && user.password !== req.body.password) {
+        console.log('user: ' + user + '\n '+ req.body);
+        err = new Error('Wrong username or password.');
+        err.status = 401;
+        return next(err);
+      } else {
+        req.session.userId = user.id;
+        res.status(200).json({
+          user:user,
+          message:'Authenticated',
+          auth:"1"
+        });
+      }
+    });
+  }
 });
 
-app.get('/logout',
-  function(req, res){
+app.get('/logout', function(req, res, next) {
     req.logout();
-    req.session.destroy();
-    res.redirect('/');
+    res.status(200).json({
+      message:'Logged Out',
+      auth:"0"
+    });
 });
 
 // Open Data Kit OpenRosa

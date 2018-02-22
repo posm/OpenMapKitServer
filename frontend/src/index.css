@@ -12,3 +12,16 @@ body {
 .main-logo {
   height: 40px;
 }
+
+.login {
+  padding-top: 30px;
+  max-width: 280px;
+}
+
+.login > form > input {
+  margin-top: 7px;
+}
+
+.pt-input-group .pt-input:not(:first-child) {
+    padding-left: 10px !important;
+}
