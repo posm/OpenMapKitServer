@@ -8,6 +8,8 @@
     "bootstrap": "3",
     "dropzone": "^5.0.1",
     "history": "^4.7.2",
+    "immutable": "^3.8.2",
+    "lodash.debounce": "^4.0.8",
     "react": "^16.2.0",
     "react-addons-css-transition-group": "^15.6.2",
     "react-bootstrap": "^0.31.0",

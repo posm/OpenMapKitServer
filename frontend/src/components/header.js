@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  Navbar, NavbarGroup, NavbarHeading, NavbarDivider, Button
+  Navbar, NavbarGroup, NavbarHeading, NavbarDivider, AnchorButton
 } from "@blueprintjs/core";
 
 import logo from '../icon.png'
@@ -18,12 +18,8 @@ export class Header extends React.Component {
             </NavbarHeading>
         </NavbarGroup>
         <NavbarGroup align="right">
-            <Button className="pt-minimal" icon="home">Home</Button>
-            <Button className="pt-minimal" icon="document">Files</Button>
-            <NavbarDivider />
-            <Button className="pt-minimal" icon="user"></Button>
-            <Button className="pt-minimal" icon="notifications"></Button>
-            <Button className="pt-minimal" icon="cog"></Button>
+            <AnchorButton className="pt-minimal" icon="home" href="/">Home</AnchorButton>
+            <AnchorButton className="pt-minimal" icon="user" href="#/login/">Login</AnchorButton>
         </NavbarGroup>
       </Navbar>
     );
