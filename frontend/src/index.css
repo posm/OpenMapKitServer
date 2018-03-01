@@ -12,7 +12,9 @@ body {
 .main-logo {
   height: 40px;
 }
-
+.pt-navbar-heading > a:hover {
+  text-decoration: none;
+}
 .login {
   padding-top: 30px;
   max-width: 280px;

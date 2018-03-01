@@ -1,11 +1,57 @@
 import React from 'react';
 import { Map } from 'immutable';
-import { Button, ButtonGroup, Card, Elevation } from '@blueprintjs/core';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { AnchorButton, ButtonGroup, Card, Elevation, NonIdealState } from '@blueprintjs/core';
+import { Grid, Row, Col, PageHeader } from 'react-bootstrap';
+import DropzoneComponent from "react-dropzone-component";
+
+import "react-dropzone-component/styles/filepicker.css";
+import "dropzone/dist/dropzone.css";
 
 import { formList } from '../network/formList';
 import { cancelablePromise } from '../utils/promise';
 import { withFetchDataSilent } from './fetch_data_enhancer';
+
+
+export class UploadForm extends React.Component {
+  constructor(props) {
+     super(props);
+     // For a full list of possible configurations,
+     // please consult http://www.dropzonejs.com/#configuration
+     this.djsConfig = {
+       addRemoveLinks: true,
+     };
+     this.componentConfig = {
+       iconFiletypes: ['.jpg', '.png', '.gif'],
+       showFiletypeIcon: true,
+       postUrl: '/omk/odk/upload-form'
+     };
+
+     // If you want to attach multiple callbacks, simply
+     // create an array filled with all your callbacks.
+     this.callbackArray = [() => console.log('Hi!'), () => console.log('Ho!')];
+     // Simple callbacks work too, of course
+     this.callback = () => console.log('Hello!');
+     this.success = file => console.log('uploaded', file);
+     this.removedfile = file => console.log('removing...', file);
+     this.dropzone = null;
+   }
+
+   render() {
+     const config = this.componentConfig;
+     const djsConfig = this.djsConfig;
+
+     // For a list of all possible events (there are many), see README.md!
+     const eventHandlers = {
+       init: dz => this.dropzone = dz,
+       drop: this.callbackArray,
+       addedfile: this.callback,
+       success: this.success,
+       removedfile: this.removedfile
+     }
+
+     return <DropzoneComponent config={config} eventHandlers={eventHandlers} djsConfig={djsConfig} />
+   }
+}
 
 type propsType = {
   data: Map<string, any>
@@ -21,9 +67,11 @@ class FormList extends React.Component<any, propsType, any> {
           <p>Number of Submissions: { form.get('totalSubmissions') }</p>
           <p>Form ID: <code>{ form.get('formID') }</code></p>
           <ButtonGroup fill={true} vertical={true} large={false}>
-            <Button  icon="list">View submissions</Button>
-            <Button icon="th">XSLX Form</Button>
-            <Button icon="code">XFORM XML</Button>
+            <AnchorButton icon="list">View submissions</AnchorButton>
+            <AnchorButton icon="th" href={`http://localhost:3210/omk/data/forms/${form.get('formID')}.xlsx`}>
+              XSLX Form
+            </AnchorButton>
+            <AnchorButton icon="code">XFORM XML</AnchorButton>
           </ButtonGroup>
         </div>
       </Card>

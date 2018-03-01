@@ -1,13 +1,13 @@
 import { types } from '../actions/auth';
 
 const initialState = {
-  userDetails: {}
+  userDetails: new Map()
 };
 
-export default (state = initialState, action) => {
+export function authReducer(state = initialState, action) {
   switch (action.type) {
     case types.SET_USER: {
-      return state.set('userDetails': action.userDetails);
+      return {'userDetails': action.userDetails};
     }
     default:
       return state;

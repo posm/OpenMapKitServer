@@ -24,8 +24,7 @@ class LoginPanel extends React.Component {
   }
 
   onSubmit = event => {
-    event.preventDefault();
-    this.props.login(this.state.username, this.state.password);
+    this.props.authenticateUser(this.state.username, this.state.password);
   }
 
   render() {
@@ -43,12 +42,18 @@ class LoginPanel extends React.Component {
   }
 }
 
-function properties(state) {
+const mapStateToProps = (state) => {
   return {
-    username: state.auth.userDetails.username
-  }
+    username: state.auth.userDetails ? state.auth.userDetails.username : ''
+  };
 }
 
-LoginPanel = connect(properties, { login })(LoginPanel);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    authenticateUser: (username, password) => dispatch(login(username, password))
+  };
+};
+
+LoginPanel = connect(mapStateToProps, mapDispatchToProps)(LoginPanel);
 
 export { LoginPanel };

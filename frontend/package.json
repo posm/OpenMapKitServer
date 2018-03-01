@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:3210/",
+  "homepage": "/frontend",
   "dependencies": {
     "@blueprintjs/core": "^2.0.0-rc.1",
     "bootstrap": "3",
@@ -26,7 +27,7 @@
     "redux-thunk": "^2.2.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3030 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
