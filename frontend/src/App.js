@@ -4,7 +4,6 @@ import { Route } from "react-router-dom";
 import { Header } from './components/header';
 import { LoginPanel } from './components/loginPanel';
 import { FormList, UploadForm } from './components/forms';
-import logo from './logo.svg';
 import './App.css';
 
 

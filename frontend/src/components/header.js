@@ -2,12 +2,12 @@ import React from 'react';
 import { connect } from "react-redux";
 
 import {
-  Navbar, NavbarGroup, NavbarHeading, AnchorButton, Button, Popover, Menu, MenuItem, Position
+  Navbar, NavbarGroup, NavbarHeading, AnchorButton, Button, Popover, Menu,
+  MenuItem, Position
 } from "@blueprintjs/core";
 
 import { logout } from '../store/actions/auth';
 import logo from '../icon.png'
-
 
 
 class Header extends React.Component {
