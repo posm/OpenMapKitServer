@@ -4,9 +4,11 @@
   "description": "OpenMapKit Server is the lightweight server component of OpenMapKit that handles the collection and aggregation of OpenStreetMap and OpenDataKit data.",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"yarn server\" \"yarn client\"",
+    "startdev": "concurrently \"yarn server\" \"yarn frontend\"",
+    "start": "yarn build && node server.js",
     "server": "node server.js",
-    "client": "node start_client.js",
+    "build": "node build_frontend.js",
+    "frontend": "node start_frontend.js",
     "test": "tape test/**/**/*.test.js | faucet"
   },
   "repository": {
