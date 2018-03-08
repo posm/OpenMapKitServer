@@ -11,11 +11,13 @@ import logo from '../icon.png'
 
 
 class Header extends React.Component {
-  renderAuthSubMenu() {
-    if (this.props.userDetails &&
+  isAuthenticated(){
+    return this.props.userDetails &&
         this.props.userDetails.hasOwnProperty('username') &&
         this.props.userDetails.username !== null
-      ) {
+  }
+  renderAuthSubMenu() {
+    if (this.isAuthenticated()) {
       const menu = <Menu>
                      <MenuItem className="pt-minimal" icon="log-out" label="Logout"
                        onClick={this.props.doLogout}
@@ -43,6 +45,9 @@ class Header extends React.Component {
         </NavbarGroup>
         <NavbarGroup align="right">
             <AnchorButton className="pt-minimal pt-white" icon="home" href="/">Home</AnchorButton>
+            { this.isAuthenticated() &&
+              <AnchorButton className="pt-minimal pt-white" icon="home" href="#/upload-form/">Upload Form</AnchorButton>
+            }
             { this.renderAuthSubMenu() }
         </NavbarGroup>
       </Navbar>
