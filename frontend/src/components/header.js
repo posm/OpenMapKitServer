@@ -46,7 +46,7 @@ class Header extends React.Component {
         <NavbarGroup align="right">
             <AnchorButton className="pt-minimal pt-white" icon="home" href="/">Home</AnchorButton>
             { this.isAuthenticated() &&
-              <AnchorButton className="pt-minimal pt-white" icon="home" href="#/upload-form/">Upload Form</AnchorButton>
+              <AnchorButton className="pt-minimal pt-white" icon="cloud-upload" href="#/upload-form/">Upload Form</AnchorButton>
             }
             { this.renderAuthSubMenu() }
         </NavbarGroup>

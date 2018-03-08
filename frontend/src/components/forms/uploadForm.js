@@ -58,7 +58,7 @@ class UploadForm extends React.Component {
        removedfile: this.removedfile
      }
 
-     return <DropzoneComponent
+     return <DropzoneComponent className="center-block"
          config={config} eventHandlers={eventHandlers} djsConfig={djsConfig}
          />
    }
