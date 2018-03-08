@@ -3,7 +3,8 @@ import { Route } from "react-router-dom";
 
 import { Header } from './components/header';
 import { LoginPanel } from './components/loginPanel';
-import { FormList, UploadForm } from './components/forms';
+import { FormList } from './components/forms/formList';
+import { UploadForm } from './components/forms/uploadForm';
 import './App.css';
 
 
