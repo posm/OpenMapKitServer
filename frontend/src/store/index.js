@@ -1,13 +1,8 @@
 import { applyMiddleware, createStore, compose } from "redux";
 import createHistory from "history/createBrowserHistory";
 import { routerMiddleware } from "react-router-redux";
-import { routerReducer, syncHistoryWithStore } from "react-router-redux";
-import { composeWithDevTools } from "redux-devtools-extension";
-import { createLogger } from "redux-logger";
 import thunk from "redux-thunk";
-import { Map } from 'immutable';
 
-import * as actionCreators from "./actions/auth";
 import * as safeStorage from '../utils/safe_storage';
 import reducers from "./reducers";
 

@@ -1,4 +1,3 @@
-// import { Map } from 'immutable';
 import { push } from 'react-router-redux';
 
 import * as safeStorage from '../../utils/safe_storage';
@@ -28,6 +27,7 @@ export const logout = () => dispatch => {
   safeStorage.removeItem('password');
   safeStorage.removeItem('role');
   dispatch(clearUserDetails());
+
 };
 
 export const login = (username, password) => dispatch => {
