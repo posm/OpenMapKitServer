@@ -21,11 +21,10 @@ class UploadForm extends React.Component {
          ).toString('base64');
        }
      this.djsConfig = {
-       acceptedFiles: ['.xls', '.xlsx'],
        addRemoveLinks: false,
        headers: {
          'Access-Control-Allow-Headers': 'Authorization, X-Requested-With, Accept, Content-Type, Origin, Cache-Control, X-File-Name',
-         'Authorization': 'Basic ' + this.authBase64
+         'Authorization': `Basic ${this.authBase64}`
        }
      };
      this.componentConfig = {

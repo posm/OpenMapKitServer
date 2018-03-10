@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 import {
   Navbar, NavbarGroup, NavbarHeading, AnchorButton, Button, Popover, Menu,
@@ -40,7 +41,7 @@ class Header extends React.Component {
         <NavbarGroup>
             <img className="pt-icon main-logo pt-align-left" src={logo} alt="omk logo" />
             <NavbarHeading>
-              <a href="/"><h3>OpenMapKit Server</h3></a>
+              <Link to="/#/"><h3>OpenMapKit Server</h3></Link>
             </NavbarHeading>
         </NavbarGroup>
         <NavbarGroup align="right">
