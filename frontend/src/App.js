@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route } from "react-router-dom";
 
 import { Header } from './components/header';
+import { SubmissionList } from './components/submissionList';
 import { LoginPanel } from './components/loginPanel';
 import { FormList } from './components/forms/formList';
 import { UploadForm } from './components/forms/uploadForm';
@@ -14,8 +15,9 @@ class App extends Component {
       <div className="App">
         <Header />
         <Route exact path="/" component={FormList} />
-        <Route path="/login" component={LoginPanel} />
-        <Route path="/upload-form" component={UploadForm} />
+        <Route exact path="/login" component={LoginPanel} />
+        <Route exact path="/upload-form" component={UploadForm} />
+        <Route exact path="/submissions/:formId" component={SubmissionList} />
       </div>
     );
   }

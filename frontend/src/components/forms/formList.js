@@ -22,7 +22,7 @@ class FormList extends React.Component<any, propsType, any> {
           <p>Number of Submissions: { form.get('totalSubmissions') }</p>
           <p>Form ID: <code>{ form.get('formID') }</code></p>
           <ButtonGroup fill={true} vertical={true} large={false}>
-            <AnchorButton icon="list">View submissions</AnchorButton>
+            <AnchorButton icon="list" href={`/#/submissions/${form.get('formID')}`}>View submissions</AnchorButton>
             <AnchorButton icon="th" href={`/omk/data/forms/${form.get('formID')}.xlsx`}>
               XSLX Form
             </AnchorButton>

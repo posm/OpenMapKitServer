@@ -41,3 +41,7 @@ body {
   margin-top: 10px;
   max-width: 70%;
 }
+
+.submissions-table, .submissions-info, .filters {
+  margin-top: 15px;
+}

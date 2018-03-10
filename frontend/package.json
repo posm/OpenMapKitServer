@@ -6,6 +6,8 @@
   "homepage": "/frontend",
   "dependencies": {
     "@blueprintjs/core": "^2.0.0-rc.1",
+    "@blueprintjs/datetime": "^2.0.0-rc.2",
+    "@blueprintjs/table": "^2.0.0-rc.2",
     "bootstrap": "3",
     "dropzone": "^5.0.1",
     "history": "^4.7.2",
