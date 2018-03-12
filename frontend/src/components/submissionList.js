@@ -172,7 +172,7 @@ class SubmissionList extends React.Component {
                 />
               <Button icon="filter" text="Filter" onClick={this.filterSubmissions}/>
               </div>
-              <Table className="submissions-table" numRows={this.state.filteredSubmissions.length}>
+              <Table className="submissions-table center-block" columnWidths={[210,210,170,210,400]} numRows={this.state.filteredSubmissions.length}>
                 <Column name="Start" cellRenderer={this.renderCell} />
                 <Column name="End" cellRenderer={this.renderCell} />
                 <Column name="Device ID" cellRenderer={this.renderCell} />

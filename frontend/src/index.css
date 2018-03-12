@@ -45,3 +45,7 @@ body {
 .submissions-table, .submissions-info, .filters {
   margin-top: 15px;
 }
+
+.submissions-table {
+  max-width: 90%
+}
