@@ -138,7 +138,7 @@ class SubmissionList extends React.Component {
     this.getSubmissionsPromise.promise.then(
       r => {
         let data = r.map(
-          i => [i.start, i.end, i.deviceid, i.meta.submissionTime, i.building_placeholder]
+          i => [i.start, i.end, i.deviceid, i.meta.submissionTime, i.building_placeholder, i.meta.instanceId.split(':')[1],]
         );
         this.setState({ submissions: data });
         this.setState({ filteredSubmissions: data });
@@ -148,7 +148,7 @@ class SubmissionList extends React.Component {
 
   renderCell = (row, column) => <Cell>{this.state.filteredSubmissions[row][column]}</Cell>;
   renderCellLink = (row, column) => <Cell>
-    <a href={`/omk/odk/submissions/${this.props.formId}/${this.state.filteredSubmissions[row][column]}`}>
+    <a href={`/omk/data/submissions/${this.props.formId}/${this.state.filteredSubmissions[row][column+1]}/${this.state.filteredSubmissions[row][column]}`}>
       {this.state.filteredSubmissions[row][column]}
     </a>
   </Cell>;

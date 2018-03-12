@@ -18,12 +18,12 @@ var adminPermission = require('permission')(['admin']);
 router.route('/submissions').get(getSubmissionsList);
 router.route(
   '/submissions/:formName.json'
-).get(adminDVPermission, getJsonSubmissions);
-router.route('/submissions/:formName.csv').get(adminDVPermission, getCsvSubmissions);
+).get(getJsonSubmissions);
+router.route('/submissions/:formName.csv').get(getCsvSubmissions);
 router.route('/submissions/:formName.osm')
-                .get(adminDVPermission, getOsmSubmissions)
+                .get(getOsmSubmissions)
                 .patch(patchSubmissions);
-router.route('/submissions/:formName.zip').get(adminDVPermission, getSubmissionAttachments);
+router.route('/submissions/:formName.zip').get(getSubmissionAttachments);
 
 /**
  * XLSForm Upload Endpoint
