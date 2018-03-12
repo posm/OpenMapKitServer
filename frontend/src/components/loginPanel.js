@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Route, Redirect } from 'react-router'
 import { Button } from "@blueprintjs/core";
 
 import { login } from '../store/actions/auth';
@@ -31,13 +32,16 @@ class LoginPanel extends React.Component {
   render() {
     return(
       <div className="pt-input-group login center-block">
-        <form onSubmit={this.onSubmit}>
-          <input type="text" className="pt-input" value={this.state.username}
-            onChange={this.changeUsername} placeholder="Username" />
-          <input type="password" className="pt-input" value={this.state.password}
-            onChange={this.changePassword} placeholder="Enter your password..." />
-          <Button type="submit" intent="primary" icon="log-in" text="Sign In" />
-        </form>
+        {!this.props.username
+          ? <form onSubmit={this.onSubmit}>
+              <input type="text" className="pt-input" value={this.state.username}
+                onChange={this.changeUsername} placeholder="Username" />
+              <input type="password" className="pt-input" value={this.state.password}
+                onChange={this.changePassword} placeholder="Enter your password..." />
+              <Button type="submit" intent="primary" icon="log-in" text="Sign In" />
+            </form>
+          : <Redirect to='/#/' />
+      }
       </div>
     );
   }

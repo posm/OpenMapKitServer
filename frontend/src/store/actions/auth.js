@@ -50,7 +50,6 @@ export const login = (username, password) => dispatch => {
     safeStorage.setItem('password', userDetails.user.password);
     safeStorage.setItem('role', userDetails.user.role);
     dispatch(updateUserDetails(userDetails.user));
-    dispatch(push('/#/'));
   })
   .catch(err => console.warn(err));
 };

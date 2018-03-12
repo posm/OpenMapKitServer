@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
+import { Route, Redirect } from 'react-router'
 
 import {
   Button, Popover, Menu, MenuItem, Position
@@ -179,7 +180,7 @@ class SubmissionList extends React.Component {
                 <Column name="Download" cellRenderer={this.renderCellLink} />
               </Table>
             </div>
-          : <h2>Access Restricted</h2>
+          : <Redirect to='/login/' />
         }
       </div>
     );
