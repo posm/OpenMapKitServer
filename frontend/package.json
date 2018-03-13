@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:3210/",
-  "homepage": "/frontend",
+  "homepage": "/omk/pages",
   "dependencies": {
     "@blueprintjs/core": "^2.0.0-rc.1",
     "@blueprintjs/datetime": "^2.0.0-rc.2",

@@ -183,8 +183,8 @@ app.use('/omk/deployments', deployments);
 // Public Data & Static Assets
 app.use('/omk/data', express.static(settings.dataDir));
 app.use('/omk/data', directory(settings.dataDir));
-app.use('/frontend', express.static(settings.pagesDir));
-app.use('/frontend', directory(settings.pagesDir));
+app.use('/omk/pages', express.static(settings.pagesDir));
+app.use('/omk/pages', directory(settings.pagesDir));
 // Handle errors
 app.use(error);
 
@@ -202,5 +202,5 @@ function info(req, res) {
 }
 
 function redirectToForms(req, res, next) {
-    res.redirect('/frontend');
+    res.redirect('/omk/pages');
 }
