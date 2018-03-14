@@ -41,7 +41,7 @@ class Header extends React.Component {
         <NavbarGroup>
             <img className="pt-icon main-logo pt-align-left" src={logo} alt="omk logo" />
             <NavbarHeading>
-              <Link to="/#/"><h3>OpenMapKit Server</h3></Link>
+              <Link to="/"><h3>OpenMapKit Server</h3></Link>
             </NavbarHeading>
         </NavbarGroup>
         <NavbarGroup align="right">
