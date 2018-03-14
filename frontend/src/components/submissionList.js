@@ -63,7 +63,7 @@ class SubmissionMenu extends React.Component {
     return (
       <div>
         <Popover content={omkMenu} position={Position.BOTTOM} className="pt-intent-default">
-          <Button icon="link" text="OMK Data" />
+          <Button icon="link" text="ODK Data" />
         </Popover>
         <Popover content={osmMenu} position={Position.BOTTOM} className="pt-intent-default">
           <Button icon="path-search" text="OSM Data" />
@@ -138,9 +138,16 @@ class SubmissionList extends React.Component {
     );
     this.getSubmissionsPromise.promise.then(
       r => {
-        let data = r.map(
-          i => [i.start, i.end, i.deviceid, i.meta.submissionTime, i.building_placeholder, i.meta.instanceId.split(':')[1],]
-        );
+        let data = r.map(i => [
+          i.start,
+          i.end,
+          i.deviceid,
+          i.meta.submissionTime,
+          Object.values(i).filter(
+            entry => typeof(entry) === 'string' && entry.endsWith('.osm')
+          )[0],
+          i.meta.instanceId.split(':')[1],
+        ]);
         this.setState({ submissions: data });
         this.setState({ filteredSubmissions: data });
       }
