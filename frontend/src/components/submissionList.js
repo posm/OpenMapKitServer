@@ -42,7 +42,7 @@ class SubmissionMenu extends React.Component {
       <MenuItem className="pt-minimal" icon="th" label="Download CSV"
         href={`/omk/odk/submissions/${this.props.formId}.csv`}
         />
-      <MenuItem className="pt-minimal" icon="code" label="Download JSON"
+      <MenuItem className="pt-minimal" icon="code" label="Download JSON" download
         href={`/omk/odk/submissions/${this.props.formId}.json`}
         />
       <MenuItem className="pt-minimal" icon="compressed" label="Download ZIP"
@@ -51,13 +51,15 @@ class SubmissionMenu extends React.Component {
     </Menu>;
     const osmMenu =
     <Menu>
-      <MenuItem className="pt-minimal" label="All OSM data"
+      <MenuItem className="pt-minimal" label="All OSM data" download
         href={`/omk/odk/submissions/${this.props.formId}.osm`}
         />
       <MenuItem className="pt-minimal" label="Unsubmitted OSM data"
+        download={`${this.props.formId}-unsubmitted.osm`}
         href={`/omk/odk/submissions/${this.props.formId}.osm?unsubmitted=true`}
         />
       <MenuItem className="pt-minimal" label="Conflicting OSM data"
+        download={`${this.props.formId}-conflicting.osm`}
         href={`/omk/odk/submissions/${this.props.formId}.osm?conflicting=true`}
         />
     </Menu>;

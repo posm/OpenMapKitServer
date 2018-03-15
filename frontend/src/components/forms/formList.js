@@ -23,10 +23,10 @@ class FormList extends React.Component<any, propsType, any> {
           <p>Form ID: <code>{ form.get('formID') }</code></p>
           <ButtonGroup fill={true} vertical={true} large={false}>
             <AnchorButton icon="list" href={`/#/submissions/${form.get('formID')}`}>View submissions</AnchorButton>
-            <AnchorButton icon="th" href={`/omk/data/forms/${form.get('formID')}.xlsx`}>
+            <AnchorButton icon="th" download href={`/omk/data/forms/${form.get('formID')}.xlsx`}>
               XSLX Form
             </AnchorButton>
-            <AnchorButton icon="code" href={`/omk/data/forms/${form.get('formID')}.xml`}>
+            <AnchorButton icon="code" download href={`/omk/data/forms/${form.get('formID')}.xml`}>
               XForm XML
             </AnchorButton>
           </ButtonGroup>
