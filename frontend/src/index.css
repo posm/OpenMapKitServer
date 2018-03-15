@@ -49,3 +49,11 @@ body {
 .submissions-table {
   max-width: 90%
 }
+
+.display-block {
+  display: block;
+}
+
+.filter-btn {
+  margin-top: 20px !important;
+}

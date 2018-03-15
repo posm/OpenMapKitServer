@@ -3,10 +3,11 @@ import { connect } from "react-redux";
 import { Route, Redirect } from 'react-router'
 
 import {
-  Button, Popover, Menu, MenuItem, Position
+  Button, Popover, Menu, MenuItem, Position, InputGroup, Icon
 } from "@blueprintjs/core";
 import { Cell, Column, Table } from "@blueprintjs/table";
 import { DateInput, IDateFormatProps } from "@blueprintjs/datetime";
+import { Grid, Row, Col } from 'react-bootstrap';
 
 import { getSubmissions, submitToOSM } from '../network/submissions';
 import { formList } from '../network/formList';
@@ -63,12 +64,12 @@ class SubmissionMenu extends React.Component {
     return (
       <div>
         <Popover content={omkMenu} position={Position.BOTTOM} className="pt-intent-default">
-          <Button icon="link" text="ODK Data" />
+          <Button icon="link">ODK Data <Icon icon="caret-down" /></Button>
         </Popover>
         <Popover content={osmMenu} position={Position.BOTTOM} className="pt-intent-default">
-          <Button icon="path-search" text="OSM Data" />
+          <Button icon="path-search">OSM Data <Icon icon="caret-down" /></Button>
         </Popover>
-        <Button icon="send-to-map" text="Submit to OSM" onClick={this.submitToOSM}/>
+        <Button icon="send-to-map" text="Submit to OSM" onClick={this.submitToOSM} />
       </div>
     );
   }
@@ -85,7 +86,8 @@ class SubmissionList extends React.Component {
       filteredSubmissions: [],
       formName: '',
       totalSubmissions: 0,
-      filterDay: new Date()
+      filterDay: null,
+      filterDeviceId: ''
     }
   }
 
@@ -108,12 +110,29 @@ class SubmissionList extends React.Component {
       this.setState({ filterDay: date.toISOString().split('T')[0]});
     }
   }
+  handleFilterDeviceIdChange = (event) => {
+    this.setState({ filterDeviceId: event.target.value });
+  }
 
   filterSubmissions = () => {
-    const filtered = this.state.submissions.filter(
-      item => item[3].startsWith(this.state.filterDay)
-    );
+    let filtered = this.state.submissions;
+    if (this.state.filterDay) {
+      filtered = filtered.filter(
+        item => item[3].startsWith(this.state.filterDay)
+      );
+    }
+    if (this.state.filterDeviceId) {
+      filtered = filtered.filter(
+        item => item[2].toString().includes(this.state.filterDeviceId)
+      );
+    }
     this.setState({ filteredSubmissions: filtered });
+  }
+
+  clearFilter = () => {
+    this.setState({ filteredSubmissions: this.state.submissions });
+    this.setState({ filterDay: null });
+    this.setState({ filterDeviceId: '' });
   }
 
   getFormDetails = () => {
@@ -172,14 +191,38 @@ class SubmissionList extends React.Component {
                 <p>Total submissions: { this.state.totalSubmissions }</p>
                 <SubmissionMenu formId={this.props.formId} />
               </div>
-              <div className="filters">
-                <DateInput {...jsDateFormatter}
-                  defaultValue={new Date()}
-                  onChange={this.handleFilterDayChange}
-                />
-              <Button icon="filter" text="Filter" onClick={this.filterSubmissions}/>
-              </div>
-              <Table className="submissions-table center-block" columnWidths={[210,210,170,210,400]} numRows={this.state.filteredSubmissions.length}>
+              <Grid className="filters container">
+                <Row>
+                  <Col xs={12} md={2} mdOffset={3} className="pt-input-group">
+                    <label for="filter-day" className="display-block">Submission Date</label>
+                    <DateInput {...jsDateFormatter}
+                      id="filter-day"
+                      onChange={this.handleFilterDayChange}
+                      />
+                  </Col>
+                  <Col xs={12} md={2} className="pt-input-group">
+                    <label for="filter-deviceid" className="display-block">Device ID</label>
+                    <input id="filter-deviceid" type="text" className="pt-input pt-minimal"
+                      value={this.state.filterDeviceId}
+                      onChange={this.handleFilterDeviceIdChange}
+                      />
+                  </Col>
+                  <Col xs={12} md={1} className="pt-input-group">
+                    <Button className="pt-intent-success filter-btn"
+                      icon="filter" text="Filter" onClick={this.filterSubmissions}
+                      />
+                  </Col>
+                  <Col xs={12} md={1} className="pt-input-group">
+                    <Button className="pt-intent-danger filter-btn"
+                      icon="filter-remove" text="Clear" onClick={this.clearFilter}
+                      />
+                  </Col>
+                </Row>
+              </Grid>
+              <Table className="submissions-table center-block"
+                columnWidths={[210,210,170,210,400]}
+                numRows={this.state.filteredSubmissions.length}
+              >
                 <Column name="Start" cellRenderer={this.renderCell} />
                 <Column name="End" cellRenderer={this.renderCell} />
                 <Column name="Device ID" cellRenderer={this.renderCell} />
