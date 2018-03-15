@@ -164,6 +164,7 @@ class SubmissionList extends React.Component {
           i.end,
           i.deviceid,
           i.meta.submissionTime,
+          i.image,
           Object.values(i).filter(
             entry => typeof(entry) === 'string' && entry.endsWith('.osm')
           )[0],
@@ -176,9 +177,18 @@ class SubmissionList extends React.Component {
   }
 
   renderCell = (row, column) => <Cell>{this.state.filteredSubmissions[row][column]}</Cell>;
+  renderCellImage = (row, column) => <Cell>
+    {this.state.filteredSubmissions[row][column]
+      ? <a href={`/omk/data/submissions/${this.props.formId}/${this.state.filteredSubmissions[row][column+2]}/${this.state.filteredSubmissions[row][column]}`}>
+          Download image
+        </a>
+      : <span>No image</span>
+    }
+
+  </Cell>;
   renderCellLink = (row, column) => <Cell>
     <a href={`/omk/data/submissions/${this.props.formId}/${this.state.filteredSubmissions[row][column+1]}/${this.state.filteredSubmissions[row][column]}`}>
-      {this.state.filteredSubmissions[row][column]}
+      OSM File
     </a>
   </Cell>;
 
@@ -222,13 +232,14 @@ class SubmissionList extends React.Component {
                 </Row>
               </Grid>
               <Table className="submissions-table center-block"
-                columnWidths={[210,210,170,210,400]}
+                columnWidths={[210,210,170,230,190,190]}
                 numRows={this.state.filteredSubmissions.length}
               >
                 <Column name="Start" cellRenderer={this.renderCell} />
                 <Column name="End" cellRenderer={this.renderCell} />
                 <Column name="Device ID" cellRenderer={this.renderCell} />
                 <Column name="Submission Time" cellRenderer={this.renderCell} />
+                <Column name="Image" cellRenderer={this.renderCellImage} />
                 <Column name="Download" cellRenderer={this.renderCellLink} />
               </Table>
             </div>
