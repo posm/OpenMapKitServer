@@ -13,7 +13,7 @@ const { getFormMetadata } = require('../../../util/xform');
 const ASYNC_LIMIT = 10;
 
 module.exports = (opts, callback) => {
-  const { formName } = opts;
+  const { formName, date, deviceId } = opts;
   let { offset } = opts;
   let limit = parseInt(opts.limit);
 
@@ -57,7 +57,8 @@ module.exports = (opts, callback) => {
       });
     }
 
-    const selectFields = Object.keys((meta || {}).fields || {}).filter(k => meta.fields[k] === 'select');
+    const selectFields = Object.keys((meta || {}).fields || {})
+      .filter(k => meta.fields[k] === 'select');
     const selectItems = selectFields.reduce((obj, k) => {
       obj[k] = xpath.find(meta.form, `//h:body/select[@ref='/${meta.instanceName}/${k}']/item`)
         .reduce((obj2, item) => {
@@ -125,8 +126,17 @@ module.exports = (opts, callback) => {
               return obj;
             }, {});
 
-            aggregate.push(submission);
+            let filtered = true;
+            if (date && !submission.meta.submissionTime.startsWith(date)) {
+              filtered = false;
+            }
+            if (deviceId && !submission.deviceid.toString().includes(deviceId)) {
+              filtered = false;
+            }
 
+            if (filtered) {
+              aggregate.push(submission);
+            }
             return next(); // ok submission
           });
 

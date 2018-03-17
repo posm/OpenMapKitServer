@@ -5,7 +5,7 @@ var settings = require('../../../settings');
  * Gathers all of the OSM submissions for a form.
  * Creates an object with the submissions dir
  * and an array of corresponding files.
- * 
+ *
  * @param formName - the name (form_id) of the ODK form
  * @param cb - first param is error, second is an object of submission dirs
  *             with an array of osm files
@@ -112,7 +112,7 @@ function findOsmFilesInDir(dirStat, osmDirs, options, cb) {
         }
         if (!skip) {
             if (dirObj.files.length > 0) {
-                osmDirs.push(dirObj);    
+                osmDirs.push(dirObj);
             }
         }
         if (dirStat.len === dirStat.count) {

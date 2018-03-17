@@ -37,32 +37,35 @@ class SubmissionMenu extends React.Component {
   }
 
   render() {
-    const omkMenu =
-    <Menu>
+    let filterParams = Object.keys(this.props.filters).filter(
+      i => this.props.filters[i]
+      ).reduce(
+      (base, k) => `${base}${k}=${this.props.filters[k]}&`,
+      '');
+    const omkMenu = <Menu>
       <MenuItem className="pt-minimal" icon="th" label="Download CSV"
-        href={`/omk/odk/submissions/${this.props.formId}.csv`}
+        href={`/omk/odk/submissions/${this.props.formId}.csv?${filterParams}`}
         />
       <MenuItem className="pt-minimal" icon="code" label="Download JSON" download
-        href={`/omk/odk/submissions/${this.props.formId}.json`}
+        href={`/omk/odk/submissions/${this.props.formId}.json?${filterParams}`}
         />
-      <MenuItem className="pt-minimal" icon="compressed" label="Download ZIP"
-        href={`/omk/odk/submissions/${this.props.formId}.zip`}
-        />
-    </Menu>;
-    const osmMenu =
-    <Menu>
-      <MenuItem className="pt-minimal" label="All OSM data" download
-        href={`/omk/odk/submissions/${this.props.formId}.osm`}
-        />
-      <MenuItem className="pt-minimal" label="Unsubmitted OSM data"
-        download={`${this.props.formId}-unsubmitted.osm`}
-        href={`/omk/odk/submissions/${this.props.formId}.osm?unsubmitted=true`}
-        />
-      <MenuItem className="pt-minimal" label="Conflicting OSM data"
-        download={`${this.props.formId}-conflicting.osm`}
-        href={`/omk/odk/submissions/${this.props.formId}.osm?conflicting=true`}
+      <MenuItem className="pt-minimal" icon="compressed" label="Download Attachments"
+        href={`/omk/odk/submissions/${this.props.formId}.zip?${filterParams}`}
         />
     </Menu>;
+    const osmMenu = <Menu>
+        <MenuItem className="pt-minimal" label="All OSM data" download
+          href={`/omk/odk/submissions/${this.props.formId}.osm&${filterParams}`}
+          />
+        <MenuItem className="pt-minimal" label="Unsubmitted OSM data"
+          download={`${this.props.formId}-unsubmitted.osm`}
+          href={`/omk/odk/submissions/${this.props.formId}.osm?unsubmitted=true&${filterParams}`}
+          />
+        <MenuItem className="pt-minimal" label="Conflicting OSM data"
+          download={`${this.props.formId}-conflicting.osm`}
+          href={`/omk/odk/submissions/${this.props.formId}.osm?conflicting=true&${filterParams}`}
+          />
+      </Menu>;
     return (
       <div>
         <Popover content={omkMenu} position={Position.BOTTOM} className="pt-intent-default">
@@ -194,6 +197,7 @@ class SubmissionList extends React.Component {
 
   render() {
     const isAuthenticated = this.isAuthenticated();
+    const filters = {deviceId: this.state.filterDeviceId, date: this.state.filterDay};
     return(
       <div>
         {isAuthenticated
@@ -201,7 +205,7 @@ class SubmissionList extends React.Component {
               <div className="submissions-info">
                 <h2>{ this.state.formName }</h2>
                 <p>Total submissions: { this.state.totalSubmissions }</p>
-                <SubmissionMenu formId={this.props.formId} />
+                <SubmissionMenu formId={this.props.formId} filters={filters} />
               </div>
               <Grid className="filters container">
                 <Row>

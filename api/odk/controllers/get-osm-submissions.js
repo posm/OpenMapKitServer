@@ -14,7 +14,7 @@ module.exports = function (req, res, next) {
             res.status(err.status || 500).json(err);
             return;
         }
-        aggregate(osmDirs,  req, res);
+        aggregate(osmDirs, req, res);
     });
 
 };
