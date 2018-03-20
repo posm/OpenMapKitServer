@@ -1,5 +1,5 @@
 export function currentUser(): Promise<*> {
-  return fetch(`/current-user/`, {
+  return fetch(`/current-user`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -12,7 +12,7 @@ export function currentUser(): Promise<*> {
 }
 
 export function login(username: string, password: string): Promise<*> {
-  return fetch(`/login/`, {
+  return fetch(`/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

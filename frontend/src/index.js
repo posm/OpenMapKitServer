@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/css/bootstrap-theme.css";
 import '@blueprintjs/core/lib/css/blueprint.css';
 import '@blueprintjs/table/lib/css/table.css';
+import '@blueprintjs/icons/lib/css/blueprint-icons.css';
 import '@blueprintjs/datetime/lib/css/blueprint-datetime.css';
 import './index.css';
 import App from './App';

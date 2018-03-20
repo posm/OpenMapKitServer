@@ -1,12 +1,18 @@
 {
-  "main.css": "static/css/main.4d19dd8a.css",
-  "main.css.map": "static/css/main.4d19dd8a.css.map",
-  "main.js": "static/js/main.2d631ee1.js",
-  "main.js.map": "static/js/main.2d631ee1.js.map",
+  "main.css": "static/css/main.8a03166d.css",
+  "main.css.map": "static/css/main.8a03166d.css.map",
+  "main.js": "static/js/main.6818c179.js",
+  "main.js.map": "static/js/main.6818c179.js.map",
   "static/media/glyphicons-halflings-regular.eot": "static/media/glyphicons-halflings-regular.f4769f9b.eot",
   "static/media/glyphicons-halflings-regular.svg": "static/media/glyphicons-halflings-regular.89889688.svg",
   "static/media/glyphicons-halflings-regular.ttf": "static/media/glyphicons-halflings-regular.e18bbf61.ttf",
   "static/media/glyphicons-halflings-regular.woff": "static/media/glyphicons-halflings-regular.fa277232.woff",
   "static/media/glyphicons-halflings-regular.woff2": "static/media/glyphicons-halflings-regular.448c34a5.woff2",
-  "static/media/icon.png": "static/media/icon.f46e375d.png"
+  "static/media/icon.png": "static/media/icon.f46e375d.png",
+  "static/media/icons-16.eot": "static/media/icons-16.2c8962a6.eot",
+  "static/media/icons-16.ttf": "static/media/icons-16.717d9aac.ttf",
+  "static/media/icons-16.woff": "static/media/icons-16.d4e66df1.woff",
+  "static/media/icons-20.eot": "static/media/icons-20.8eb14aee.eot",
+  "static/media/icons-20.ttf": "static/media/icons-20.f9eec517.ttf",
+  "static/media/icons-20.woff": "static/media/icons-20.5d6d0525.woff"
 }
