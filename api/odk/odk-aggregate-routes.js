@@ -28,7 +28,7 @@ router.route('/submissions/:formName.zip').get(getSubmissionAttachments);
 /**
  * XLSForm Upload Endpoint
  */
-router.route('/upload-form').post(adminPermission, uploadForm);
+router.route('/upload-form').post(uploadForm);
 
 router.route('/manifest/:formName.xml').get(getManifest);
 
