@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Route, Redirect } from 'react-router'
+import { Redirect } from 'react-router'
 import { Button } from "@blueprintjs/core";
 
 import { login } from '../store/actions/auth';
@@ -40,7 +40,7 @@ class LoginPanel extends React.Component {
                 onChange={this.changePassword} placeholder="Enter your password..." />
               <Button type="submit" intent="primary" icon="log-in" text="Sign In" />
             </form>
-          : <Redirect to='/#/' />
+          : <Redirect to='/' />
       }
       </div>
     );

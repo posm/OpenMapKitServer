@@ -1,5 +1,3 @@
-import { push } from 'react-router-redux';
-
 import * as safeStorage from '../../utils/safe_storage';
 
 export const types = {

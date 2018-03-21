@@ -30,9 +30,11 @@ class Header extends React.Component {
         </Popover>
       );
     } else {
-      return <AnchorButton className="pt-minimal" icon="user" href="#/login/">
-        Login
-      </AnchorButton>
+      return <Link to="/login">
+        <AnchorButton className="pt-minimal" icon="user">
+          Login
+        </AnchorButton>
+      </Link>
     }
   }
   render() {
@@ -45,9 +47,11 @@ class Header extends React.Component {
             </NavbarHeading>
         </NavbarGroup>
         <NavbarGroup align="right">
-            <AnchorButton className="pt-minimal pt-white" icon="home" href="/">Home</AnchorButton>
+            <Link to="/"><Button className="pt-minimal pt-white" icon="home">Home</Button></Link>
             { this.isAuthenticated() &&
-              <AnchorButton className="pt-minimal pt-white" icon="cloud-upload" href="#/upload-form/">Upload Form</AnchorButton>
+              <Link to="/upload-form">
+                <Button className="pt-minimal pt-white" icon="cloud-upload">Upload Form</Button>
+              </Link>
             }
             { this.renderAuthSubMenu() }
         </NavbarGroup>

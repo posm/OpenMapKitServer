@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from "react-redux";
-import { Route, Redirect } from 'react-router'
+import { Redirect } from 'react-router'
 
 import {
-  Button, Popover, Menu, MenuItem, Position, InputGroup, Icon
+  Button, Popover, Menu, MenuItem, Position, Icon
 } from "@blueprintjs/core";
 import { Cell, Column, Table } from "@blueprintjs/table";
 import { DateInput, IDateFormatProps } from "@blueprintjs/datetime";
@@ -55,7 +55,7 @@ class SubmissionMenu extends React.Component {
     </Menu>;
     const osmMenu = <Menu>
         <MenuItem className="pt-minimal" label="All OSM data" download
-          href={`/omk/odk/submissions/${this.props.formId}.osm&${filterParams}`}
+          href={`/omk/odk/submissions/${this.props.formId}.osm?${filterParams}`}
           />
         <MenuItem className="pt-minimal" label="Unsubmitted OSM data"
           download={`${this.props.formId}-unsubmitted.osm`}

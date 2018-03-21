@@ -57,3 +57,7 @@ body {
 .filter-btn {
   margin-top: 20px !important;
 }
+
+.pt-dark a {
+  color: #fff;
+}

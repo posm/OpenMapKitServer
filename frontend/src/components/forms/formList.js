@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import { Map } from 'immutable';
-import { AnchorButton, ButtonGroup, Card, Elevation } from '@blueprintjs/core';
+import { AnchorButton, Button, ButtonGroup, Card, Elevation } from '@blueprintjs/core';
 import { Grid, Row, Col } from 'react-bootstrap';
 
 import { formList } from '../../network/formList';
@@ -22,9 +23,11 @@ class FormList extends React.Component<any, propsType, any> {
           <p>Number of Submissions: { form.get('totalSubmissions') }</p>
           <p>Form ID: <code>{ form.get('formID') }</code></p>
           <ButtonGroup fill={true} vertical={true} large={false}>
-            <AnchorButton icon="list" href={`/#/submissions/${form.get('formID')}`}>
-              View submissions
-            </AnchorButton>
+            <Link to={`/submissions/${form.get('formID')}`}>
+              <Button icon="list">
+                View submissions
+              </Button>
+            </Link>
             <AnchorButton icon="th" download href={`/omk/data/forms/${form.get('formID')}.xlsx`}>
               XSLX Form
             </AnchorButton>
