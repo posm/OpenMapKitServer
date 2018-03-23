@@ -166,8 +166,8 @@ app.use('/', odkOpenRosa);
  * We can't lock down /omk/data/forms route, because that
  * breaks /formList
  */
-// app.use('/omk/odk', auth);
-// app.use('/omk/data/submissions', adminDVPermission);
+app.use('/omk/odk', auth);
+app.use('/omk/data/submissions', adminDVPermission);
 
 // Open Data Kit Aggregate
 

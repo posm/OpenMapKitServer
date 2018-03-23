@@ -3,13 +3,14 @@ import { connect } from "react-redux";
 import { Redirect } from 'react-router'
 
 import {
-  Button, Popover, Menu, MenuItem, Position, Icon
+  AnchorButton, Button, Popover, Menu, MenuItem, Position, Icon, Dialog, Intent
 } from "@blueprintjs/core";
 import { Cell, Column, Table } from "@blueprintjs/table";
 import { DateInput, IDateFormatProps } from "@blueprintjs/datetime";
 import { Grid, Row, Col } from 'react-bootstrap';
 
 import { getSubmissions, submitToOSM } from '../network/submissions';
+import { handleErrors } from '../utils/promise';
 import { formList } from '../network/formList';
 import { cancelablePromise } from '../utils/promise';
 
@@ -23,6 +24,15 @@ const jsDateFormatter: IDateFormatProps = {
 
 class SubmissionMenu extends React.Component {
   submitToOSMPromise;
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeBlob: '',
+      downloadName:'',
+      openDialog: false
+    }
+    // this.downloadCsv = this.downloadCsv.bind(this);
+  }
 
   submitToOSM = () => {
     this.submitToOSMPromise = cancelablePromise(
@@ -36,34 +46,104 @@ class SubmissionMenu extends React.Component {
     ).catch(e => console.log(e));
   }
 
+  download = (urlEnding, filename) => {
+    const authBase64 = new Buffer(
+      this.props.userDetails.username + ':' + this.props.userDetails.password
+    ).toString('base64');
+    return fetch(`/omk/odk/submissions/${urlEnding}`, {
+      method: 'GET',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Authorization': `Basic ${authBase64}`
+      }
+    })
+      .then(handleErrors)
+      .then(res => res.blob())
+      .then(blob => {
+        const objURL = URL.createObjectURL(blob);
+        this.setState({ activeBlob: objURL });
+        this.setState({
+          downloadName: filename ? filename : urlEnding.split('?')[0]
+        });
+      });
+  }
+
+  downloadCsv = (event) => {
+    this.download(`${this.props.formId}.csv?${this.props.filterParams}`);
+    this.toggleDialog();
+  }
+  downloadJson = (event) => {
+    this.download(`${this.props.formId}.json?${this.props.filterParams}`);
+    this.toggleDialog();
+  }
+  downloadAttachments = (event) => {
+    this.download(`${this.props.formId}.zip?${this.props.filterParams}`);
+    this.toggleDialog();
+  }
+  downloadAllOsm = (event) => {
+    this.download(`${this.props.formId}.osm?${this.props.filterParams}`);
+    this.toggleDialog();
+  }
+  downloadOsmUnsubmitted = (event) => {
+    this.download(
+      `${this.props.formId}.osm?unsubmitted=true&${this.props.filterParams}`,
+      `${this.props.formId}-unsubmitted.osm`,
+    );
+    this.toggleDialog();
+  }
+  downloadOsmConflicting = (event) => {
+    this.download(
+      `${this.props.formId}.osm?conflicting=true&${this.props.filterParams}`,
+      `${this.props.formId}-conflicting.osm`
+    );
+    this.toggleDialog();
+  }
+
+  toggleDialog = () => this.setState({ openDialog: !this.state.openDialog });
+
+  renderDialog() {
+    return (
+      <Dialog
+        icon="cloud-download"
+        isOpen={this.state.openDialog}
+        onClose={this.toggleDialog}
+        title="Download file"
+      >
+        <div className="pt-dialog-body">
+          <p>{this.state.downloadName}</p>
+          <AnchorButton
+            intent={Intent.PRIMARY}
+            className="pt-small"
+            text="Download"
+            download={this.state.downloadName}
+            href={this.state.activeBlob}
+          />
+        </div>
+      </Dialog>
+    );
+  }
+
   render() {
-    let filterParams = Object.keys(this.props.filters).filter(
-      i => this.props.filters[i]
-      ).reduce(
-      (base, k) => `${base}${k}=${this.props.filters[k]}&`,
-      '');
     const omkMenu = <Menu>
       <MenuItem className="pt-minimal" icon="th" label="Download CSV"
-        href={`/omk/odk/submissions/${this.props.formId}.csv?${filterParams}`}
+        onClick={this.downloadCsv}
         />
-      <MenuItem className="pt-minimal" icon="code" label="Download JSON" download
-        href={`/omk/odk/submissions/${this.props.formId}.json?${filterParams}`}
+      <MenuItem className="pt-minimal" icon="code" label="Download JSON"
+        onClick={this.downloadJson}
         />
       <MenuItem className="pt-minimal" icon="compressed" label="Download Attachments"
-        href={`/omk/odk/submissions/${this.props.formId}.zip?${filterParams}`}
+        onClick={this.downloadAttachments}
         />
     </Menu>;
     const osmMenu = <Menu>
-        <MenuItem className="pt-minimal" label="All OSM data" download
-          href={`/omk/odk/submissions/${this.props.formId}.osm?${filterParams}`}
+        <MenuItem className="pt-minimal" label="All OSM data"
+          onClick={this.downloadAllOsm}
           />
         <MenuItem className="pt-minimal" label="Unsubmitted OSM data"
-          download={`${this.props.formId}-unsubmitted.osm`}
-          href={`/omk/odk/submissions/${this.props.formId}.osm?unsubmitted=true&${filterParams}`}
+          onClick={this.downloadOsmUnsubmitted}
           />
         <MenuItem className="pt-minimal" label="Conflicting OSM data"
-          download={`${this.props.formId}-conflicting.osm`}
-          href={`/omk/odk/submissions/${this.props.formId}.osm?conflicting=true&${filterParams}`}
+          onClick={this.downloadOsmConflicting}
           />
       </Menu>;
     return (
@@ -75,6 +155,7 @@ class SubmissionMenu extends React.Component {
           <Button icon="path-search">OSM Data <Icon icon="caret-down" /></Button>
         </Popover>
         <Button icon="send-to-map" text="Submit to OSM" onClick={this.submitToOSM} />
+        {this.renderDialog()}
       </div>
     );
   }
@@ -198,6 +279,11 @@ class SubmissionList extends React.Component {
   render() {
     const isAuthenticated = this.isAuthenticated();
     const filters = {deviceId: this.state.filterDeviceId, date: this.state.filterDay};
+    const filterParams = Object.keys(filters).filter(
+      i => filters[i]
+      ).reduce(
+      (base, k) => `${base}${k}=${filters[k]}&`,
+      '');
     return(
       <div>
         {isAuthenticated
@@ -205,19 +291,23 @@ class SubmissionList extends React.Component {
               <div className="submissions-info">
                 <h2>{ this.state.formName }</h2>
                 <p>Total submissions: { this.state.totalSubmissions }</p>
-                <SubmissionMenu formId={this.props.formId} filters={filters} />
+                <SubmissionMenu
+                  formId={this.props.formId}
+                  filterParams={filterParams}
+                  userDetails={this.props.userDetails}
+                  />
               </div>
               <Grid className="filters container">
                 <Row>
                   <Col xs={12} md={2} mdOffset={3} className="pt-input-group">
-                    <label for="filter-day" className="display-block">Submission Date</label>
+                    <label htmlFor="filter-day" className="display-block">Submission Date</label>
                     <DateInput {...jsDateFormatter}
                       id="filter-day"
                       onChange={this.handleFilterDayChange}
                       />
                   </Col>
                   <Col xs={12} md={2} className="pt-input-group">
-                    <label for="filter-deviceid" className="display-block">Device ID</label>
+                    <label htmlFor="filter-deviceid" className="display-block">Device ID</label>
                     <input id="filter-deviceid" type="text" className="pt-input pt-minimal"
                       value={this.state.filterDeviceId}
                       onChange={this.handleFilterDeviceIdChange}
