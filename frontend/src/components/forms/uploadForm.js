@@ -1,71 +1,74 @@
 import React from 'react';
-import { connect } from "react-redux";
-import DropzoneComponent from "react-dropzone-component";
+import {connect} from "react-redux";
+import Upload from 'rc-upload';
 
-import "react-dropzone-component/styles/filepicker.css";
-import "dropzone/dist/dropzone.css";
+import {Callout} from '@blueprintjs/core';
 
 
 class UploadForm extends React.Component {
   constructor(props) {
-     super(props);
-     // For a full list of possible configurations,
-     // please consult http://www.dropzonejs.com/#configuration
-     this.authBase64 = null;
-     if (this.props.userDetails &&
-         this.props.userDetails.hasOwnProperty('username') &&
-         this.props.userDetails.username !== null
-       ) {
-         this.authBase64 = new Buffer(
-           this.props.userDetails.username + ':' + this.props.userDetails.password
-         ).toString('base64');
-       }
-     this.djsConfig = {
-       addRemoveLinks: false,
-       headers: {
-         'Access-Control-Allow-Headers': 'Authorization, X-Requested-With, Accept, Content-Type, Origin, Cache-Control, X-File-Name',
-         'Authorization': `Basic ${this.authBase64}`
-       }
-     };
-     this.componentConfig = {
-       iconFiletypes: ['.xls', '.xlsx'],
-       showFiletypeIcon: true,
-       withCredentials: true,
-       postUrl: '/omk/odk/upload-form'
-     };
+    super(props);
+    this.state = {
+      success: false,
+      error: false,
+    }
+    this.authBase64 = null;
+    if (this.props.userDetails && this.props.userDetails.hasOwnProperty('username') && this.props.userDetails.username !== null) {
+      this.authBase64 = new Buffer(this.props.userDetails.username + ':' + this.props.userDetails.password).toString('base64');
+    }
+  }
 
-     // If you want to attach multiple callbacks, simply
-     // create an array filled with all your callbacks.
-     this.callbackArray = [() => console.log('Hi!'), () => console.log('Ho!')];
-     // Simple callbacks work too, of course
-     this.callback = () => console.log('Hello!');
-     this.success = file => console.log('uploaded', file);
-     this.removedfile = file => console.log('removing...', file);
-     this.dropzone = null;
-   }
-
-   render() {
-     const config = this.componentConfig;
-     const djsConfig = this.djsConfig;
-
-     // For a list of all possible events (there are many), see README.md!
-     const eventHandlers = {
-       init: dz => this.dropzone = dz,
-       drop: this.callbackArray,
-       addedfile: this.callback,
-       success: this.success,
-       removedfile: this.removedfile
-     }
-
-     return <DropzoneComponent className="center-block"
-         config={config} eventHandlers={eventHandlers} djsConfig={djsConfig}
-         />
-   }
+  render() {
+    const uploaderProps = {
+      action: '/omk/odk/upload-form',
+      headers: {
+        Authorization: `Basic ${this.authBase64}`
+      },
+      multiple: true,
+      beforeUpload(file) {
+        console.log('beforeUpload', file.name);
+      },
+      onStart: (file) => {
+        this.setState({error: false});
+        this.setState({success: false});
+        console.log('onStart', file.name);
+      },
+      onSuccess: (file) => {
+        this.setState({success: true});
+        this.setState({error: false});
+        console.log('onSuccess', file);
+      },
+      onProgress(step, file) {
+        console.log('onProgress', Math.round(step.percent), file.name);
+      },
+      onError: (err) => {
+        this.setState({error: true});
+        this.setState({success: false});
+      }
+    };
+    return (<div className="container">
+      {
+        this.state.success && <Callout title="Success!" intent="success" className="upload-result">
+            Your file(s) has been successfully uploaded and the new forms are already available
+          </Callout>
+      }
+      {
+        this.state.error && <Callout title="Error!" intent="danger" className="upload-result">
+            Some error ocurred while uploading your file(s).
+          </Callout>
+      }
+      <Upload {...uploaderProps} ref="inner">
+        <Callout title={"Upload XSL or XSLX files"} className="upload-area">
+          Drag and drop here your XSL or XSLX files to upload to OpenMapKit Server.
+        </Callout>
+      </Upload>
+    </div>);
+  }
 }
 
-const mapStateToProps = state => ({
-  userDetails: state.auth.userDetails
-});
+const mapStateToProps = state => ({userDetails: state.auth.userDetails});
 
 UploadForm = connect(mapStateToProps)(UploadForm);
-export { UploadForm };
+export {
+  UploadForm
+};

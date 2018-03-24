@@ -61,3 +61,12 @@ body {
 .pt-dark a {
   color: #fff;
 }
+
+.upload-area {
+  padding: 60px 0;
+  margin-top: 20px;
+}
+
+.upload-result {
+  margin-top: 20px;
+}
