@@ -8,8 +8,13 @@ var getOsmSubmissionsDirs = require('../helpers/get-osm-submissions-dirs');
  */
 module.exports = function (req, res, next) {
     var formName = req.params.formName;
+    var filters = {
+      deviceId: req.query.deviceId,
+      startDate: req.query.start_date,
+      endDate: req.query.end_date
+    }
 
-    getOsmSubmissionsDirs(formName, null, function (err, osmDirs) {
+    getOsmSubmissionsDirs(formName, {filters: filters}, function (err, osmDirs) {
         if (err) {
             res.status(err.status || 500).json(err);
             return;
