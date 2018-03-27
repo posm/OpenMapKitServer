@@ -10,7 +10,8 @@ module.exports = function (req, res, next) {
     formName: req.params.formName,
     limit: req.query.limit,
     offset: req.query.offset,
-    date: req.query.date,
+    startDate: req.query.start_date,
+    endDate: req.query.end_date,
     deviceId: req.query.deviceId
   }, (err, aggregate) => {
     if (err) {

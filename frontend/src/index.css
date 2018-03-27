@@ -70,3 +70,8 @@ body {
 .upload-result {
   margin-top: 20px;
 }
+
+.preview-submission-img {
+  margin-bottom: 7px;
+  max-height: 500px;
+}

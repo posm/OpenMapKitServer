@@ -167,7 +167,6 @@ app.use('/', odkOpenRosa);
  * breaks /formList
  */
 app.use('/omk/odk', auth);
-app.use('/omk/data/submissions', adminDVPermission);
 
 // Open Data Kit Aggregate
 
@@ -183,6 +182,7 @@ app.use('/omk/deployments', deployments);
 // Public Data & Static Assets
 app.use('/omk/data', express.static(settings.dataDir));
 app.use('/omk/data', directory(settings.dataDir));
+app.use('/omk/data/submissions', adminDVPermission);
 app.use('/omk/pages', express.static(settings.pagesDir));
 app.use('/omk/pages', directory(settings.pagesDir));
 // Handle errors

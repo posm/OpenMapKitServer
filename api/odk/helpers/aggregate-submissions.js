@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const moment = require('moment');
 
 const async = require('async');
 const JSONStream = require('JSONStream');
@@ -13,7 +14,7 @@ const { getFormMetadata } = require('../../../util/xform');
 const ASYNC_LIMIT = 10;
 
 module.exports = (opts, callback) => {
-  const { formName, date, deviceId } = opts;
+  const { formName, startDate, endDate, deviceId } = opts;
   let { offset } = opts;
   let limit = parseInt(opts.limit);
 
@@ -127,7 +128,10 @@ module.exports = (opts, callback) => {
             }, {});
 
             let filtered = true;
-            if (date && !submission.meta.submissionTime.startsWith(date)) {
+            if (startDate && moment(startDate).isAfter(submission.meta.submissionTime)) {
+              filtered = false;
+            }
+            if (endDate && moment(endDate).isBefore(submission.meta.submissionTime)) {
               filtered = false;
             }
             if (deviceId && !submission.deviceid.toString().includes(deviceId)) {

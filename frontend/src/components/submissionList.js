@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from "react-redux";
 import { Redirect } from 'react-router'
+import moment from 'moment';
 
 import {
   AnchorButton, Button, Popover, Menu, MenuItem, Position, Icon, Dialog, Intent
 } from "@blueprintjs/core";
 import { Cell, Column, Table } from "@blueprintjs/table";
 import { DateInput, IDateFormatProps } from "@blueprintjs/datetime";
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Grid, Row, Col, Image } from 'react-bootstrap';
 
 import { getSubmissions, submitToOSM } from '../network/submissions';
 import { handleErrors } from '../utils/promise';
@@ -31,7 +32,6 @@ class SubmissionMenu extends React.Component {
       downloadName:'',
       openDialog: false
     }
-    // this.downloadCsv = this.downloadCsv.bind(this);
   }
 
   submitToOSM = () => {
@@ -161,6 +161,87 @@ class SubmissionMenu extends React.Component {
   }
 };
 
+
+class TableItemDownload extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeBlob: '',
+      openDialog: false
+    }
+  }
+
+  download = (urlEnding, filename) => {
+    const authBase64 = new Buffer(
+      this.props.userDetails.username + ':' + this.props.userDetails.password
+    ).toString('base64');
+    return fetch(`/omk/data/submissions/${urlEnding}`, {
+      method: 'GET',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Authorization': `Basic ${authBase64}`
+      }
+    })
+      .then(handleErrors)
+      .then(res => res.blob())
+      .then(blob => {
+        const objURL = URL.createObjectURL(blob);
+        this.setState({ activeBlob: objURL });
+      });
+  }
+
+  downloadFile = (event) => {
+    this.download(this.props.urlEnding, this.props.filename);
+    this.toggleDialog();
+  }
+
+  toggleDialog = () => this.setState({ openDialog: !this.state.openDialog });
+
+  renderDialog() {
+    return (
+      <Dialog
+        icon="cloud-download"
+        isOpen={this.state.openDialog}
+        onClose={this.toggleDialog}
+        title="Download file"
+      >
+        <div className="pt-dialog-body">
+          {(this.props.filename.endsWith('.jpg') || this.props.filename.endsWith('.png'))
+            ? <Image src={this.state.activeBlob} responsive className="preview-submission-img" />
+          : <p>{this.props.filename}</p>
+          }
+          <AnchorButton
+            intent={Intent.PRIMARY}
+            className="pt-small"
+            text="Download"
+            download={this.props.filename}
+            href={this.state.activeBlob}
+          />
+        </div>
+      </Dialog>
+    );
+  }
+
+  render() {
+    if (this.props.filename.endsWith('.osm')) {
+      return(
+        <div>
+          <a onClick={this.downloadFile}>OSM File</a>
+          {this.renderDialog()}
+        </div>
+      );
+    } else {
+      return(
+        <div>
+          <a onClick={this.downloadFile}>Download image</a>
+          {this.renderDialog()}
+        </div>
+      );
+    }
+  }
+}
+
+
 class SubmissionList extends React.Component {
   getSubmissionsPromise;
   getFormDetailsPromise;
@@ -172,7 +253,8 @@ class SubmissionList extends React.Component {
       filteredSubmissions: [],
       formName: '',
       totalSubmissions: 0,
-      filterDay: null,
+      startDate: null,
+      endDate: null,
       filterDeviceId: ''
     }
   }
@@ -182,29 +264,47 @@ class SubmissionList extends React.Component {
         this.props.userDetails.hasOwnProperty('username') &&
         this.props.userDetails.username !== null
   }
+
   componentWillUnmount() {
     this.getSubmissionsPromise && this.getSubmissionsPromise.cancel();
     this.getFormDetailsPromise && this.getFormDetailsPromise.cancel();
   }
+
   componentDidMount() {
     this.getSubmissions();
     this.getFormDetails();
   }
 
-  handleFilterDayChange = (date) => {
+  handleFilterStartDate = (date) => {
     if (date) {
-      this.setState({ filterDay: date.toISOString().split('T')[0]});
+      this.setState({ startDate: date.toISOString().split('T')[0]});
+    } else {
+      this.setState({ startDate: null });
     }
   }
+
+  handleFilterEndDate = (date) => {
+    if (date) {
+      this.setState({ endDate: date.toISOString().split('T')[0]});
+    } else {
+      this.setState({ endDate: null });
+    }
+  }
+
   handleFilterDeviceIdChange = (event) => {
     this.setState({ filterDeviceId: event.target.value });
   }
 
   filterSubmissions = () => {
     let filtered = this.state.submissions;
-    if (this.state.filterDay) {
+    if (this.state.startDate) {
       filtered = filtered.filter(
-        item => item[3].startsWith(this.state.filterDay)
+        item => moment(this.state.startDate).isBefore(item[3], 'day') || moment(this.state.startDate).isSame(item[3], 'day')
+      );
+    }
+    if (this.state.endDate) {
+      filtered = filtered.filter(
+        item => moment(this.state.endDate).isAfter(item[3], 'day') || moment(this.state.endDate).isSame(item[3], 'day')
       );
     }
     if (this.state.filterDeviceId) {
@@ -217,7 +317,8 @@ class SubmissionList extends React.Component {
 
   clearFilter = () => {
     this.setState({ filteredSubmissions: this.state.submissions });
-    this.setState({ filterDay: null });
+    this.setState({ filterStartDate: null });
+    this.setState({ filterEndDate: null });
     this.setState({ filterDeviceId: '' });
   }
 
@@ -263,22 +364,30 @@ class SubmissionList extends React.Component {
   renderCell = (row, column) => <Cell>{this.state.filteredSubmissions[row][column]}</Cell>;
   renderCellImage = (row, column) => <Cell>
     {this.state.filteredSubmissions[row][column]
-      ? <a href={`/omk/data/submissions/${this.props.formId}/${this.state.filteredSubmissions[row][column+2]}/${this.state.filteredSubmissions[row][column]}`}>
-          Download image
-        </a>
+      ? <TableItemDownload
+          urlEnding={`${this.props.formId}/${this.state.filteredSubmissions[row][column+2]}/${this.state.filteredSubmissions[row][column]}`}
+          filename={this.state.filteredSubmissions[row][column]}
+          userDetails={this.props.userDetails}
+        />
       : <span>No image</span>
     }
 
   </Cell>;
   renderCellLink = (row, column) => <Cell>
-    <a href={`/omk/data/submissions/${this.props.formId}/${this.state.filteredSubmissions[row][column+1]}/${this.state.filteredSubmissions[row][column]}`}>
-      OSM File
-    </a>
+    <TableItemDownload
+      urlEnding={`${this.props.formId}/${this.state.filteredSubmissions[row][column+1]}/${this.state.filteredSubmissions[row][column]}`}
+      filename={this.state.filteredSubmissions[row][column]}
+      userDetails={this.props.userDetails}
+    />
   </Cell>;
 
   render() {
     const isAuthenticated = this.isAuthenticated();
-    const filters = {deviceId: this.state.filterDeviceId, date: this.state.filterDay};
+    const filters = {
+      deviceId: this.state.filterDeviceId,
+      start_date: this.state.startDate,
+      end_date: this.state.endDate
+    };
     const filterParams = Object.keys(filters).filter(
       i => filters[i]
       ).reduce(
@@ -299,11 +408,18 @@ class SubmissionList extends React.Component {
               </div>
               <Grid className="filters container">
                 <Row>
-                  <Col xs={12} md={2} mdOffset={3} className="pt-input-group">
-                    <label htmlFor="filter-day" className="display-block">Submission Date</label>
+                  <Col xs={12} md={2} mdOffset={2} className="pt-input-group">
+                    <label htmlFor="start-date" className="display-block">Start Date</label>
                     <DateInput {...jsDateFormatter}
-                      id="filter-day"
-                      onChange={this.handleFilterDayChange}
+                      id="start-date"
+                      onChange={this.handleFilterStartDate}
+                      />
+                  </Col>
+                  <Col xs={12} md={2} className="pt-input-group">
+                    <label htmlFor="end-date" className="display-block">End Date</label>
+                    <DateInput {...jsDateFormatter}
+                      id="end-date"
+                      onChange={this.handleFilterEndDate}
                       />
                   </Col>
                   <Col xs={12} md={2} className="pt-input-group">
