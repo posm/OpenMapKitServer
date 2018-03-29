@@ -4,7 +4,8 @@ import { Redirect } from 'react-router'
 import moment from 'moment';
 
 import {
-  AnchorButton, Button, Popover, Menu, MenuItem, Position, Icon, Dialog, Intent
+  AnchorButton, Button, Popover, Menu, MenuItem, Position, Icon, Dialog, Intent,
+  Tooltip
 } from "@blueprintjs/core";
 import { Cell, Column, Table } from "@blueprintjs/table";
 import { DateInput, IDateFormatProps } from "@blueprintjs/datetime";
@@ -361,7 +362,14 @@ class SubmissionList extends React.Component {
     ).catch(e => console.log(e));
   }
 
-  renderCell = (row, column) => <Cell>{this.state.filteredSubmissions[row][column]}</Cell>;
+  renderCell = (row, column) => <Cell>
+    {this.state.filteredSubmissions[row][column]}
+  </Cell>;
+
+  renderDateCell = (row, column) => <Cell>
+    {moment(this.state.filteredSubmissions[row][column]).format('lll')}
+  </Cell>;
+
   renderCellImage = (row, column) => <Cell>
     {this.state.filteredSubmissions[row][column]
       ? <TableItemDownload
@@ -412,14 +420,24 @@ class SubmissionList extends React.Component {
               <Grid className="filters container">
                 <Row>
                   <Col xs={12} md={2} mdOffset={2} className="pt-input-group">
-                    <label htmlFor="start-date" className="display-block">Start Date</label>
+                    <label htmlFor="start-date" className="display-block">
+                      From
+                      <Tooltip content="Based on the Submission Time" position={Position.RIGHT}>
+                        <Icon icon="help" color="#CED9E0" className="help-icon"/>
+                      </Tooltip>
+                    </label>
                     <DateInput {...jsDateFormatter}
                       id="start-date"
                       onChange={this.handleFilterStartDate}
                       />
                   </Col>
                   <Col xs={12} md={2} className="pt-input-group">
-                    <label htmlFor="end-date" className="display-block">End Date</label>
+                    <label htmlFor="end-date" className="display-block">
+                      To
+                      <Tooltip content="Based on the Submission Time" position={Position.RIGHT}>
+                        <Icon icon="help" color="#CED9E0" className="help-icon"/>
+                      </Tooltip>
+                    </label>
                     <DateInput {...jsDateFormatter}
                       id="end-date"
                       onChange={this.handleFilterEndDate}
@@ -455,10 +473,10 @@ class SubmissionList extends React.Component {
                 columnWidths={[210,210,170,230,190,190]}
                 numRows={this.state.filteredSubmissions.length}
               >
-                <Column name="Start" cellRenderer={this.renderCell} />
-                <Column name="End" cellRenderer={this.renderCell} />
+                <Column name="Start" cellRenderer={this.renderDateCell} />
+                <Column name="End" cellRenderer={this.renderDateCell} />
                 <Column name="Device ID" cellRenderer={this.renderCell} />
-                <Column name="Submission Time" cellRenderer={this.renderCell} />
+                <Column name="Submission Time" cellRenderer={this.renderDateCell} />
                 <Column name="Image" cellRenderer={this.renderCellImage} />
                 <Column name="Download" cellRenderer={this.renderCellLink} />
               </Table>
