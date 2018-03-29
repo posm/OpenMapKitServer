@@ -393,6 +393,9 @@ class SubmissionList extends React.Component {
       ).reduce(
       (base, k) => `${base}${k}=${filters[k]}&`,
       '');
+    let devices = this.state.submissions.map(item => item[2])
+    devices = devices.filter((i, k) => devices.indexOf(i) === k);
+
     return(
       <div>
         {isAuthenticated
@@ -424,10 +427,17 @@ class SubmissionList extends React.Component {
                   </Col>
                   <Col xs={12} md={2} className="pt-input-group">
                     <label htmlFor="filter-deviceid" className="display-block">Device ID</label>
-                    <input id="filter-deviceid" type="text" className="pt-input pt-minimal"
-                      value={this.state.filterDeviceId}
-                      onChange={this.handleFilterDeviceIdChange}
-                      />
+                    <div className="pt-select">
+                      <select onChange={this.handleFilterDeviceIdChange}>
+                        <option value={null} >Choose an item...</option>
+                        {devices.map(
+                          (item, k) =>
+                            <option key={k} value={ `${item}` }>
+                              { item.toString() }
+                            </option>
+                        )}
+                      </select>
+                    </div>
                   </Col>
                   <Col xs={12} md={1} className="pt-input-group">
                     <Button className="pt-intent-success filter-btn"
