@@ -470,7 +470,7 @@ class SubmissionList extends React.Component {
                 </Row>
               </Grid>
               <Table className="submissions-table center-block"
-                columnWidths={[210,210,170,230,190,190]}
+                columnWidths={[190,190,190,190,190,190]}
                 numRows={this.state.filteredSubmissions.length}
               >
                 <Column name="Start" cellRenderer={this.renderDateCell} />
