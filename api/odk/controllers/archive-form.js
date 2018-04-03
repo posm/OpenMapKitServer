@@ -33,9 +33,6 @@ const moveSubmissions = (submissionDir, archiveDir, formName) => {
 
 module.exports = (req, res, next) => {
   const formName = req.params.formName;
-  const xlsFile = path.join(settings.dataDir, 'forms', `${formName}.xls`);
-  const xlsxFile = path.join(settings.dataDir, 'forms', `${formName}.xlsx`);
-  const xmlFile = path.join(settings.dataDir, 'forms', `${formName}.xml`);
   const submissionDir = path.join(settings.dataDir, 'submissions', formName);
   const archiveDir = path.join(settings.dataDir, 'archive');
   let errors = [];
@@ -57,20 +54,22 @@ module.exports = (req, res, next) => {
       });
     } else {
       if (items.filter(i => i === 'forms').length === 0) {
-        fs.mkdir(path.join(archiveDir, 'forms'), mkdirError => {
-          if (!mkdirError) moveFiles(archiveDir, formName);
-        });
+        fs.mkdir(path.join(archiveDir, 'forms'));
+      } else {
+        moveFiles(archiveDir, formName);
       }
       if (items.filter(i => i === 'submissions').length === 0) {
-        fs.mkdir(path.join(archiveDir, 'submissions'), mkdirError => {
-          if (!mkdirError) moveSubmissions(submissionDir, archiveDir, formName);
-        });
+        fs.mkdir(path.join(archiveDir, 'submissions'));
+      } else {
+        moveSubmissions(submissionDir, archiveDir, formName);
       }
     }
   });
 
+
+
   if (errors.length > 1) {
-    res.status(403).json({detail: "Errors ocurred during the archive process."})
+    res.status(500).json({detail: "Errors ocurred during the archive process."})
   } else {
     res.status(200).json({detail: "Form archived successfully."})
   }

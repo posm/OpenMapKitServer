@@ -10,6 +10,7 @@ var uploadForm = require('./controllers/upload-form');
 var submitChangesets = require('./controllers/submit-changesets');
 var deleteForm = require('./controllers/delete-form');
 var archiveForm = require('./controllers/archive-form');
+var restoreForm = require('./controllers/restore-form');
 
 /**
  * Aggregate End Points
@@ -33,11 +34,12 @@ router.route('/upload-form').post(adminPermission, uploadForm);
 router.route('/manifest/:formName.xml').get(getManifest);
 
 /**
- * Form Delete/Archive Endpoint
+ * Form Delete/Archive/Restore Endpoints
  */
 
  router.route('/forms/:formName/delete').post(adminPermission, deleteForm);
  router.route('/forms/:formName/archive').post(adminPermission, archiveForm);
+ router.route('/forms/:formName/restore').post(adminPermission, restoreForm);
 
 /**
  * Creates changesets for submissions and submits to
