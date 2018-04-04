@@ -11,7 +11,8 @@ import { Cell, Column, Table } from "@blueprintjs/table";
 import { DateInput, IDateFormatProps } from "@blueprintjs/datetime";
 import { Grid, Row, Col, Image } from 'react-bootstrap';
 
-import { getSubmissions, submitToOSM } from '../network/submissions';
+import { getSubmissions } from '../network/submissions';
+import { archiveForm, deleteForm } from '../network/formManagement';
 import { handleErrors } from '../utils/promise';
 import { formList } from '../network/formList';
 import { cancelablePromise } from '../utils/promise';
@@ -25,24 +26,48 @@ const jsDateFormatter: IDateFormatProps = {
 };
 
 class SubmissionMenu extends React.Component {
-  submitToOSMPromise;
+  archiveFormPromise;
   constructor(props) {
     super(props);
     this.state = {
       activeBlob: '',
       downloadName:'',
-      openDialog: false
+      openDialog: false,
+      formArchivedOrDelete: false
     }
   }
 
-  submitToOSM = () => {
-    this.submitToOSMPromise = cancelablePromise(
-      submitToOSM(this.props.formId)
+  componentWillUnmount() {
+      this.archiveFormPromise && this.archiveFormPromise.cancel();
+      this.deleteFormPromise && this.deleteFormPromise.cancel();
+  }
+
+  archiveForm = (event) => {
+    this.archiveFormPromise = cancelablePromise(
+      archiveForm(
+        this.props.formId,
+        this.props.userDetails.username,
+        this.props.userDetails.password
+      )
     );
-    this.submitToOSMPromise.promise.then(
+    this.archiveFormPromise.promise.then(
       r => {
-        // need to implement some notification system
-        console.log('changeset submitted//');
+        this.setState({ formArchivedOrDelete: true });
+      }
+    ).catch(e => console.log(e));
+  }
+
+  deleteForm = (event) => {
+    this.deleteFormPromise = cancelablePromise(
+      deleteForm(
+        this.props.formId,
+        this.props.userDetails.username,
+        this.props.userDetails.password
+      )
+    );
+    this.deleteFormPromise.promise.then(
+      r => {
+        this.setState({ formArchivedOrDelete: true });
       }
     ).catch(e => console.log(e));
   }
@@ -69,6 +94,11 @@ class SubmissionMenu extends React.Component {
       });
   }
 
+  isAdmin() {
+    return this.props.userDetails &&
+      this.props.userDetails.hasOwnProperty('role') &&
+      this.props.userDetails.role === 'admin';
+  }
   downloadCsv = (event) => {
     this.download(`${this.props.formId}.csv?${this.props.filterParams}`);
     this.toggleDialog();
@@ -147,16 +177,37 @@ class SubmissionMenu extends React.Component {
           onClick={this.downloadOsmConflicting}
           />
       </Menu>;
+    const manageMenu = <Menu>
+        <MenuItem className="pt-minimal" icon="add-to-folder" label="Archive Form"
+          onClick={this.archiveForm}
+          />
+        {!this.props.hasSubmissions &&
+          <MenuItem className="pt-minimal" icon="trash" label="Delete Form"
+            onClick={this.deleteForm}
+            />
+        }
+      </Menu>;
     return (
       <div>
-        <Popover content={omkMenu} position={Position.BOTTOM} className="pt-intent-default">
-          <Button icon="link">ODK Data <Icon icon="caret-down" /></Button>
-        </Popover>
-        <Popover content={osmMenu} position={Position.BOTTOM} className="pt-intent-default">
-          <Button icon="path-search">OSM Data <Icon icon="caret-down" /></Button>
-        </Popover>
-        <Button icon="send-to-map" text="Submit to OSM" onClick={this.submitToOSM} />
-        {this.renderDialog()}
+        {!this.state.formArchivedOrDelete
+          ? <div>
+              <Popover content={omkMenu} position={Position.BOTTOM} className="pt-intent-default">
+                <Button icon="link">ODK Data <Icon icon="caret-down" /></Button>
+              </Popover>
+              <Popover content={osmMenu} position={Position.BOTTOM} className="pt-intent-default">
+                <Button icon="path-search">OSM Data <Icon icon="caret-down" /></Button>
+              </Popover>
+              {this.isAdmin() &&
+                <Popover content={manageMenu} position={Position.BOTTOM}
+                  className="pt-intent-default"
+                  >
+                  <Button icon="cog">Manage <Icon icon="caret-down" /></Button>
+                </Popover>
+              }
+              {this.renderDialog()}
+            </div>
+          : <Redirect to='/' />
+        }
       </div>
     );
   }
@@ -413,6 +464,7 @@ class SubmissionList extends React.Component {
                 <p>Total submissions: { this.state.totalSubmissions }</p>
                 <SubmissionMenu
                   formId={this.props.formId}
+                  hasSubmissions={this.state.totalSubmissions > 0}
                   filterParams={filterParams}
                   userDetails={this.props.userDetails}
                   />

@@ -54,6 +54,10 @@ body {
   display: block;
 }
 
+.display-inline {
+  display: inline;
+}
+
 .filter-btn {
   margin: 20px 17% 0 17% !important;
 }
@@ -62,12 +66,12 @@ body {
   color: #fff;
 }
 
-.upload-area {
+.upload-area{
   padding: 60px 0;
   margin-top: 20px;
 }
 
-.upload-result {
+.upload-result, .archived-forms, .archived-form-list {
   margin-top: 20px;
 }
 
@@ -78,4 +82,8 @@ body {
 
 .help-icon {
   margin-left: 5px;
+}
+
+.restore-btn {
+  margin-left: 10px;
 }

@@ -14,8 +14,13 @@ import logo from '../icon.png'
 class Header extends React.Component {
   isAuthenticated(){
     return this.props.userDetails &&
-        this.props.userDetails.hasOwnProperty('username') &&
-        this.props.userDetails.username !== null
+      this.props.userDetails.hasOwnProperty('username') &&
+      this.props.userDetails.username !== null
+  }
+  isAdmin() {
+    return this.props.userDetails &&
+      this.props.userDetails.hasOwnProperty('role') &&
+      this.props.userDetails.role === 'admin'
   }
   renderAuthSubMenu() {
     if (this.isAuthenticated()) {
@@ -47,10 +52,23 @@ class Header extends React.Component {
             </NavbarHeading>
         </NavbarGroup>
         <NavbarGroup align="right">
-            <Link to="/"><Button className="pt-minimal pt-white" icon="home">Home</Button></Link>
-            { this.isAuthenticated() &&
+            <Link to="/">
+              <Button className="pt-minimal pt-white" icon="home">
+                Home
+              </Button>
+            </Link>
+            { this.isAdmin() &&
               <Link to="/upload-form">
-                <Button className="pt-minimal pt-white" icon="cloud-upload">Upload Form</Button>
+                <Button className="pt-minimal pt-white" icon="cloud-upload">
+                  Upload Form
+                </Button>
+              </Link>
+            }
+            { this.isAdmin() &&
+              <Link to="/archived-forms">
+                <Button className="pt-minimal pt-white" icon="folder-close">
+                  Archived Forms
+                </Button>
               </Link>
             }
             { this.renderAuthSubMenu() }
