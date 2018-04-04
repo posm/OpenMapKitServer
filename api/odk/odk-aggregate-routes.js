@@ -11,6 +11,7 @@ var submitChangesets = require('./controllers/submit-changesets');
 var deleteForm = require('./controllers/delete-form');
 var archiveForm = require('./controllers/archive-form');
 var restoreForm = require('./controllers/restore-form');
+var archivedForms = require('./controllers/archived-form-list');
 
 /**
  * Aggregate End Points
@@ -37,6 +38,7 @@ router.route('/manifest/:formName.xml').get(getManifest);
  * Form Delete/Archive/Restore Endpoints
  */
 
+ router.route('/archived-forms').get(adminPermission, archivedForms);
  router.route('/forms/:formName/delete').post(adminPermission, deleteForm);
  router.route('/forms/:formName/archive').post(adminPermission, archiveForm);
  router.route('/forms/:formName/restore').post(adminPermission, restoreForm);
