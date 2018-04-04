@@ -42,7 +42,12 @@ module.exports = (req, res, next) => {
         );
       });
       // move submissions dir
-      fs.rename(path.join(archiveDir, 'submissions', formName), submissionDir);
+      fs.readdir(path.join(archiveDir, 'submissions', formName), (err, items) => {
+        if (!err) {
+          fs.rename(path.join(archiveDir, 'submissions', formName), submissionDir);
+        }
+      }
+      );
       return res.status(200).json({detail: "Form restored successfully."});
     }
   });
