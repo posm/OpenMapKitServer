@@ -419,7 +419,7 @@ class SubmissionList extends React.Component {
       r => {
         let data = r.map(i => [
           i.start,
-          i.end,
+          i.end ? i.end : i.meta.submissionTime,
           i.username ? i.username : i.deviceid,
           i.meta.submissionTime,
           i.image,
