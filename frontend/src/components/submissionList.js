@@ -119,20 +119,6 @@ class SubmissionMenu extends React.Component {
     this.download(`${this.props.formId}.osm?${this.props.filterParams}`);
     this.toggleDialog();
   }
-  downloadOsmUnsubmitted = (event) => {
-    this.download(
-      `${this.props.formId}.osm?unsubmitted=true&${this.props.filterParams}`,
-      `${this.props.formId}-unsubmitted.osm`,
-    );
-    this.toggleDialog();
-  }
-  downloadOsmConflicting = (event) => {
-    this.download(
-      `${this.props.formId}.osm?conflicting=true&${this.props.filterParams}`,
-      `${this.props.formId}-conflicting.osm`
-    );
-    this.toggleDialog();
-  }
 
   toggleDialog = () => this.setState({ openDialog: !this.state.openDialog });
 
@@ -179,12 +165,6 @@ class SubmissionMenu extends React.Component {
             onClick={this.downloadFilteredOsm}
             />
         }
-        <MenuItem className="pt-minimal" label="Unsubmitted OSM data"
-          onClick={this.downloadOsmUnsubmitted}
-          />
-        <MenuItem className="pt-minimal" label="Conflicting OSM data"
-          onClick={this.downloadOsmConflicting}
-          />
       </Menu>;
     const manageMenu = <Menu>
         <MenuItem className="pt-minimal" icon="add-to-folder" label="Archive Form"
