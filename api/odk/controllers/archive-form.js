@@ -13,7 +13,7 @@ const moveFiles = (archiveDir, formName) => {
         path.join(settings.dataDir, 'forms', i),
         path.join(archiveDir, 'forms', i),
         renameError => {
-          if (renameError) errors.push(i);
+          if (renameError) console.log(`Error when moving file ${i}.`);
         }
       )
     );
@@ -26,7 +26,9 @@ const moveSubmissions = (submissionDir, archiveDir, formName) => {
   fs.rename(
     submissionDir,
     path.join(archiveDir, 'submissions', formName),
-    renameError => console.log('It was not possible to move the submissions directory.')
+    renameError => {
+      if (renameError) console.log('It was not possible to move the submissions directory.');
+    }
   );
 }
 
@@ -35,42 +37,53 @@ module.exports = (req, res, next) => {
   const formName = req.params.formName;
   const submissionDir = path.join(settings.dataDir, 'submissions', formName);
   const archiveDir = path.join(settings.dataDir, 'archive');
-  let errors = [];
 
   // check and create archive dir and its subdirectories
   fs.readdir(archiveDir, (err, items) => {
     if (err) {
       fs.mkdir(archiveDir, mkdirError => {
         if (mkdirError) {
-          return res.status(500).json({detail: "It wasn't possible to create archive dir."})
+          return res.status(500).json({detail: "It wasn't possible to create archive dir."});
         } else {
-          fs.mkdir(path.join(archiveDir, 'forms'), mkdirError => {
-            if (!mkdirError) moveFiles(archiveDir, formName);
+          fs.mkdir(path.join(archiveDir, 'forms'), formsDirError => {
+            if (!formsDirError) moveFiles(archiveDir, formName);
           });
-          fs.mkdir(path.join(archiveDir, 'submissions'), mkdirError => {
-            if (!mkdirError) moveSubmissions(submissionDir, archiveDir, formName);
+          fs.mkdir(path.join(archiveDir, 'submissions'), subDirError => {
+            if (!subDirError) moveSubmissions(submissionDir, archiveDir, formName);
           });
+          return res.status(200).json({detail: "Form archived successfully."});
         }
       });
     } else {
       if (items.filter(i => i === 'forms').length === 0) {
-        fs.mkdir(path.join(archiveDir, 'forms'));
+        fs.mkdir(path.join(archiveDir, 'forms'), (err) => {
+            if (!err) {
+              moveFiles(archiveDir, formName)
+            } else {
+              return res.status(500).json(
+                {detail: "It wasn't possible to create forms archive dir."}
+              );
+            }
+          }
+        );
       } else {
         moveFiles(archiveDir, formName);
       }
       if (items.filter(i => i === 'submissions').length === 0) {
-        fs.mkdir(path.join(archiveDir, 'submissions'));
+        fs.mkdir(path.join(archiveDir, 'submissions'), err => {
+          if (!err) {
+            moveSubmissions(submissionDir, archiveDir, formName);
+          } else {
+            return res.status(500).json(
+              {detail: "It wasn't possible to create submissions archive dir."}
+            );
+          }
+        }
+      );
       } else {
         moveSubmissions(submissionDir, archiveDir, formName);
       }
+      return res.status(200).json({detail: "Form archived successfully."});
     }
   });
-
-
-
-  if (errors.length > 1) {
-    res.status(500).json({detail: "Errors ocurred during the archive process."})
-  } else {
-    res.status(200).json({detail: "Form archived successfully."})
-  }
 };
