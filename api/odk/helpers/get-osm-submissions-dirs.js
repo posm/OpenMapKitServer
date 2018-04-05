@@ -137,6 +137,9 @@ function filterByDateAndDevice(submissionDir, filters) {
   if (filters.deviceId && !submission.meta.deviceId.startsWith(filters.deviceId)) {
     filtered = false;
   }
+  if (filters.username && !submission.username.startsWith(filters.username)) {
+    filtered = false;
+  }
   submissionDate = moment(submission.meta.submissionTime.split('T')[0]);
   if (filters.startDate && moment(filters.startDate).isAfter(submissionDate)) {
     filtered = false;

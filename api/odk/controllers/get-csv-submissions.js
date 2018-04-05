@@ -14,7 +14,8 @@ module.exports = function(req, res, next) {
     offset: req.query.offset,
     startDate: req.query.start_date,
     endDate: req.query.end_date,
-    deviceId: req.query.deviceId
+    deviceId: req.query.deviceId,
+    username: req.query.username
   };
 
   aggregate(opts, function(err, aggregate) {

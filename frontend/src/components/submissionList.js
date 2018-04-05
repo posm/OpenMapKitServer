@@ -307,7 +307,9 @@ class SubmissionList extends React.Component {
       totalSubmissions: 0,
       startDate: null,
       endDate: null,
-      filterDeviceId: ''
+      filterDeviceId: '',
+      filterUsername: '',
+      hasUsername: false
     }
   }
 
@@ -347,6 +349,10 @@ class SubmissionList extends React.Component {
     this.setState({ filterDeviceId: event.target.value });
   }
 
+  handleFilterUsernameChange = (event) => {
+    this.setState({ filterUsername: event.target.value });
+  }
+
   filterSubmissions = () => {
     let filtered = this.state.submissions;
     if (this.state.startDate) {
@@ -364,6 +370,11 @@ class SubmissionList extends React.Component {
         item => item[2].toString().includes(this.state.filterDeviceId)
       );
     }
+    if (this.state.filterUsername) {
+      filtered = filtered.filter(
+        item => item[2].toString().includes(this.state.filterUsername)
+      );
+    }
     this.setState({ filteredSubmissions: filtered });
   }
 
@@ -372,6 +383,7 @@ class SubmissionList extends React.Component {
     this.setState({ filterStartDate: null });
     this.setState({ filterEndDate: null });
     this.setState({ filterDeviceId: '' });
+    this.setState({ filterUsername: '' });
   }
 
   getFormDetails = () => {
@@ -399,7 +411,7 @@ class SubmissionList extends React.Component {
         let data = r.map(i => [
           i.start,
           i.end,
-          i.deviceid,
+          i.username ? i.username : i.deviceid,
           i.meta.submissionTime,
           i.image,
           Object.values(i).filter(
@@ -407,6 +419,9 @@ class SubmissionList extends React.Component {
           )[0],
           i.meta.instanceId.split(':')[1],
         ]);
+        if (r.length > 0 && r[0].hasOwnProperty('username')) {
+          this.setState({ hasUsername: true });
+        }
         this.setState({ submissions: data });
         this.setState({ filteredSubmissions: data });
       }
@@ -445,14 +460,15 @@ class SubmissionList extends React.Component {
     const filters = {
       deviceId: this.state.filterDeviceId,
       start_date: this.state.startDate,
-      end_date: this.state.endDate
+      end_date: this.state.endDate,
+      username: this.state.filterUsername
     };
     const filterParams = Object.keys(filters).filter(
       i => filters[i]
-      ).reduce(
+    ).reduce(
       (base, k) => `${base}${k}=${filters[k]}&`,
-      '');
-    let devices = this.state.submissions.map(item => item[2])
+    '');
+    let devices = this.state.submissions.map(item => item[2]);
     devices = devices.filter((i, k) => devices.indexOf(i) === k);
 
     return(
@@ -495,20 +511,41 @@ class SubmissionList extends React.Component {
                       onChange={this.handleFilterEndDate}
                       />
                   </Col>
-                  <Col xs={12} md={2} className="pt-input-group">
-                    <label htmlFor="filter-deviceid" className="display-block">Device ID</label>
-                    <div className="pt-select">
-                      <select onChange={this.handleFilterDeviceIdChange}>
-                        <option value={null} >Choose an item...</option>
-                        {devices.map(
-                          (item, k) =>
-                            <option key={k} value={ `${item}` }>
-                              { item.toString() }
-                            </option>
-                        )}
-                      </select>
-                    </div>
-                  </Col>
+                  {this.state.hasUsername
+                    ? <Col xs={12} md={2} className="pt-input-group">
+                        <label htmlFor="filter-username" className="display-block">
+                          Username
+                        </label>
+                        <div className="pt-select">
+                          <select onChange={this.handleFilterUsernameChange}>
+                            <option value={null} >Choose an item...</option>
+                            {devices.map(
+                              (item, k) =>
+                                <option key={k} value={ `${item}` }>
+                                  { item.toString() }
+                                </option>
+                            )}
+                          </select>
+                        </div>
+                      </Col>
+                    : <Col xs={12} md={2} className="pt-input-group">
+                        <label htmlFor="filter-deviceid" className="display-block">
+                          Device ID
+                        </label>
+                        <div className="pt-select">
+                          <select onChange={this.handleFilterDeviceIdChange}>
+                            <option value={null} >Choose an item...</option>
+                            {devices.map(
+                              (item, k) =>
+                                <option key={k} value={ `${item}` }>
+                                  { item.toString() }
+                                </option>
+                            )}
+                          </select>
+                        </div>
+                      </Col>
+                  }
+
                   <Col xs={12} md={1} className="pt-input-group">
                     <Button className="pt-intent-success filter-btn"
                       icon="filter" text="Filter" onClick={this.filterSubmissions}
@@ -527,7 +564,10 @@ class SubmissionList extends React.Component {
               >
                 <Column name="Start" cellRenderer={this.renderDateCell} />
                 <Column name="End" cellRenderer={this.renderDateCell} />
-                <Column name="Device ID" cellRenderer={this.renderCell} />
+                {this.state.hasUsername
+                  ? <Column name="Username" cellRenderer={this.renderCell} />
+                  : <Column name="Device ID" cellRenderer={this.renderCell} />
+                }
                 <Column name="Submission Time" cellRenderer={this.renderDateCell} />
                 <Column name="Image" cellRenderer={this.renderCellImage} />
                 <Column name="Download" cellRenderer={this.renderCellLink} />

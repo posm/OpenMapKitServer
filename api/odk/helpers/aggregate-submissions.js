@@ -14,7 +14,7 @@ const { getFormMetadata } = require('../../../util/xform');
 const ASYNC_LIMIT = 10;
 
 module.exports = (opts, callback) => {
-  const { formName, startDate, endDate, deviceId } = opts;
+  const { formName, startDate, endDate, deviceId, username } = opts;
   let { offset } = opts;
   let limit = parseInt(opts.limit);
 
@@ -135,6 +135,9 @@ module.exports = (opts, callback) => {
               filtered = false;
             }
             if (deviceId && !submission.deviceid.toString().includes(deviceId)) {
+              filtered = false;
+            }
+            if (username && !submission.username.toString().includes(username)) {
               filtered = false;
             }
 
