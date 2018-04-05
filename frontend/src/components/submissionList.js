@@ -112,6 +112,10 @@ class SubmissionMenu extends React.Component {
     this.toggleDialog();
   }
   downloadAllOsm = (event) => {
+    this.download(`${this.props.formId}.osm`);
+    this.toggleDialog();
+  }
+  downloadFilteredOsm = (event) => {
     this.download(`${this.props.formId}.osm?${this.props.filterParams}`);
     this.toggleDialog();
   }
@@ -170,6 +174,11 @@ class SubmissionMenu extends React.Component {
         <MenuItem className="pt-minimal" label="All OSM data"
           onClick={this.downloadAllOsm}
           />
+        {this.props.filterParams &&
+          <MenuItem className="pt-minimal" label="Filtered OSM data"
+            onClick={this.downloadFilteredOsm}
+            />
+        }
         <MenuItem className="pt-minimal" label="Unsubmitted OSM data"
           onClick={this.downloadOsmUnsubmitted}
           />
