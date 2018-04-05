@@ -37,7 +37,7 @@ class Header extends React.Component {
     } else {
       return <Link to="/login">
         <AnchorButton className="pt-minimal" icon="user">
-          Login
+          Log in
         </AnchorButton>
       </Link>
     }

@@ -41,7 +41,7 @@ class Form extends React.Component {
           ? <div>
               <h3 className="display-inline">{ this.props.formName }</h3>
               <Button className="display-inline restore-btn" icon="refresh"
-                intent="success" text="Restore" onClick={this.restoreForm}
+                intent="warning" text="Restore" onClick={this.restoreForm}
               />
             </div>
           : <div>
@@ -84,7 +84,7 @@ class ArchivedForms extends React.Component {
         <h2>Archived Forms</h2>
         <Grid className="archived-form-list">
           <Row>
-            <Col xs={12} md={4} mdOffset={4}>
+            <Col xs={12} md={6} mdOffset={3}>
               {this.state.forms.length
                 ? <ListGroup>
                     {this.state.forms.map(

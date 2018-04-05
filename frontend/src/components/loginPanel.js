@@ -34,11 +34,12 @@ class LoginPanel extends React.Component {
       <div className="pt-input-group login center-block">
         {!this.props.username
           ? <form onSubmit={this.onSubmit}>
+              <h2>Sign in</h2>
               <input type="text" className="pt-input" value={this.state.username}
                 onChange={this.changeUsername} placeholder="Username" />
               <input type="password" className="pt-input" value={this.state.password}
                 onChange={this.changePassword} placeholder="Enter your password..." />
-              <Button type="submit" intent="primary" icon="log-in" text="Sign In" />
+              <Button type="submit" className="pt-large" intent="success" icon="log-in" text="Sign In" />
             </form>
           : <Redirect to='/' />
       }

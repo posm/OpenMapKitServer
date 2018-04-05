@@ -58,7 +58,7 @@ class UploadForm extends React.Component {
           </Callout>
       }
       <Upload {...uploaderProps} ref="inner">
-        <Callout title={"Upload XSL or XSLX files"} className="upload-area">
+        <Callout title={"Upload Form"} className="upload-area">
           Drag and drop here your XSL or XSLX files to upload to OpenMapKit Server.
         </Callout>
       </Upload>
