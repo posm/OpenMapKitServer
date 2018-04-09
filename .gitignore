@@ -33,6 +33,9 @@ pids
 *.seed
 
 ############## OpenMapKit Stuff ##############
+data/archive/*
+data/archive/forms/*
+data/archive/submissions/*
 data/submissions/*
 !data/submissions/README.md
 data/deployments/**/*.osm

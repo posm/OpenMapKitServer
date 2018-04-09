@@ -1,0 +1,89 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+.default-green-bg {
+  background-color: #7ebc6f !important;
+}
+.default-green {
+  color: #7ebc6f !important;
+}
+.main-logo {
+  height: 40px;
+}
+.pt-navbar-heading > a:hover {
+  text-decoration: none;
+}
+.login {
+  padding-top: 30px;
+  max-width: 280px;
+}
+
+.login > form > input {
+  margin-top: 7px;
+}
+
+.pt-input-group .pt-input:not(:first-child) {
+    padding-left: 10px !important;
+}
+
+.forms-row, .forms-grid, .form-info {
+  padding-top: 15px;
+}
+
+.forms-col {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.dropzone {
+  margin-top: 10px;
+  max-width: 70%;
+}
+
+.submissions-table, .submissions-info, .filters {
+  margin-top: 15px;
+}
+
+.submissions-table {
+  max-width: 90%
+}
+
+.display-block {
+  display: block;
+}
+
+.display-inline {
+  display: inline;
+}
+
+.filter-btn {
+  margin: 20px 17% 0 17% !important;
+}
+
+.pt-dark a {
+  color: #fff;
+}
+
+.upload-area{
+  padding: 60px 0;
+  margin-top: 20px;
+}
+
+.upload-result, .archived-forms, .archived-form-list {
+  margin-top: 20px;
+}
+
+.preview-submission-img {
+  margin-bottom: 7px;
+  max-height: 500px;
+}
+
+.help-icon {
+  margin-left: 5px;
+}
+
+.restore-btn {
+  margin-left: 10px;
+}
