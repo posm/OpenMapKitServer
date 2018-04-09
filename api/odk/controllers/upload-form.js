@@ -26,6 +26,7 @@ const xlsToXForm = (xlsPath, callback) => {
   });
 
   return PythonShell.run('xls2xform.py', {
+    pythonPath: 'python2',
     scriptPath: path.join(__dirname, '..', 'pyxform', 'pyxform'),
     args: [xlsPath, xformPath],
     mode: 'text'
