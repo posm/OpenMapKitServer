@@ -1,4 +1,5 @@
 var fs = require('fs');
+var fse = require('fs-extra');
 var path = require('path');
 var settings = require('../../../settings.js');
 
@@ -28,7 +29,7 @@ module.exports = (req, res, next) => {
           i => [`${formName}.xls`, `${formName}.xlsx`, `${formName}.xml`].includes(i)
         ).forEach(
           // move forms dir
-          i => fs.rename(
+          i => fse.move(
             path.join(archiveDir, 'forms', i),
             path.join(settings.dataDir, 'forms', i),
             renameFormError => {
@@ -44,7 +45,7 @@ module.exports = (req, res, next) => {
       // move submissions dir
       fs.readdir(path.join(archiveDir, 'submissions', formName), (err, items) => {
         if (!err) {
-          fs.rename(path.join(archiveDir, 'submissions', formName), submissionDir);
+          fse.move(path.join(archiveDir, 'submissions', formName), submissionDir);
         }
       }
       );
