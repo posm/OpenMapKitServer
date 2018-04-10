@@ -1,4 +1,5 @@
 var fs = require('fs');
+var fse = require('fs-extra');
 var path = require('path');
 var settings = require('../../../settings.js');
 
@@ -9,7 +10,7 @@ const moveFiles = (archiveDir, formName) => {
     items.filter(
       i => [`${formName}.xls`, `${formName}.xlsx`, `${formName}.xml`].includes(i)
     ).forEach(
-      i => fs.rename(
+      i => fse.move(
         path.join(settings.dataDir, 'forms', i),
         path.join(archiveDir, 'forms', i),
         renameError => {
@@ -23,7 +24,7 @@ const moveFiles = (archiveDir, formName) => {
 
 const moveSubmissions = (submissionDir, archiveDir, formName) => {
   // move submissions dir to archive
-  fs.rename(
+  fse.move(
     submissionDir,
     path.join(archiveDir, 'submissions', formName),
     renameError => {

@@ -1,6 +1,6 @@
 {
   "name": "open-map-kit-server",
-  "version": "1.0.0-hotosm",
+  "version": "1.0.1-hotosm",
   "description": "OpenMapKit Server is the lightweight server component of OpenMapKit that handles the collection and aggregation of OpenStreetMap and OpenDataKit data.",
   "main": "index.js",
   "scripts": {
@@ -45,6 +45,7 @@
     "debug": "^2.2.0",
     "express": "^4.13.3",
     "express-session": "^1.11.3",
+    "fs-extra": "^5.0.0",
     "graceful-fs": "^4.1.6",
     "json2csv": "^3.7.2",
     "libxmljs": "^0.18.4",
