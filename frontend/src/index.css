@@ -87,3 +87,7 @@ body {
 .restore-btn {
   margin-left: 10px;
 }
+
+.card-title {
+  word-wrap: break-word;
+}

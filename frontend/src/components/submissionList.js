@@ -264,19 +264,25 @@ class TableItemDownload extends React.Component {
   }
 
   render() {
-    if (this.props.filename.endsWith('.osm')) {
-      return(
-        <div>
-          <a onClick={this.downloadFile}>OSM File</a>
-          {this.renderDialog()}
-        </div>
-      );
+    if (this.props.filename) {
+      if (this.props.filename.endsWith('.osm')) {
+        return(
+          <div>
+            <a onClick={this.downloadFile}>OSM File</a>
+            {this.renderDialog()}
+          </div>
+        );
+      } else {
+        return(
+          <div>
+            <a onClick={this.downloadFile}>Download image</a>
+            {this.renderDialog()}
+          </div>
+        );
+      }
     } else {
       return(
-        <div>
-          <a onClick={this.downloadFile}>Download image</a>
-          {this.renderDialog()}
-        </div>
+        <span>No data</span>
       );
     }
   }
