@@ -18,7 +18,7 @@ class FormList extends React.Component<any, propsType, any> {
   renderCol(form) {
     return(
       <Card interactive={true} elevation={Elevation.TWO}>
-        <h5>{ form.get('name') }</h5>
+          <h5 class="card-title">{ form.get('name') }</h5>
         <div className="text-left form-info">
           <p>Number of Submissions: { form.get('totalSubmissions') }</p>
           <p>Form ID: <code>{ form.get('formID') }</code></p>
