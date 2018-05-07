@@ -21,6 +21,18 @@ Url.dataDirFileUrl = function (req, path, fileName) {
 };
 
 /**
+ * Returns a fully qualified base URL (protocol + host) for an API endpoint.
+ *
+ * @param req - http request that is pending
+ * @returns {string} - the base URL to the endpoint
+ */
+Url.baseUrl = function (req) {
+    var proto = req.headers['x-forwarded-proto'] ? req.headers['x-forwarded-proto'] : req.protocol;
+    var host = req.headers['x-forwarded-host'] ? req.headers['x-forwarded-host'] : req.headers.host;
+    return proto + '://' + host;
+}
+
+/**
  * Returns a fully qualified URL for an API endpoint.
  *
  * @param req - http request that is pending
@@ -29,7 +41,7 @@ Url.dataDirFileUrl = function (req, path, fileName) {
  */
 Url.apiUrl = function (req, path) {
     path = encodeURIComponent(path).replace(/%2F/g, '/'); // keep slashes
-    var base = req.protocol + '://' + req.headers.host;
+    var base = Url.baseUrl(req);
     return path[0] === '/' ? base + path : base + '/' + path;
 };
 

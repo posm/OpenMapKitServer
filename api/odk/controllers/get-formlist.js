@@ -3,6 +3,7 @@ var parser = new xml2js.Parser({explicitArray: false, attrkey: "attributes"});
 var createFormList = require('openrosa-formlist');
 var getFormUrls = require('../helpers/get-form-urls');
 var settings = require('../../../settings');
+var Url = require('../../../util/url');
 var fs = require('fs');
 
 /**
@@ -14,7 +15,7 @@ module.exports = function (req, res, next) {
         headers: {
             'User-Agent': 'OpenMapKitServer'
         },
-        baseUrl: req.protocol + '://' + req.headers.host + '/omk/data/forms'
+        baseUrl: Url.baseUrl(req) + '/omk/data/forms'
     };
 
     // Look for "json" query param
@@ -28,7 +29,7 @@ module.exports = function (req, res, next) {
 
         var formListOptions = {
             headers: options.headers,
-            manifestUrl: `${req.protocol}://${req.headers.host}/omk/odk/manifest/\${formId}.xml`
+            manifestUrl: `${Url.baseUrl(req)}/omk/odk/manifest/\${formId}.xml`
         };
 
         return createFormList(formUrls, formListOptions, function (err, xml) {

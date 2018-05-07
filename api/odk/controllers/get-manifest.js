@@ -3,6 +3,7 @@
 const createManifest = require('openrosa-manifest');
 
 const { getFormMetadata } = require('../../../util/xform');
+const Url = require('../../../util/url');
 
 module.exports = (req, res, next) => {
   const formId = req.params.formName;
@@ -17,7 +18,7 @@ module.exports = (req, res, next) => {
 
     const files = meta.assets.map(x => ({
       filename: x,
-      url: `${req.protocol}://${req.headers.host}/omk/data/forms/${formId}/${x}`
+      url: `${Url.baseUrl(req)}/omk/data/forms/${formId}/${x}`
     }));
 
     return createManifest(files, (err, xml) => {
