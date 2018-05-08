@@ -8,6 +8,7 @@ const async = require("async");
 const builder = require("xmlbuilder");
 
 const settings = require("../../../settings");
+const Url = require('../../../util/url');
 
 const SUBMISSIONS_DIR = path.join(settings.dataDir, "submissions");
 
@@ -82,7 +83,7 @@ module.exports = (req, res, next) => {
                   .createHash("md5")
                   .update(data)
                   .digest("hex");
-                const downloadUrl = `${req.protocol}://${req.headers.host}/omk/data/submissions/${formId}/${instanceId}/${file}`;
+                const downloadUrl = `${Url.baseUrl(req)}/omk/data/submissions/${formId}/${instanceId}/${file}`;
 
                 xml
                   .ele("mediaFile")

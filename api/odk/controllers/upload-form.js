@@ -13,6 +13,7 @@ const tempy = require('tempy');
 
 const settings = require('../../../settings');
 const { getForms, loadXForm } = require('../../../util/xform');
+const Url = require('../../../util/url');
 
 const formsDir = settings.dataDir + '/forms/';
 
@@ -227,8 +228,8 @@ module.exports = function (req, res, next) {
               return res.status(201).json({
                 status: 201,
                 msg: `Converted ${xlsFilename} to an XForm and saved everything to the forms directory.`,
-                xFormUrl: `${req.protocol}://${req.headers.host}/omk/data/forms/${xformFilename}`,
-                xlsFormUrl: `${req.protocol}://${req.headers.host}/omk/data/forms/${xlsFilename}`
+                xFormUrl: `${Url.baseUrl(req)}/omk/data/forms/${xformFilename}`,
+                xlsFormUrl: `${Url.baseUrl(req)}/omk/data/forms/${xlsFilename}`
               });
             });
           });

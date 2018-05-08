@@ -11,9 +11,13 @@ module.exports = function() {
 };
 
 function httpOrHttps(req) {
+    if (req.headers['x-forwarded-proto']) {
+        return req.headers['x-forwarded-proto'] + '://';
+    }
     return req.connection.encrypted ? 'https://' : 'http://';
 }
 
 function locationUrl(req) {
-    return httpOrHttps(req) + req.headers.host + req.originalUrl;
+    var host = req.headers['x-forwarded-host'] ? req.headers['x-forwarded-host'] : req.headers.host;
+    return httpOrHttps(req) + host + req.originalUrl;
 }
