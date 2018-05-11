@@ -40,6 +40,17 @@ git submodule update
 sudo pip install -r requirements.txt
 npm install
 ```
+If you want to enable AWS S3 sync, in a way to have a backup of forms and
+submissions files in a S3 bucket, set the following environment variables:
+
+```sh
+export ENABLES3SYNC=1
+export AWSKEYID=<your AWS access key ID>
+export AWSSECRETKEY=<your AWS secret access key>
+export AWSBUCKETNAME=<a S3 bucket name>
+```
+
+With the first variable you can enable/disable the S3 sync using the values 1/0.
 
 ### Turn on server
 
@@ -47,7 +58,7 @@ npm install
 npm start
 ```
 
-If `npm start` is failing, run `npm start --verbose` to see detailed log execution. 
+If `npm start` is failing, run `npm start --verbose` to see detailed log execution.
 You might encounter `Error: Could not locate the bindings file`. Run `npm install libxmljs` to fix this.
 
 ### NodeJS Version Problems

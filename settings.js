@@ -10,11 +10,4 @@ module.exports = {
         user: 'POSM',
         pass: ''
     }
-
-    // To do simple authentication, you can have an object like so:
-    // auth: {
-    //     user: 'username',
-    //     pass: 'password'
-    // }
-
 };
