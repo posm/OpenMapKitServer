@@ -298,13 +298,17 @@ class SubmissionList extends React.Component {
     this.state = {
       submissions: [],
       filteredSubmissions: [],
+      slicedSubmissions: [],
       formName: '',
       totalSubmissions: 0,
       startDate: null,
       endDate: null,
       filterDeviceId: '',
       filterUsername: '',
-      hasUsername: false
+      hasUsername: false,
+      page: 1,
+      pageSize:200,
+      pageCount: 1
     }
   }
 
@@ -322,6 +326,15 @@ class SubmissionList extends React.Component {
   componentDidMount() {
     this.getSubmissions();
     this.getFormDetails();
+  }
+
+  updatePagination(newPageSize, filtered) {
+    if (filtered.length > newPageSize) {
+      const mod = filtered.length % newPageSize;
+      this.setState({'pageCount': ((filtered.length - mod) / newPageSize) + 1});
+    } else {
+      this.setState({'pageCount': 1});
+    }
   }
 
   handleFilterStartDate = (date) => {
@@ -348,6 +361,15 @@ class SubmissionList extends React.Component {
     this.setState({ filterUsername: event.target.value });
   }
 
+  handlePageChange = (event) => {
+    this.setState({ page: event.target.value });
+  }
+
+  handlePageSizeChange = (event) => {
+    this.setState({ pageSize: event.target.value });
+    this.updatePagination(event.target.value, this.state.filteredSubmissions);
+  }
+
   filterSubmissions = () => {
     let filtered = this.state.submissions;
     if (this.state.startDate) {
@@ -371,6 +393,7 @@ class SubmissionList extends React.Component {
       );
     }
     this.setState({ filteredSubmissions: filtered });
+    this.updatePagination(this.state.pageSize, filtered)
   }
 
   clearFilter = () => {
@@ -379,6 +402,7 @@ class SubmissionList extends React.Component {
     this.setState({ filterEndDate: null });
     this.setState({ filterDeviceId: '' });
     this.setState({ filterUsername: '' });
+    this.updatePagination(this.state.pageSize, this.state.submissions)
   }
 
   getFormDetails = () => {
@@ -391,6 +415,13 @@ class SubmissionList extends React.Component {
         this.setState({ totalSubmissions: r.xforms.xform[0].totalSubmissions });
       }
     ).catch(e => console.log(e));
+  }
+
+  getPageSlice() {
+    return this.state.filteredSubmissions.slice(
+      (this.state.page - 1) * this.state.pageSize,
+      this.state.page * this.state.pageSize
+    );
   }
 
   getSubmissions = () => {
@@ -419,33 +450,34 @@ class SubmissionList extends React.Component {
         }
         this.setState({ submissions: data });
         this.setState({ filteredSubmissions: data });
+        this.updatePagination(this.state.pageSize, data)
       }
     ).catch(e => console.log(e));
   }
 
   renderCell = (row, column) => <Cell>
-    {this.state.filteredSubmissions[row][column]}
+    {this.getPageSlice()[row][column]}
   </Cell>;
 
   renderDateCell = (row, column) => <Cell>
-    {moment(this.state.filteredSubmissions[row][column]).format('lll')}
+    {moment(this.getPageSlice()[row][column]).format('lll')}
   </Cell>;
 
   renderCellImage = (row, column) => <Cell>
-    {this.state.filteredSubmissions[row][column]
+    {this.getPageSlice()[row][column]
       ? <TableItemDownload
-          urlEnding={`${this.props.formId}/${this.state.filteredSubmissions[row][column+2]}/${this.state.filteredSubmissions[row][column]}`}
-          filename={this.state.filteredSubmissions[row][column]}
+          urlEnding={`${this.props.formId}/${this.getPageSlice()[row][column+2]}/${this.getPageSlice()[row][column]}`}
+          filename={this.getPageSlice()[row][column]}
           userDetails={this.props.userDetails}
         />
       : <span>No image</span>
     }
-
   </Cell>;
+
   renderCellLink = (row, column) => <Cell>
     <TableItemDownload
-      urlEnding={`${this.props.formId}/${this.state.filteredSubmissions[row][column+1]}/${this.state.filteredSubmissions[row][column]}`}
-      filename={this.state.filteredSubmissions[row][column]}
+      urlEnding={`${this.props.formId}/${this.getPageSlice()[row][column+1]}/${this.getPageSlice()[row][column]}`}
+      filename={this.getPageSlice()[row][column]}
       userDetails={this.props.userDetails}
     />
   </Cell>;
@@ -553,9 +585,43 @@ class SubmissionList extends React.Component {
                   </Col>
                 </Row>
               </Grid>
+              <Grid className="pagination">
+                <Row>
+                  <Col xs={12} md={2} mdOffset={4} className="pt-input-group">
+                    <label className="display-inline pr-7">Page Size</label>
+                    <div className="pt-select">
+                      <select onChange={this.handlePageSizeChange}>
+                        {[200, 100, 50, 20].map(
+                          (item, k) =>
+                          <option key={k} value={ item }>
+                            { item.toString() }
+                          </option>
+                        )}
+                      </select>
+                    </div>
+                  </Col>
+                  <Col xs={12} md={2} className="pt-input-group">
+                    <label className="inline horizontal-small-padding pr-7">Page</label>
+                    <div className="pt-select">
+                      <select onChange={this.handlePageChange}>
+                        {Array.apply(null, { length: this.state.pageCount }).map(
+                          Number.call, Number
+                        ).map(
+                          i => i + 1
+                        ).map(
+                          (item, k) =>
+                          <option key={k} value={ item }>
+                            { item.toString() }
+                          </option>
+                        )}
+                      </select>
+                    </div>
+                  </Col>
+                </Row>
+              </Grid>
               <Table className="submissions-table center-block"
                 columnWidths={[190,190,190,190,190,190]}
-                numRows={this.state.filteredSubmissions.length}
+                numRows={this.getPageSlice().length}
               >
                 <Column name="Start" cellRenderer={this.renderDateCell} />
                 <Column name="End" cellRenderer={this.renderDateCell} />
