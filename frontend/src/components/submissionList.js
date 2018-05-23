@@ -31,7 +31,7 @@ class SubmissionMenu extends React.Component {
     super(props);
     this.state = {
       activeBlob: '',
-      downloadName:'',
+      downloadName: '',
       openDialog: false,
       formArchivedOrDelete: false
     }
@@ -73,6 +73,7 @@ class SubmissionMenu extends React.Component {
   }
 
   download = (urlEnding, filename) => {
+    this.setState({ downloadName: '' });
     const authBase64 = new Buffer(
       this.props.userDetails.username + ':' + this.props.userDetails.password
     ).toString('base64');
@@ -131,14 +132,20 @@ class SubmissionMenu extends React.Component {
         title="Download file"
       >
         <div className="pt-dialog-body">
-          <p>{this.state.downloadName}</p>
-          <AnchorButton
-            intent={Intent.PRIMARY}
-            className="pt-small"
-            text="Download"
-            download={this.state.downloadName}
-            href={this.state.activeBlob}
-          />
+          {this.state.downloadName
+            ? <div>
+                <p>{this.state.downloadName}</p>
+                <AnchorButton
+                  intent={Intent.PRIMARY}
+                  className="pt-small"
+                  text="Download"
+                  download={this.state.downloadName}
+                  href={this.state.activeBlob}
+                />
+              </div>
+            : <div>Loading data, please wait...</div>
+          }
+
         </div>
       </Dialog>
     );
@@ -189,7 +196,7 @@ class SubmissionMenu extends React.Component {
               {this.isAdmin() &&
                 <Popover content={manageMenu} position={Position.BOTTOM}
                   className="pt-intent-default"
-                  >
+                >
                   <Button icon="cog">Manage <Icon icon="caret-down" /></Button>
                 </Popover>
               }
@@ -299,6 +306,7 @@ class SubmissionList extends React.Component {
       submissions: [],
       filteredSubmissions: [],
       slicedSubmissions: [],
+      loading: true,
       formName: '',
       totalSubmissions: 0,
       startDate: null,
@@ -371,6 +379,7 @@ class SubmissionList extends React.Component {
   }
 
   filterSubmissions = () => {
+    this.setState({ loading: true });
     let filtered = this.state.submissions;
     if (this.state.startDate) {
       filtered = filtered.filter(
@@ -393,16 +402,19 @@ class SubmissionList extends React.Component {
       );
     }
     this.setState({ filteredSubmissions: filtered });
-    this.updatePagination(this.state.pageSize, filtered)
+    this.updatePagination(this.state.pageSize, filtered);
+    this.setState({ loading: false });
   }
 
   clearFilter = () => {
+    this.setState({ loading: true });
     this.setState({ filteredSubmissions: this.state.submissions });
     this.setState({ filterStartDate: null });
     this.setState({ filterEndDate: null });
     this.setState({ filterDeviceId: '' });
     this.setState({ filterUsername: '' });
     this.updatePagination(this.state.pageSize, this.state.submissions)
+    this.setState({ loading: false });
   }
 
   getFormDetails = () => {
@@ -432,6 +444,7 @@ class SubmissionList extends React.Component {
         this.props.userDetails.password
       )
     );
+
     this.getSubmissionsPromise.promise.then(
       r => {
         let data = r.map(i => [
@@ -450,7 +463,8 @@ class SubmissionList extends React.Component {
         }
         this.setState({ submissions: data });
         this.setState({ filteredSubmissions: data });
-        this.updatePagination(this.state.pageSize, data)
+        this.setState({ loading: false });
+        this.updatePagination(this.state.pageSize, data);
       }
     ).catch(e => console.log(e));
   }
@@ -482,6 +496,86 @@ class SubmissionList extends React.Component {
     />
   </Cell>;
 
+  renderFilterSection() {
+    let devices = this.state.submissions.map(item => item[2]);
+    devices = devices.filter((i, k) => devices.indexOf(i) === k);
+    return(
+      <Grid className="filters container">
+        <Row>
+          <Col xs={12} md={2} mdOffset={2} className="pt-input-group">
+            <label htmlFor="start-date" className="display-block">
+              From
+              <Tooltip content="Based on the Submission Time" position={Position.RIGHT}>
+                <Icon icon="help" color="#CED9E0" className="help-icon"/>
+              </Tooltip>
+            </label>
+            <DateInput {...jsDateFormatter}
+              id="start-date"
+              onChange={this.handleFilterStartDate}
+              />
+          </Col>
+          <Col xs={12} md={2} className="pt-input-group">
+            <label htmlFor="end-date" className="display-block">
+              To
+              <Tooltip content="Based on the Submission Time" position={Position.RIGHT}>
+                <Icon icon="help" color="#CED9E0" className="help-icon"/>
+              </Tooltip>
+            </label>
+            <DateInput {...jsDateFormatter}
+              id="end-date"
+              onChange={this.handleFilterEndDate}
+              />
+          </Col>
+          {this.state.hasUsername
+            ? <Col xs={12} md={2} className="pt-input-group">
+                <label htmlFor="filter-username" className="display-block">
+                  Username
+                </label>
+                <div className="pt-select">
+                  <select onChange={this.handleFilterUsernameChange}>
+                    <option value={null} >Choose an item...</option>
+                    {devices.map(
+                      (item, k) =>
+                      <option key={k} value={ `${item}` }>
+                        { item.toString() }
+                      </option>
+                    )}
+                  </select>
+                </div>
+              </Col>
+            : <Col xs={12} md={2} className="pt-input-group">
+                <label htmlFor="filter-deviceid" className="display-block">
+                  Device ID
+                </label>
+                <div className="pt-select">
+                  <select onChange={this.handleFilterDeviceIdChange}>
+                    <option value={null} >Choose an item...</option>
+                    {devices.map(
+                      (item, k) =>
+                      <option key={k} value={ `${item}` }>
+                        { item.toString() }
+                      </option>
+                    )}
+                  </select>
+                </div>
+              </Col>
+            }
+
+          <Col xs={12} md={1} className="pt-input-group">
+            <Button className="pt-intent-success filter-btn"
+              icon="filter" text="Filter" onClick={this.filterSubmissions}
+              />
+          </Col>
+          <Col xs={12} md={1} className="pt-input-group">
+            <Button className="pt-intent-danger filter-btn"
+              icon="filter-remove" text="Clear" onClick={this.clearFilter}
+              />
+          </Col>
+        </Row>
+      </Grid>
+    );
+  }
+
   render() {
     const isAuthenticated = this.isAuthenticated();
     const filters = {
@@ -495,8 +589,6 @@ class SubmissionList extends React.Component {
     ).reduce(
       (base, k) => `${base}${k}=${filters[k]}&`,
     '');
-    let devices = this.state.submissions.map(item => item[2]);
-    devices = devices.filter((i, k) => devices.indexOf(i) === k);
 
     return(
       <div>
@@ -512,79 +604,7 @@ class SubmissionList extends React.Component {
                   userDetails={this.props.userDetails}
                   />
               </div>
-              <Grid className="filters container">
-                <Row>
-                  <Col xs={12} md={2} mdOffset={2} className="pt-input-group">
-                    <label htmlFor="start-date" className="display-block">
-                      From
-                      <Tooltip content="Based on the Submission Time" position={Position.RIGHT}>
-                        <Icon icon="help" color="#CED9E0" className="help-icon"/>
-                      </Tooltip>
-                    </label>
-                    <DateInput {...jsDateFormatter}
-                      id="start-date"
-                      onChange={this.handleFilterStartDate}
-                      />
-                  </Col>
-                  <Col xs={12} md={2} className="pt-input-group">
-                    <label htmlFor="end-date" className="display-block">
-                      To
-                      <Tooltip content="Based on the Submission Time" position={Position.RIGHT}>
-                        <Icon icon="help" color="#CED9E0" className="help-icon"/>
-                      </Tooltip>
-                    </label>
-                    <DateInput {...jsDateFormatter}
-                      id="end-date"
-                      onChange={this.handleFilterEndDate}
-                      />
-                  </Col>
-                  {this.state.hasUsername
-                    ? <Col xs={12} md={2} className="pt-input-group">
-                        <label htmlFor="filter-username" className="display-block">
-                          Username
-                        </label>
-                        <div className="pt-select">
-                          <select onChange={this.handleFilterUsernameChange}>
-                            <option value={null} >Choose an item...</option>
-                            {devices.map(
-                              (item, k) =>
-                                <option key={k} value={ `${item}` }>
-                                  { item.toString() }
-                                </option>
-                            )}
-                          </select>
-                        </div>
-                      </Col>
-                    : <Col xs={12} md={2} className="pt-input-group">
-                        <label htmlFor="filter-deviceid" className="display-block">
-                          Device ID
-                        </label>
-                        <div className="pt-select">
-                          <select onChange={this.handleFilterDeviceIdChange}>
-                            <option value={null} >Choose an item...</option>
-                            {devices.map(
-                              (item, k) =>
-                                <option key={k} value={ `${item}` }>
-                                  { item.toString() }
-                                </option>
-                            )}
-                          </select>
-                        </div>
-                      </Col>
-                  }
-
-                  <Col xs={12} md={1} className="pt-input-group">
-                    <Button className="pt-intent-success filter-btn"
-                      icon="filter" text="Filter" onClick={this.filterSubmissions}
-                      />
-                  </Col>
-                  <Col xs={12} md={1} className="pt-input-group">
-                    <Button className="pt-intent-danger filter-btn"
-                      icon="filter-remove" text="Clear" onClick={this.clearFilter}
-                      />
-                  </Col>
-                </Row>
-              </Grid>
+              { this.renderFilterSection() }
               <Grid className="pagination">
                 <Row>
                   <Col xs={12} md={2} mdOffset={4} className="pt-input-group">
@@ -619,20 +639,24 @@ class SubmissionList extends React.Component {
                   </Col>
                 </Row>
               </Grid>
-              <Table className="submissions-table center-block"
-                columnWidths={[190,190,190,190,190,190]}
-                numRows={this.getPageSlice().length}
-              >
-                <Column name="Start" cellRenderer={this.renderDateCell} />
-                <Column name="End" cellRenderer={this.renderDateCell} />
-                {this.state.hasUsername
-                  ? <Column name="Username" cellRenderer={this.renderCell} />
-                  : <Column name="Device ID" cellRenderer={this.renderCell} />
-                }
-                <Column name="Submission Time" cellRenderer={this.renderDateCell} />
-                <Column name="Image" cellRenderer={this.renderCellImage} />
-                <Column name="Download" cellRenderer={this.renderCellLink} />
-              </Table>
+              {this.state.loading
+                ? <div id="loading-msg">Loading data, please wait...</div>
+                : <Table className="submissions-table center-block"
+                    columnWidths={[190,190,190,190,190,190]}
+                    numRows={this.getPageSlice().length}
+                  >
+                    <Column name="Start" cellRenderer={this.renderDateCell} />
+                    <Column name="End" cellRenderer={this.renderDateCell} />
+                    {this.state.hasUsername
+                      ? <Column name="Username" cellRenderer={this.renderCell} />
+                      : <Column name="Device ID" cellRenderer={this.renderCell} />
+                    }
+                    <Column name="Submission Time" cellRenderer={this.renderDateCell} />
+                    <Column name="Image" cellRenderer={this.renderCellImage} />
+                    <Column name="Download" cellRenderer={this.renderCellLink} />
+                  </Table>
+              }
+
             </div>
           : <Redirect to='/login/' />
         }
