@@ -29,6 +29,32 @@ const syncDataDir = () => {
   }
 };
 
+const downloadDataDir = () => {
+  if (process.env.ENABLES3SYNC) {
+    var client = s3.createClient({
+      s3Options: {
+        accessKeyId: process.env.AWSKEYID,
+        secretAccessKey: process.env.AWSSECRETKEY
+      }
+    });
+    var params = {
+      localDir: settings.dataDir,
+      deleteRemoved: true,
+      s3Params: {
+        Bucket: process.env.AWSBUCKETNAME
+      }
+    };
+    var uploader = client.downloadDir(params);
+    uploader.on('error', function(err) {
+      console.error("unable to sync:", err.stack);
+    });
+    uploader.on('end', function() {
+      console.log("Download from AWS S3 done");
+    });
+  }
+};
+
 module.exports = {
-  syncDataDir
+  syncDataDir,
+  downloadDataDir
 };

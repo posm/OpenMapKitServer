@@ -40,6 +40,18 @@ git submodule update
 sudo pip install -r requirements.txt
 npm install
 ```
+
+### Turn on server
+
+```sh
+npm start
+```
+
+If `npm start` is failing, run `npm start --verbose` to see detailed log execution.
+You might encounter `Error: Could not locate the bindings file`. Run `npm install libxmljs` to fix this.
+
+### Data Sync
+
 If you want to enable AWS S3 sync, in a way to have a backup of forms and
 submissions files in a S3 bucket, set the following environment variables:
 
@@ -50,16 +62,15 @@ export AWSSECRETKEY=<your AWS secret access key>
 export AWSBUCKETNAME=<a S3 bucket name>
 ```
 
-With the first variable you can enable/disable the S3 sync using the values 1/0.
+This will make the data be syncronized to your S3 bucket after each API request
+that modifies the data. The first variable enables/disables the S3
+sync and need to receive the value 1 or 0.
 
-### Turn on server
+If you need to get the data stored in a S3 Bucket to put it in your server,
+execute: `npm get_data_files`.
 
-```sh
-npm start
-```
-
-If `npm start` is failing, run `npm start --verbose` to see detailed log execution.
-You might encounter `Error: Could not locate the bindings file`. Run `npm install libxmljs` to fix this.
+To assure that the files were synced to AWS before turning off a server, execute
+`npm send_data_files`
 
 ### NodeJS Version Problems
 
