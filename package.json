@@ -9,8 +9,8 @@
     "server": "node server.js",
     "build": "node build_frontend.js",
     "frontend": "node start_frontend.js",
-    "send_to_aws": "node util/send_data_files.js",
-    "get_from_aws": "node util/get_data_files.js",
+    "send_to_s3": "node util/send_data_files.js",
+    "get_from_s3": "node util/get_data_files.js",
     "test": "tape test/**/**/*.test.js | faucet"
   },
   "repository": {

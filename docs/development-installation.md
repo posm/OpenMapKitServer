@@ -67,10 +67,10 @@ that modifies the data. The first variable enables/disables the S3
 sync and need to receive the value 1 or 0.
 
 If you need to get the data stored in a S3 Bucket to put it in your server,
-execute: `npm get_data_files`.
+execute: `npm get_from_s3`.
 
 To assure that the files were synced to AWS before turning off a server, execute
-`npm send_data_files`
+`npm send_to_s3`
 
 ### NodeJS Version Problems
 
