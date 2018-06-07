@@ -3,6 +3,7 @@ var path = require('path');
 
 var settings = require('../../../settings');
 
+const AWSBUCKETPREFIX = process.env.AWSBUCKETPREFIX ? process.env.AWSBUCKETPREFIX : '/';
 
 const syncDataDir = () => {
   if (process.env.ENABLES3SYNC) {
@@ -16,7 +17,8 @@ const syncDataDir = () => {
       localDir: settings.dataDir,
       deleteRemoved: true,
       s3Params: {
-        Bucket: process.env.AWSBUCKETNAME
+        Bucket: process.env.AWSBUCKETNAME,
+        Prefix: AWSBUCKETPREFIX
       }
     };
     var uploader = client.uploadDir(params);
@@ -41,7 +43,8 @@ const downloadDataDir = () => {
       localDir: settings.dataDir,
       deleteRemoved: true,
       s3Params: {
-        Bucket: process.env.AWSBUCKETNAME
+        Bucket: process.env.AWSBUCKETNAME,
+        Prefix: AWSBUCKETPREFIX
       }
     };
     var uploader = client.downloadDir(params);

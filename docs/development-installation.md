@@ -60,6 +60,7 @@ export ENABLES3SYNC=1
 export AWSKEYID=<your AWS access key ID>
 export AWSSECRETKEY=<your AWS secret access key>
 export AWSBUCKETNAME=<a S3 bucket name>
+export AWSBUCKETPREFIX=<(optional, bucket root is the default prefix) subdirectory where the files should be stored in the S3 bucket>
 ```
 
 This will make the data be syncronized to your S3 bucket after each API request
