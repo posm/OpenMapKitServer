@@ -220,6 +220,7 @@ class TableItemDownload extends React.Component {
   }
 
   download = (urlEnding, filename) => {
+    this.setState({ downloadName: '' });
     const authBase64 = new Buffer(
       this.props.userDetails.username + ':' + this.props.userDetails.password
     ).toString('base64');
@@ -235,6 +236,9 @@ class TableItemDownload extends React.Component {
       .then(blob => {
         const objURL = URL.createObjectURL(blob);
         this.setState({ activeBlob: objURL });
+        this.setState({
+          downloadName: filename ? filename : urlEnding.split('?')[0]
+        });
       });
   }
 
@@ -254,17 +258,22 @@ class TableItemDownload extends React.Component {
         title="Download file"
       >
         <div className="pt-dialog-body">
-          {(this.props.filename.endsWith('.jpg') || this.props.filename.endsWith('.png'))
-            ? <Image src={this.state.activeBlob} responsive className="preview-submission-img" />
-          : <p>{this.props.filename}</p>
+          {this.state.downloadName
+            ? <div>
+                {(this.props.filename.endsWith('.jpg') || this.props.filename.endsWith('.png'))
+                  ? <Image src={this.state.activeBlob} responsive className="preview-submission-img" />
+                  : <p>{this.props.filename}</p>
+                }
+                <AnchorButton
+                  intent={Intent.PRIMARY}
+                  className="pt-small"
+                  text="Download"
+                  download={this.props.filename}
+                  href={this.state.activeBlob}
+                />
+              </div>
+            : <div>Loading data, please wait...</div>
           }
-          <AnchorButton
-            intent={Intent.PRIMARY}
-            className="pt-small"
-            text="Download"
-            download={this.props.filename}
-            href={this.state.activeBlob}
-          />
         </div>
       </Dialog>
     );
