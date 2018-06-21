@@ -1,5 +1,6 @@
 var router = require('express').Router({ mergeParams: true });
 var getSubmissionsList = require('./controllers/get-submissionslist');
+var getGeoJsonSubmissions = require('./controllers/get-geojson-submissions');
 var getJsonSubmissions = require('./controllers/get-json-submissions');
 var getCsvSubmissions = require('./controllers/get-csv-submissions');
 var getOsmSubmissions = require('./controllers/get-osm-submissions');
@@ -26,6 +27,7 @@ router.route('/submissions/:formName.osm')
   .get(adminDVPermission, getOsmSubmissions)
   .patch(patchSubmissions);
 router.route('/submissions/:formName.zip').get(adminDVPermission, getSubmissionAttachments);
+router.route('/submissions/:formName.geojson').get(adminDVPermission, getGeoJsonSubmissions);
 
 /**
  * XLSForm Upload Endpoint
