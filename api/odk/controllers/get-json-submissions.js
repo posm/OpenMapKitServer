@@ -9,7 +9,11 @@ module.exports = function (req, res, next) {
   return aggregate({
     formName: req.params.formName,
     limit: req.query.limit,
-    offset: req.query.offset
+    offset: req.query.offset,
+    startDate: req.query.start_date,
+    endDate: req.query.end_date,
+    deviceId: req.query.deviceId,
+    username: req.query.username
   }, (err, aggregate) => {
     if (err) {
       console.warn(err.stack);
