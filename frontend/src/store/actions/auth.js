@@ -29,7 +29,7 @@ export const logout = () => dispatch => {
 };
 
 export const login = (username, password) => dispatch => {
-  fetch(`/login/`, {
+  fetch(`/omk/login/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
