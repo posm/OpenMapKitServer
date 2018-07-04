@@ -31,3 +31,20 @@ export function submitToOSM(formId, username, password): Promise<*> {
       return res.json();
     });
 }
+
+export function getSubmissionsGeojson(formId, username, password): Promise<*> {
+  const authBase64 = new Buffer(username + ':' + password).toString('base64');
+  let url = `/omk/odk/submissions/${formId}.geojson`;
+  return fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+      'Authorization': `Basic ${authBase64}`
+    }
+  })
+    .then(handleErrors)
+    .then(res => {
+      return res.json();
+    });
+}

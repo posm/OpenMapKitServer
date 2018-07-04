@@ -1,4 +1,4 @@
-var aggregateOsm = require('../osm/aggregate-osm');
+  var aggregateOsm = require('../osm/aggregate-osm');
 var getOsmSubmissionsDirs = require('../helpers/get-osm-submissions-dirs');
 var osmtogeojson = require('osmtogeojson');
 var osmxmlParser = require('osmtogeojson/parse_osmxml');
@@ -15,7 +15,7 @@ module.exports = function(req, res, next) {
     username: req.query.username,
     startDate: req.query.start_date,
     endDate: req.query.end_date
-  }
+  };
 
   getOsmSubmissionsDirs(formName, {
     filters: filters

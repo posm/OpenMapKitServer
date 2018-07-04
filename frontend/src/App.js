@@ -3,6 +3,7 @@ import { Route } from "react-router-dom";
 
 import { Header } from './components/header';
 import { SubmissionList } from './components/submissionList';
+import { SubmissionMap } from './components/submissionMap';
 import { LoginPanel } from './components/loginPanel';
 import { FormList } from './components/forms/formList';
 import { UploadForm } from './components/forms/uploadForm';
@@ -20,6 +21,7 @@ class App extends Component {
         <Route exact path="/upload-form" component={UploadForm} />
         <Route exact path="/archived-forms" component={ArchivedForms} />
         <Route exact path="/submissions/:formId" component={SubmissionList} />
+        <Route exact path="/submissions/:formId/map" component={SubmissionMap} />
       </div>
     );
   }

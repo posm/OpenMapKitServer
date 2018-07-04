@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from "react-redux";
-import { Redirect } from 'react-router'
+import { Redirect } from 'react-router';
+import { Link } from "react-router-dom";
 import moment from 'moment';
 
 import {
@@ -200,6 +201,11 @@ class SubmissionMenu extends React.Component {
                   <Button icon="cog">Manage <Icon icon="caret-down" /></Button>
                 </Popover>
               }
+              <Link to={`/submissions/${this.props.formId}/map/`}>
+                <Button icon="map" className="pt-intent-default">
+                  See on map
+                </Button>
+              </Link>
               {this.renderDialog()}
             </div>
           : <Redirect to='/' />

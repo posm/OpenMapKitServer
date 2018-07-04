@@ -47,7 +47,7 @@ body {
 }
 
 .submissions-table {
-  max-width: 90%
+  max-width: 90%;
 }
 
 .display-block {
@@ -100,12 +100,47 @@ body {
   word-wrap: break-word;
 }
 
-.pt-table-container {
+.pt-table-container, .mb20 {
   margin-bottom: 20px;
 }
 
 #loading-msg {
   font-size: 24px;
   color: #AAA;
-  margin-top: 20px
+  margin-top: 20px;
+}
+
+#map {
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  position: absolute !important;
+}
+
+.mapboxgl-canvas {
+  position: relative !important;
+}
+
+.map-title {
+  background-color: #eff0d1;
+  padding: 70px 10px 0px 10px;
+  position: absolute;
+  text-align: right;
+  z-index: 1;
+}
+
+.feature-key {
+  font-weight: bold;
+  text-align: left;
+  border: 1px solid #dadada;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.feature-value {
+  border: 1px solid #dadada;
+  padding-right: 10px;
+  padding-left: 10px;
+  text-align: left;
 }
