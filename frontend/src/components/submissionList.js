@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
 import { Redirect } from 'react-router';
-import { Link } from "react-router-dom";
 import moment from 'moment';
 
 import {
@@ -17,6 +16,7 @@ import { archiveForm, deleteForm } from '../network/formManagement';
 import { handleErrors } from '../utils/promise';
 import { formList } from '../network/formList';
 import { cancelablePromise } from '../utils/promise';
+import { SubmissionMap } from './submissionMap';
 
 
 const jsDateFormatter: IDateFormatProps = {
@@ -35,7 +35,7 @@ class SubmissionMenu extends React.Component {
       downloadName: '',
       openDialog: false,
       formArchivedOrDelete: false
-    }
+    };
   }
 
   componentWillUnmount() {
@@ -201,11 +201,6 @@ class SubmissionMenu extends React.Component {
                   <Button icon="cog">Manage <Icon icon="caret-down" /></Button>
                 </Popover>
               }
-              <Link to={`/submissions/${this.props.formId}/map/`}>
-                <Button icon="map" className="pt-intent-default">
-                  See on map
-                </Button>
-              </Link>
               {this.renderDialog()}
             </div>
           : <Redirect to='/' />
@@ -322,7 +317,8 @@ class SubmissionList extends React.Component {
       hasUsername: false,
       page: 1,
       pageSize:200,
-      pageCount: 1
+      pageCount: 1,
+      activateMap: false
     }
   }
 
@@ -475,9 +471,7 @@ class SubmissionList extends React.Component {
     ).catch(e => console.log(e));
   }
 
-  renderCell = (row, column) => <Cell>
-    {this.getPageSlice()[row][column]}
-  </Cell>;
+  renderCell = (row, column) => <Cell>{ this.getPageSlice()[row][column]}</Cell>;
 
   renderDateCell = (row, column) => <Cell>
     {moment(this.getPageSlice()[row][column]).format('lll')}
@@ -582,6 +576,79 @@ class SubmissionList extends React.Component {
     );
   }
 
+  renderTable() {
+    if (this.state.loading) {
+      return(<div id="loading-msg">Loading data, please wait...</div>);
+    } else {
+      return (
+        <Table className="submissions-table center-block"
+          columnWidths={[190,190,190,190,190,190]}
+          numRows={this.getPageSlice().length}
+          >
+          <Column name="Start" cellRenderer={this.renderDateCell} />
+          <Column name="End" cellRenderer={this.renderDateCell} />
+          {this.state.hasUsername
+            ? <Column name="Username" cellRenderer={this.renderCell} />
+            : <Column name="Device ID" cellRenderer={this.renderCell} />
+          }
+          <Column name="Submission Time" cellRenderer={this.renderDateCell} />
+          <Column name="Image" cellRenderer={this.renderCellImage} />
+          <Column name="Download" cellRenderer={this.renderCellLink} />
+        </Table>
+      );
+    }
+  }
+
+  renderPagination() {
+    return(
+      <Grid className="pagination">
+        <Row>
+          <Col xs={12} md={2} mdOffset={3} className="pt-input-group">
+            <label className="display-inline pr-7">Page Size</label>
+            <div className="pt-select">
+              <select onChange={this.handlePageSizeChange}>
+                {[200, 100, 50, 20].map(
+                  (item, k) =>
+                  <option key={k} value={ item }>
+                    { item.toString() }
+                  </option>
+                )}
+              </select>
+            </div>
+          </Col>
+          <Col xs={12} md={2} className="pt-input-group">
+            <label className="inline horizontal-small-padding pr-7">Page</label>
+            <div className="pt-select">
+              <select onChange={this.handlePageChange}>
+                {Array.apply(null, { length: this.state.pageCount }).map(
+                  Number.call, Number
+                ).map(
+                  i => i + 1
+                ).map(
+                  (item, k) =>
+                  <option key={k} value={ item }>
+                    { item.toString() }
+                  </option>
+                )}
+              </select>
+            </div>
+          </Col>
+          <Col xs={12} md={2} className="pt-input-group">
+            {this.state.activateMap
+              ? <Button className="pt-intent" icon="th" text="Switch to Table view"
+                  onClick={() => this.setState({activateMap: false})}
+                  />
+              : <Button className="pt-intent" icon="map" text="Switch to Map view"
+                  onClick={() => this.setState({activateMap: true})}
+                  />
+            }
+
+          </Col>
+        </Row>
+      </Grid>
+    );
+  }
+
   render() {
     const isAuthenticated = this.isAuthenticated();
     const filters = {
@@ -611,58 +678,11 @@ class SubmissionList extends React.Component {
                   />
               </div>
               { this.renderFilterSection() }
-              <Grid className="pagination">
-                <Row>
-                  <Col xs={12} md={2} mdOffset={4} className="pt-input-group">
-                    <label className="display-inline pr-7">Page Size</label>
-                    <div className="pt-select">
-                      <select onChange={this.handlePageSizeChange}>
-                        {[200, 100, 50, 20].map(
-                          (item, k) =>
-                          <option key={k} value={ item }>
-                            { item.toString() }
-                          </option>
-                        )}
-                      </select>
-                    </div>
-                  </Col>
-                  <Col xs={12} md={2} className="pt-input-group">
-                    <label className="inline horizontal-small-padding pr-7">Page</label>
-                    <div className="pt-select">
-                      <select onChange={this.handlePageChange}>
-                        {Array.apply(null, { length: this.state.pageCount }).map(
-                          Number.call, Number
-                        ).map(
-                          i => i + 1
-                        ).map(
-                          (item, k) =>
-                          <option key={k} value={ item }>
-                            { item.toString() }
-                          </option>
-                        )}
-                      </select>
-                    </div>
-                  </Col>
-                </Row>
-              </Grid>
-              {this.state.loading
-                ? <div id="loading-msg">Loading data, please wait...</div>
-                : <Table className="submissions-table center-block"
-                    columnWidths={[190,190,190,190,190,190]}
-                    numRows={this.getPageSlice().length}
-                  >
-                    <Column name="Start" cellRenderer={this.renderDateCell} />
-                    <Column name="End" cellRenderer={this.renderDateCell} />
-                    {this.state.hasUsername
-                      ? <Column name="Username" cellRenderer={this.renderCell} />
-                      : <Column name="Device ID" cellRenderer={this.renderCell} />
-                    }
-                    <Column name="Submission Time" cellRenderer={this.renderDateCell} />
-                    <Column name="Image" cellRenderer={this.renderCellImage} />
-                    <Column name="Download" cellRenderer={this.renderCellLink} />
-                  </Table>
+              { this.renderPagination() }
+              {this.state.activateMap
+                ? <SubmissionMap userDetails={this.props.userDetails} formId={this.props.formId} />
+                : this.renderTable()
               }
-
             </div>
           : <Redirect to='/login/' />
         }

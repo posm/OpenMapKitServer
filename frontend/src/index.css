@@ -51,7 +51,7 @@ body {
 }
 
 .display-block {
-  display: block;
+  display: block !important;
 }
 
 .display-inline {
@@ -113,21 +113,24 @@ body {
 #map {
   left: 0 !important;
   right: 0 !important;
-  top: 0 !important;
   bottom: 0 !important;
-  position: absolute !important;
+  height: 600px;
 }
 
 .mapboxgl-canvas {
   position: relative !important;
 }
 
-.map-title {
+.map-info {
   background-color: #eff0d1;
-  padding: 70px 10px 0px 10px;
+  padding: 10px;
+  margin-right: 10px;
   position: absolute;
   text-align: right;
+  bottom: 30px;
+  right: 0;
   z-index: 1;
+  display: none;
 }
 
 .feature-key {
