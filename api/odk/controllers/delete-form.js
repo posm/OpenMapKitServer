@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var settings = require('../../../settings.js');
+const { syncDataDir } = require('../helpers/aws-sync');
 
 module.exports = (req, res, next) => {
   const formName = req.params.formName;
@@ -24,7 +25,7 @@ module.exports = (req, res, next) => {
       [xlsFile, xlsxFile, xmlFile].map(file => {
         fs.stat(file, (statError, stats) => {
           if (statError) {
-            errors.push(file)
+            errors.push(file);
           } else {
             fs.unlink(file, unlinkError => {
               if (unlinkError) errors.push(file);
@@ -39,9 +40,9 @@ module.exports = (req, res, next) => {
           {detail: "It was not possible to find or delete the form files"}
         );
       } else {
+        syncDataDir();
         res.status(200).json({detail: "Form deleted successfully"});
       }
     }
-  }
-  );
+  });
 };

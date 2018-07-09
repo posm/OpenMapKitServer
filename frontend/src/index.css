@@ -58,6 +58,14 @@ body {
   display: inline;
 }
 
+.pl-7 {
+  padding-left: 7px;
+}
+
+.pr-7 {
+  padding-right: 7px;
+}
+
 .filter-btn {
   margin: 20px 17% 0 17% !important;
 }
@@ -71,7 +79,7 @@ body {
   margin-top: 20px;
 }
 
-.upload-result, .archived-forms, .archived-form-list {
+.upload-result, .archived-forms, .archived-form-list, .pagination {
   margin-top: 20px;
 }
 
@@ -90,4 +98,14 @@ body {
 
 .card-title {
   word-wrap: break-word;
+}
+
+.pt-table-container {
+  margin-bottom: 20px;
+}
+
+#loading-msg {
+  font-size: 24px;
+  color: #AAA;
+  margin-top: 20px
 }
