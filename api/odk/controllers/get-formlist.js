@@ -45,8 +45,8 @@ module.exports = function (req, res, next) {
             // Default is XML, but JSON is an option
             if (json) {
                 return parser.parseString(xml, function (err, result) {
-                    if (result === undefined) {
-                        res.status(200).json(null);
+                    if (result == null) {
+                        res.status(200).json({});
                     } else {
                         if (typeof result.xforms.xform == "object") {
 
@@ -64,7 +64,7 @@ module.exports = function (req, res, next) {
                                 res.status(200).json(result);
                             });
                         } else {
-                            res.status(200).json(null);
+                            res.status(200).json({});
                         }
                     }
                 });
