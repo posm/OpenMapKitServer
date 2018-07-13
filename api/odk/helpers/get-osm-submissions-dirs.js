@@ -124,7 +124,7 @@ function findOsmFilesInDir(dirStat, osmDirs, options, cb) {
       }
     }
     if (dirStat.len === dirStat.count) {
-      cb(null, osmDirs)
+      cb(null, osmDirs);
     }
   });
 }

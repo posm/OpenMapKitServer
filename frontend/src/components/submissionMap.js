@@ -15,75 +15,94 @@ function orderKeys(obj) {
 export class SubmissionMap extends React.Component {
   constructor(props) {
     super(props);
+    this.map = null
     this.state = {
       info_content: '',
-      display_map_info: 'none'
+      display_map_info: 'none',
+      data: {}
     };
+  }
+
+  add_data_to_map() {
+    if (this.map.getSource('submissions')) {
+      ['submission_areas', 'submission_lines', 'submission_points'].map(
+        layer => this.map.removeLayer(layer)
+      );
+      this.map.removeSource('submissions');
+    }
+    getSubmissionsGeojson(
+      this.props.formId,
+      this.props.userDetails.username,
+      this.props.userDetails.password,
+      this.props.filterParams
+    ).then(data => {
+      this.setState({'data': data});
+      this.map.addSource('submissions', {
+        "type": "geojson",
+        "data": this.state.data
+      });
+      this.map.addLayer({
+        "id": "submission_lines",
+        "type": "line",
+        "source": "submissions",
+        "filter": ["==", "$type", "LineString"],
+        "paint": {
+          "line-color": "#11b4da",
+          "line-width": 3
+        }
+      });
+      this.map.addLayer({
+        "id": "submission_areas",
+        "type": "fill",
+        "source": "submissions",
+        "filter": ["in", "$type", "Polygon"],
+        "paint": {
+          "fill-color": "#000",
+          "fill-opacity": 0.3,
+          "fill-outline-color": "#11b4da"
+        }
+      });
+      this.map.addLayer({
+        "id": "submission_points",
+        "type": "circle",
+        "source": "submissions",
+        "filter": ["==", "$type", "Point"],
+        "paint": {
+          "circle-color": "#11b4da",
+          "circle-radius": 4,
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#fff"
+        }
+      });
+      this.map.fitBounds(
+        extent(this.state.data),
+        {"padding": {top: 80, bottom: 35, left: 35, right: 35}, "linear": true}
+      );
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.filterParams !== prevProps.filterParams) {
+      this.add_data_to_map();
+    }
   }
 
   componentDidMount() {
     mapboxgl.accessToken = 'pk.eyJ1IjoiaG90IiwiYSI6IlBtUmNiR1kifQ.dCS1Eu9DIRNZGktc24IwtA';
-    const map = new mapboxgl.Map({
+    this.map = new mapboxgl.Map({
       container: 'map',
         style: 'mapbox://styles/mapbox/satellite-v9',
     });
-    map.addControl(new mapboxgl.NavigationControl(), "top-right");
-    map.on('load', () => {
-      getSubmissionsGeojson(
-        this.props.formId,
-        this.props.userDetails.username,
-        this.props.userDetails.password
-      ).then(data => {
-        map.addSource('submissions', {
-          "type": "geojson",
-          "data": data
-        });
-        map.addLayer({
-          "id": "submission_lines",
-          "type": "line",
-          "source": "submissions",
-          "filter": ["==", "$type", "LineString"],
-          "paint": {
-            "line-color": "#11b4da",
-            "line-width": 3
-          }
-        });
-        map.addLayer({
-          "id": "submission_areas",
-          "type": "fill",
-          "source": "submissions",
-          "filter": ["in", "$type", "Polygon"],
-          "paint": {
-            "fill-color": "#000",
-            "fill-opacity": 0.3,
-            "fill-outline-color": "#11b4da"
-          }
-        });
-        map.addLayer({
-          "id": "submission_points",
-          "type": "circle",
-          "source": "submissions",
-          "filter": ["==", "$type", "Point"],
-          "paint": {
-            "circle-color": "#11b4da",
-            "circle-radius": 4,
-            "circle-stroke-width": 1,
-            "circle-stroke-color": "#fff"
-          }
-        });
-        map.fitBounds(
-          extent(data),
-          {"padding": {top: 80, bottom: 35, left: 35, right: 35}, "linear": true}
-        );
-      });
+    this.map.addControl(new mapboxgl.NavigationControl(), "top-right");
+    this.map.on('load', () => {
+      this.add_data_to_map();
     });
-    map.on('click', e => {
+    this.map.on('click', e => {
       var x1y1 = [e.point.x - 5, e.point.y - 5];
       var x2y2 = [e.point.x + 5, e.point.y + 5];
-      var features = map.queryRenderedFeatures([x1y1, x2y2], {
+      var features = this.map.queryRenderedFeatures([x1y1, x2y2], {
         layers: ['submission_areas', 'submission_lines', 'submission_points']
       });
-      console.log(features);
       if (features.length) {
         const properties = orderKeys(features[0].properties);
         console.log(properties);
@@ -109,13 +128,13 @@ export class SubmissionMap extends React.Component {
     });
     ['submission_areas', 'submission_lines', 'submission_points'].forEach(
       layer => {
-          map.on('mouseenter', layer, () => {
-          map.getCanvas().style.cursor = 'pointer';
+          this.map.on('mouseenter', layer, () => {
+          this.map.getCanvas().style.cursor = 'pointer';
         });
 
         // Change it back to a pointer when it leaves.
-        map.on('mouseleave', layer, () => {
-          map.getCanvas().style.cursor = '';
+        this.map.on('mouseleave', layer, () => {
+          this.map.getCanvas().style.cursor = '';
         });
       }
     );
@@ -126,7 +145,7 @@ export class SubmissionMap extends React.Component {
       <div>
         <div id="map">
             <div className={`map-info ${this.state.info_content && 'display-block'}`}>
-              <table><tbody>{ this.state.info_content }</tbody></table>
+              <table><tbody>{this.state.info_content}</tbody></table>
             </div>
         </div>
       </div>

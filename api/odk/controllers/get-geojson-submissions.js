@@ -1,8 +1,7 @@
-  var aggregateOsm = require('../osm/aggregate-osm');
+var aggregateOsm = require('../osm/aggregate-osm');
 var getOsmSubmissionsDirs = require('../helpers/get-osm-submissions-dirs');
 var osmtogeojson = require('osmtogeojson');
-var osmxmlParser = require('osmtogeojson/parse_osmxml');
-
+var DOMParser = require("xmldom").DOMParser;
 /**
  * Aggregates together all of the OSM submissions
  * from ODK Collect / OpenMapKit Android to the
@@ -44,7 +43,6 @@ function aggregate(osmDirs, req, res) {
   }
   //We filter by the query parameters of the request
   aggregateOsm(osmFiles, req.query, function(err, osmXml) {
-    var data = osmtogeojson(osmxmlParser.parseFromString(osmXml));
     if (err) {
       if (!res._headerSent) { // prevents trying to send multiple error responses on a single request
         res.status(500).json({
@@ -55,6 +53,7 @@ function aggregate(osmDirs, req, res) {
       }
       return;
     }
-    res.status(200).json(data);
+    var xmlObj = (new DOMParser()).parseFromString(osmXml, 'text/xml');
+    res.status(200).json(osmtogeojson(xmlObj));
   });
 }

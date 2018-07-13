@@ -32,9 +32,9 @@ export function submitToOSM(formId, username, password): Promise<*> {
     });
 }
 
-export function getSubmissionsGeojson(formId, username, password): Promise<*> {
+export function getSubmissionsGeojson(formId, username, password, filterParams): Promise<*> {
   const authBase64 = new Buffer(username + ':' + password).toString('base64');
-  let url = `/omk/odk/submissions/${formId}.geojson`;
+  let url = `/omk/odk/submissions/${formId}.geojson?${filterParams}`;
   return fetch(url, {
     method: 'GET',
     headers: {

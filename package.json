@@ -78,6 +78,7 @@
     "xml2js": "^0.4.16",
     "xml2js-xpath": "^0.8.0",
     "xmlbuilder": "^8.2.2",
+    "xmldom": "^0.1.27",
     "xtend": "^4.0.1"
   },
   "devDependencies": {

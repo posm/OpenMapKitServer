@@ -314,6 +314,7 @@ class SubmissionList extends React.Component {
       endDate: null,
       filterDeviceId: '',
       filterUsername: '',
+      filterParams: '',
       hasUsername: false,
       page: 1,
       pageSize:200,
@@ -380,8 +381,24 @@ class SubmissionList extends React.Component {
     this.updatePagination(event.target.value, this.state.filteredSubmissions);
   }
 
+  updateFilterParams() {
+    const filters = {
+      deviceId: this.state.filterDeviceId,
+      start_date: this.state.startDate,
+      end_date: this.state.endDate,
+      username: this.state.filterUsername
+    };
+    const filterParams = Object.keys(filters).filter(
+      i => filters[i]
+    ).reduce(
+      (base, k) => `${base}${k}=${filters[k]}&`,
+    '');
+    this.setState({'filterParams': filterParams});
+  }
+
   filterSubmissions = () => {
     this.setState({ loading: true });
+    this.updateFilterParams();
     let filtered = this.state.submissions;
     if (this.state.startDate) {
       filtered = filtered.filter(
@@ -417,6 +434,7 @@ class SubmissionList extends React.Component {
     this.setState({ filterUsername: '' });
     this.updatePagination(this.state.pageSize, this.state.submissions)
     this.setState({ loading: false });
+    this.updateFilterParams();
   }
 
   getFormDetails = () => {
@@ -651,18 +669,6 @@ class SubmissionList extends React.Component {
 
   render() {
     const isAuthenticated = this.isAuthenticated();
-    const filters = {
-      deviceId: this.state.filterDeviceId,
-      start_date: this.state.startDate,
-      end_date: this.state.endDate,
-      username: this.state.filterUsername
-    };
-    const filterParams = Object.keys(filters).filter(
-      i => filters[i]
-    ).reduce(
-      (base, k) => `${base}${k}=${filters[k]}&`,
-    '');
-
     return(
       <div>
         {isAuthenticated
@@ -673,14 +679,18 @@ class SubmissionList extends React.Component {
                 <SubmissionMenu
                   formId={this.props.formId}
                   hasSubmissions={this.state.totalSubmissions > 0}
-                  filterParams={filterParams}
+                  filterParams={this.state.filterParams}
                   userDetails={this.props.userDetails}
                   />
               </div>
               { this.renderFilterSection() }
               { this.renderPagination() }
               {this.state.activateMap
-                ? <SubmissionMap userDetails={this.props.userDetails} formId={this.props.formId} />
+                ? <SubmissionMap
+                    userDetails={this.props.userDetails}
+                    formId={this.props.formId}
+                    filterParams={this.state.filterParams}
+                    />
                 : this.renderTable()
               }
             </div>
