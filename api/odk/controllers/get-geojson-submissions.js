@@ -13,7 +13,9 @@ module.exports = function(req, res, next) {
     deviceId: req.query.deviceId,
     username: req.query.username,
     startDate: req.query.start_date,
-    endDate: req.query.end_date
+    endDate: req.query.end_date,
+    offset: req.query.offset,
+    limit: req.query.limit
   };
 
   getOsmSubmissionsDirs(formName, {
@@ -40,6 +42,11 @@ function aggregate(osmDirs, req, res) {
   var osmFiles = [];
   for (var i in osmDirs) {
     osmFiles = osmFiles.concat(osmDirs[i].files);
+  }
+  if (req.query.offset != null) {
+    var offset = parseInt(req.query.offset);
+    var limit = parseInt(req.query.limit);
+    osmFiles = osmFiles.slice(offset, offset + limit);
   }
   //We filter by the query parameters of the request
   aggregateOsm(osmFiles, req.query, function(err, osmXml) {

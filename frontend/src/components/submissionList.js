@@ -314,10 +314,10 @@ class SubmissionList extends React.Component {
       endDate: null,
       filterDeviceId: '',
       filterUsername: '',
-      filterParams: '',
+      filterParams: 'offset=0&limit=200',
       hasUsername: false,
       page: 1,
-      pageSize:200,
+      pageSize: 200,
       pageCount: 1,
       activateMap: false
     }
@@ -374,11 +374,13 @@ class SubmissionList extends React.Component {
 
   handlePageChange = (event) => {
     this.setState({ page: event.target.value });
+    this.updateFilterParams();
   }
 
   handlePageSizeChange = (event) => {
     this.setState({ pageSize: event.target.value });
     this.updatePagination(event.target.value, this.state.filteredSubmissions);
+    this.updateFilterParams();
   }
 
   updateFilterParams() {
@@ -386,7 +388,9 @@ class SubmissionList extends React.Component {
       deviceId: this.state.filterDeviceId,
       start_date: this.state.startDate,
       end_date: this.state.endDate,
-      username: this.state.filterUsername
+      username: this.state.filterUsername,
+      offset: this.state.page * this.state.pageSize || 0,
+      limit: this.state.pageSize || 200
     };
     const filterParams = Object.keys(filters).filter(
       i => filters[i]
