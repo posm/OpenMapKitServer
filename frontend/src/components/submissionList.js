@@ -387,6 +387,13 @@ class SubmissionList extends React.Component {
     this.updatePagination(event.target.value, this.state.filteredSubmissions);
   }
 
+  handleActivateMap = (event) => {
+    this.setState({ activateMap: !this.state.activateMap });
+    if (this.state.pageSize > 200) {
+      this.setState({ pageSize: 200 });
+    }
+  }
+
   updateFilterParams() {
     const filters = {
       deviceId: this.state.filterDeviceId,
@@ -558,7 +565,7 @@ class SubmissionList extends React.Component {
                   Username
                 </label>
                 <div className="pt-select">
-                  <select onChange={this.handleFilterUsernameChange}>
+                  <select onChange={this.handleFilterUsernameChange} value={this.state.filterUsername}>
                     <option value={null} >Choose an item...</option>
                     {devices.map(
                       (item, k) =>
@@ -574,7 +581,7 @@ class SubmissionList extends React.Component {
                   Device ID
                 </label>
                 <div className="pt-select">
-                  <select onChange={this.handleFilterDeviceIdChange}>
+                  <select onChange={this.handleFilterDeviceIdChange} value={this.state.filterDeviceId}>
                     <option value={null} >Choose an item...</option>
                     {devices.map(
                       (item, k) =>
@@ -629,17 +636,28 @@ class SubmissionList extends React.Component {
     return(
       <Grid className="pagination">
         <Row>
-          <Col xs={12} md={2} mdOffset={3} className="pt-input-group">
+          <Col xs={12} md={3} mdOffset={2} className="pt-input-group">
             <label className="display-inline pr-7">Page Size</label>
             <div className="pt-select">
-              <select onChange={this.handlePageSizeChange}>
-                {[200, 100, 50, 20].map(
-                  (item, k) =>
-                  <option key={k} value={ item }>
-                    { item.toString() }
-                  </option>
-                )}
-              </select>
+              {this.state.activateMap
+                ? <select onChange={this.handlePageSizeChange} value={this.state.pageSize}>
+                    {[1000, 800, 600, 400, 200, 100, 50, 20].map(
+                      (item, k) =>
+                      <option key={k} value={ item }>
+                        { item.toString() }
+                      </option>
+                    )}
+                  </select>
+                : <select onChange={this.handlePageSizeChange}>
+                    {[200, 100, 50, 20].map(
+                      (item, k) =>
+                      <option key={k} value={ item }>
+                        { item.toString() }
+                      </option>
+                    )}
+                  </select>
+              }
+
             </div>
           </Col>
           <Col xs={12} md={2} className="pt-input-group">

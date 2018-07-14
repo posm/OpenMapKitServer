@@ -39,7 +39,7 @@ export class SubmissionMap extends React.Component {
       this.setState({'data': data});
       this.map.addSource('submissions', {
         "type": "geojson",
-        "data": this.state.data
+        "data": data
       });
       this.map.addLayer({
         "id": "submission_lines",
@@ -75,7 +75,7 @@ export class SubmissionMap extends React.Component {
         }
       });
       this.map.fitBounds(
-        extent(this.state.data),
+        extent(data),
         {"padding": {top: 80, bottom: 35, left: 35, right: 35}, "linear": true}
       );
     });
