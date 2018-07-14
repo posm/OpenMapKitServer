@@ -339,6 +339,12 @@ class SubmissionList extends React.Component {
     this.getFormDetails();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.page !== this.state.page || prevState.pageSize !== this.state.pageSize) {
+      this.updateFilterParams();
+    }
+  }
+
   updatePagination(newPageSize, filtered) {
     if (filtered.length > newPageSize) {
       const mod = filtered.length % newPageSize;
@@ -374,13 +380,11 @@ class SubmissionList extends React.Component {
 
   handlePageChange = (event) => {
     this.setState({ page: event.target.value });
-    this.updateFilterParams();
   }
 
   handlePageSizeChange = (event) => {
     this.setState({ pageSize: event.target.value });
     this.updatePagination(event.target.value, this.state.filteredSubmissions);
-    this.updateFilterParams();
   }
 
   updateFilterParams() {
@@ -389,7 +393,7 @@ class SubmissionList extends React.Component {
       start_date: this.state.startDate,
       end_date: this.state.endDate,
       username: this.state.filterUsername,
-      offset: this.state.page * this.state.pageSize || 0,
+      offset: (this.state.page - 1) * this.state.pageSize || 0,
       limit: this.state.pageSize || 200
     };
     const filterParams = Object.keys(filters).filter(
@@ -402,7 +406,7 @@ class SubmissionList extends React.Component {
 
   filterSubmissions = () => {
     this.setState({ loading: true });
-    this.updateFilterParams();
+    this.setState({ page: 1 });
     let filtered = this.state.submissions;
     if (this.state.startDate) {
       filtered = filtered.filter(

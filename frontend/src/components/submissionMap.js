@@ -105,7 +105,6 @@ export class SubmissionMap extends React.Component {
       });
       if (features.length) {
         const properties = orderKeys(features[0].properties);
-        console.log(properties);
         const keys = Object.keys(properties);
         const values = Object.values(properties);
         this.setState({

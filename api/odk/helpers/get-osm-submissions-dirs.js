@@ -134,7 +134,7 @@ function filterByDateAndDevice(submissionDir, filters) {
     fs.readFileSync(path.format({dir: submissionDir, base: 'data.json'}), 'utf8')
   );
   filtered = true;
-  if (filters.deviceId && !submission.meta.deviceId.startsWith(filters.deviceId)) {
+  if (filters.deviceId && submission.deviceid != filters.deviceId) {
     filtered = false;
   }
   if (filters.username && !submission.username.startsWith(filters.username)) {

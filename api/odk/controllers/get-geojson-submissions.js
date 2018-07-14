@@ -27,7 +27,6 @@ module.exports = function(req, res, next) {
     }
     aggregate(osmDirs, req, res);
   });
-
 };
 
 /**
