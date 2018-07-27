@@ -16,39 +16,44 @@ var archivedForms = require('./controllers/archived-form-list');
 /**
  * Aggregate End Points
  */
-var adminDVPermission = require('permission')(['admin', 'data-viewer']);
-var adminPermission = require('permission')(['admin']);
 
 router.route('/submissions').get(getSubmissionsList);
-router.route('/submissions/:formName.json').get(adminDVPermission, getJsonSubmissions);
-router.route('/submissions/:formName.csv').get(adminDVPermission, getCsvSubmissions);
-router.route('/submissions/:formName.osm')
-  .get(adminDVPermission, getOsmSubmissions)
-  .patch(patchSubmissions);
-router.route('/submissions/:formName.zip').get(adminDVPermission, getSubmissionAttachments);
 
-/**
- * XLSForm Upload Endpoint
- */
-router.route('/upload-form').post(adminPermission, uploadForm);
+var disableAuth = process.env.DISABLE_AUTH == 1 || process.env.DISABLE_AUTH == 'true';
+if (disableAuth) {
+  router.route('/submissions/:formName.json').get(getJsonSubmissions);
+  router.route('/submissions/:formName.csv').get(getCsvSubmissions);
+  router.route('/submissions/:formName.osm')
+    .get(getOsmSubmissions)
+    .patch(patchSubmissions);
+  router.route('/submissions/:formName.zip').get(getSubmissionAttachments);
+  router.route('/upload-form').post(uploadForm);
+  router.route('/archived-forms').get(archivedForms);
+  router.route('/submit-changesets/:formName')
+    .get(submitChangesets)
+    .put(submitChangesets);
+  router.route('/forms/:formName/delete').post(deleteForm);
+  router.route('/forms/:formName/archive').post(archiveForm);
+  router.route('/forms/:formName/restore').post(restoreForm);
+} else {
+  var adminDVPermission = require('permission')(['admin', 'data-viewer']);
+  var adminPermission = require('permission')(['admin']);
+  router.route('/submissions/:formName.json').get(adminDVPermission, getJsonSubmissions);
+  router.route('/submissions/:formName.csv').get(adminDVPermission, getCsvSubmissions);
+  router.route('/submissions/:formName.osm')
+    .get(adminDVPermission, getOsmSubmissions)
+    .patch(patchSubmissions);
+  router.route('/submissions/:formName.zip').get(adminDVPermission, getSubmissionAttachments);
+  router.route('/upload-form').post(adminPermission, uploadForm);
+  router.route('/archived-forms').get(adminPermission, archivedForms);
+  router.route('/forms/:formName/delete').post(adminPermission, deleteForm);
+  router.route('/forms/:formName/archive').post(adminPermission, archiveForm);
+  router.route('/forms/:formName/restore').post(adminPermission, restoreForm);
+  router.route('/submit-changesets/:formName')
+    .get(adminPermission, submitChangesets)
+    .put(adminPermission, submitChangesets);
+}
 
 router.route('/manifest/:formName.xml').get(getManifest);
-
-/**
- * Form Delete/Archive/Restore Endpoints
- */
-
- router.route('/archived-forms').get(adminPermission, archivedForms);
- router.route('/forms/:formName/delete').post(adminPermission, deleteForm);
- router.route('/forms/:formName/archive').post(adminPermission, archiveForm);
- router.route('/forms/:formName/restore').post(adminPermission, restoreForm);
-
-/**
- * Creates changesets for submissions and submits to
- * an OSM Editing API
- */
-router.route('/submit-changesets/:formName')
-  .get(adminPermission, submitChangesets)
-  .put(adminPermission, submitChangesets);
 
 module.exports = router;

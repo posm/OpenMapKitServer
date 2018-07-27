@@ -50,6 +50,15 @@ npm start
 If `npm start` is failing, run `npm start --verbose` to see detailed log execution.
 You might encounter `Error: Could not locate the bindings file`. Run `npm install libxmljs` to fix this.
 
+### Enable authentication
+
+By default the authentication is enabled in OpenMapKitServer. You can disable it,
+by setting the environment variable `DISABLE_AUTH` as `1` or as `true`.
+
+```sh
+export DISABLE_AUTH=1
+```
+
 ### Data Sync
 
 If you want to enable AWS S3 sync, in a way to have a backup of forms and

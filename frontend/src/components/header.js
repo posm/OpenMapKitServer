@@ -8,19 +8,48 @@ import {
 } from "@blueprintjs/core";
 
 import { logout } from '../store/actions/auth';
+import { authStatus } from '../network/auth';
+import { cancelablePromise } from '../utils/promise';
 import logo from '../icon.png'
 
 
 class Header extends React.Component {
+  getAuthStatusPromise;
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      authEnabled: true
+    }
+  }
+
+  componentDidMount() {
+    if (!(this.props.userDetails &&
+        this.props.userDetails.hasOwnProperty('username') &&
+        this.props.userDetails.username !== null)) {
+          this.getAuthStatus();
+        }
+  }
+  getAuthStatus = () => {
+    this.getAuthStatusPromise = cancelablePromise(
+      authStatus()
+    );
+    this.getAuthStatusPromise.promise.then(
+      r => {
+        console.log('response ' + r.auth_enabled);
+        this.setState({ authEnabled: r.auth_enabled });
+      }
+    ).catch(e => console.log(e));
+  }
   isAuthenticated(){
     return this.props.userDetails &&
       this.props.userDetails.hasOwnProperty('username') &&
-      this.props.userDetails.username !== null
+      this.props.userDetails.username !== null;
   }
   isAdmin() {
-    return this.props.userDetails &&
+    return (this.props.userDetails &&
       this.props.userDetails.hasOwnProperty('role') &&
-      this.props.userDetails.role === 'admin'
+      this.props.userDetails.role === 'admin') || !this.state.authEnabled;
   }
   renderAuthSubMenu() {
     if (this.isAuthenticated()) {
