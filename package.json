@@ -11,6 +11,7 @@
     "frontend": "node start_frontend.js",
     "send_to_s3": "node util/send_data_files.js",
     "get_from_s3": "node util/get_data_files.js",
+    "pushbuild": "yarn build && gh-pages -d frontend/build -b dist",
     "test": "tape test/**/**/*.test.js | faucet"
   },
   "repository": {
@@ -85,6 +86,7 @@
     "faucet": "0.0.1",
     "semistandard": "^10.0.0",
     "supertest": "^1.1.0",
+    "gh-pages": "^1.2.0",
     "tape": "^4.2.2"
   }
 }

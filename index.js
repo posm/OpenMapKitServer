@@ -28,9 +28,11 @@ var adminDVPermission = require('permission')(['admin', 'data-viewer']);
 
 var app = express();
 
+var disableAuth = process.env.DISABLE_AUTH === '1' || process.env.DISABLE_AUTH === 'true';
+
 var noAuth = (req, res, next) => next();
 var auth = (req, res, next) => {
-  if (req.user && req.user.username) {
+  if (disableAuth) {
     return next();
   } else {
     passport.authenticate(
@@ -111,17 +113,13 @@ app.get('/', redirectToForms);
 app.get('/omk', redirectToForms);
 app.get('/omk/info', info);
 
-app.get('/current-user',
+app.get('/omk/auth-status',
   function(req, res) {
-    if (req.user) {
-      res.json({ username: req.user.username, role: req.user.role});
-    } else {
-      res.status(401).json({error: 'User not authenticated'});
-    }
+    res.json({ 'auth_enabled': !disableAuth });
   }
 );
 
-app.post('/login', function(req, res, next) {
+app.post('/omk/login', function(req, res, next) {
   console.log(req.body);
   if (req.body.username && req.body.password) {
     authentication.findByUsername(req.body.username, function(err, user) {
@@ -142,7 +140,7 @@ app.post('/login', function(req, res, next) {
   }
 });
 
-app.get('/logout', function(req, res, next) {
+app.get('/omk/logout', function(req, res, next) {
     req.logout();
     res.status(200).json({
       message:'Logged Out',

@@ -15,8 +15,10 @@ import { getSubmissions } from '../network/submissions';
 import { archiveForm, deleteForm } from '../network/formManagement';
 import { handleErrors } from '../utils/promise';
 import { formList } from '../network/formList';
+import { authStatus } from '../network/auth';
 import { cancelablePromise } from '../utils/promise';
 import { SubmissionMap } from './submissionMap';
+import { LoginPanel } from './loginPanel';
 
 
 const jsDateFormatter: IDateFormatProps = {
@@ -97,9 +99,7 @@ class SubmissionMenu extends React.Component {
   }
 
   isAdmin() {
-    return this.props.userDetails &&
-      this.props.userDetails.hasOwnProperty('role') &&
-      this.props.userDetails.role === 'admin';
+    return this.props.userDetails && this.props.userDetails.role === 'admin';
   }
   downloadCsv = (event) => {
     this.download(`${this.props.formId}.csv?${this.props.filterParams}`);
@@ -221,6 +221,7 @@ class TableItemDownload extends React.Component {
   }
 
   download = (urlEnding, filename) => {
+    this.setState({ downloadName: '' });
     const authBase64 = new Buffer(
       this.props.userDetails.username + ':' + this.props.userDetails.password
     ).toString('base64');
@@ -236,6 +237,9 @@ class TableItemDownload extends React.Component {
       .then(blob => {
         const objURL = URL.createObjectURL(blob);
         this.setState({ activeBlob: objURL });
+        this.setState({
+          downloadName: filename ? filename : urlEnding.split('?')[0]
+        });
       });
   }
 
@@ -255,17 +259,22 @@ class TableItemDownload extends React.Component {
         title="Download file"
       >
         <div className="pt-dialog-body">
-          {(this.props.filename.endsWith('.jpg') || this.props.filename.endsWith('.png'))
-            ? <Image src={this.state.activeBlob} responsive className="preview-submission-img" />
-          : <p>{this.props.filename}</p>
+          {this.state.downloadName
+            ? <div>
+                {(this.props.filename.endsWith('.jpg') || this.props.filename.endsWith('.png'))
+                  ? <Image src={this.state.activeBlob} responsive className="preview-submission-img" />
+                  : <p>{this.props.filename}</p>
+                }
+                <AnchorButton
+                  intent={Intent.PRIMARY}
+                  className="pt-small"
+                  text="Download"
+                  download={this.props.filename}
+                  href={this.state.activeBlob}
+                />
+              </div>
+            : <div>Loading data, please wait...</div>
           }
-          <AnchorButton
-            intent={Intent.PRIMARY}
-            className="pt-small"
-            text="Download"
-            download={this.props.filename}
-            href={this.state.activeBlob}
-          />
         </div>
       </Dialog>
     );
@@ -300,6 +309,7 @@ class TableItemDownload extends React.Component {
 class SubmissionList extends React.Component {
   getSubmissionsPromise;
   getFormDetailsPromise;
+  getAuthStatusPromise;
 
   constructor(props) {
     super(props);
@@ -319,24 +329,31 @@ class SubmissionList extends React.Component {
       page: 1,
       pageSize: 200,
       pageCount: 1,
-      activateMap: false
+      activateMap: false,
+      authEnabled: true
     }
-  }
-
-  isAuthenticated() {
-    return this.props.userDetails &&
-        this.props.userDetails.hasOwnProperty('username') &&
-        this.props.userDetails.username !== null
   }
 
   componentWillUnmount() {
     this.getSubmissionsPromise && this.getSubmissionsPromise.cancel();
     this.getFormDetailsPromise && this.getFormDetailsPromise.cancel();
+    this.getAuthStatusPromise && this.getAuthStatusPromise.cancel();
   }
 
   componentDidMount() {
     this.getSubmissions();
     this.getFormDetails();
+    if (!(this.props.userDetails &&
+        this.props.userDetails.username != null)) {
+          this.getAuthStatus();
+        }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.userDetails.username !== prevProps.userDetails.username
+    ) {
+      this.getSubmissions();
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -470,7 +487,17 @@ class SubmissionList extends React.Component {
       this.state.page * this.state.pageSize
     );
   }
-
+  getAuthStatus = () => {
+    this.getAuthStatusPromise = cancelablePromise(
+      authStatus()
+    );
+    this.getAuthStatusPromise.promise.then(
+      r => {
+        console.log('response ' + r.auth_enabled);
+        this.setState({ authEnabled: r.auth_enabled });
+      }
+    ).catch(e => console.log(e));
+  }
   getSubmissions = () => {
     this.getSubmissionsPromise = cancelablePromise(
       getSubmissions(
@@ -694,7 +721,20 @@ class SubmissionList extends React.Component {
   }
 
   render() {
-    const isAuthenticated = this.isAuthenticated();
+    const isAuthenticated = (this.props.userDetails &&
+        this.props.userDetails.username != null) || !this.state.authEnabled;
+    const filters = {
+      deviceId: this.state.filterDeviceId,
+      start_date: this.state.startDate,
+      end_date: this.state.endDate,
+      username: this.state.filterUsername
+    };
+    const filterParams = Object.keys(filters).filter(
+      i => filters[i]
+    ).reduce(
+      (base, k) => `${base}${k}=${filters[k]}&`,
+    '');
+
     return(
       <div>
         {isAuthenticated
@@ -720,7 +760,7 @@ class SubmissionList extends React.Component {
                 : this.renderTable()
               }
             </div>
-          : <Redirect to='/login/' />
+          : <LoginPanel />
         }
       </div>
     );

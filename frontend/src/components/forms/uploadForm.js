@@ -54,7 +54,7 @@ class UploadForm extends React.Component {
       }
       {
         this.state.error && <Callout title="Error!" intent="danger" className="upload-result">
-            Some error ocurred while uploading your file(s).
+            Some error occurred while uploading your file(s).
           </Callout>
       }
       <Upload {...uploaderProps} ref="inner">

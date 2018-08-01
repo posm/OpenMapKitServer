@@ -42,6 +42,10 @@ data/deployments/**/*.osm
 data/deployments/**/*.mbtiles
 data/deployments/**/*.md
 data/forms/*
+frontend/build/static/*
+frontend/build/*.js
+frontend/build/index.html
+frontend/build/asset-*
 
 ############## Jekyll Stuff ##################
 .sass-cache/
