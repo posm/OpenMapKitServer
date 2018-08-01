@@ -50,6 +50,14 @@ npm start
 If `npm start` is failing, run `npm start --verbose` to see detailed log execution.
 You might encounter `Error: Could not locate the bindings file`. Run `npm install libxmljs` to fix this.
 
+### Enable authentication
+
+By default the authentication is enabled in OpenMapKitServer. You can disable it,
+by setting the environment variable `DISABLE_AUTH` as `1` or as `true`.
+
+```sh
+export DISABLE_AUTH=1
+```
 ### Run on development mode
 
 To start the server in the development mode, use `npm startdev`, it will make the React App restart each time the frontend code is updated.

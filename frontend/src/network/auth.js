@@ -1,5 +1,7 @@
-export function currentUser(): Promise<*> {
-  return fetch(`/current-user`, {
+import { handleErrors } from '../utils/promise';
+
+export function authStatus(): Promise<*> {
+  return fetch(`/omk/auth-status/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -16,7 +18,7 @@ export function login(username: string, password: string): Promise<*> {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-    }
+    },
     body: JSON.stringify({
       username,
       password

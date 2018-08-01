@@ -15,7 +15,9 @@ import { getSubmissions } from '../network/submissions';
 import { archiveForm, deleteForm } from '../network/formManagement';
 import { handleErrors } from '../utils/promise';
 import { formList } from '../network/formList';
+import { authStatus } from '../network/auth';
 import { cancelablePromise } from '../utils/promise';
+import { LoginPanel } from './loginPanel';
 
 
 const jsDateFormatter: IDateFormatProps = {
@@ -96,9 +98,7 @@ class SubmissionMenu extends React.Component {
   }
 
   isAdmin() {
-    return this.props.userDetails &&
-      this.props.userDetails.hasOwnProperty('role') &&
-      this.props.userDetails.role === 'admin';
+    return this.props.userDetails && this.props.userDetails.role === 'admin';
   }
   downloadCsv = (event) => {
     this.download(`${this.props.formId}.csv?${this.props.filterParams}`);
@@ -308,6 +308,7 @@ class TableItemDownload extends React.Component {
 class SubmissionList extends React.Component {
   getSubmissionsPromise;
   getFormDetailsPromise;
+  getAuthStatusPromise;
 
   constructor(props) {
     super(props);
@@ -325,24 +326,31 @@ class SubmissionList extends React.Component {
       hasUsername: false,
       page: 1,
       pageSize:200,
-      pageCount: 1
+      pageCount: 1,
+      authEnabled: true
     }
-  }
-
-  isAuthenticated() {
-    return this.props.userDetails &&
-        this.props.userDetails.hasOwnProperty('username') &&
-        this.props.userDetails.username !== null
   }
 
   componentWillUnmount() {
     this.getSubmissionsPromise && this.getSubmissionsPromise.cancel();
     this.getFormDetailsPromise && this.getFormDetailsPromise.cancel();
+    this.getAuthStatusPromise && this.getAuthStatusPromise.cancel();
   }
 
   componentDidMount() {
     this.getSubmissions();
     this.getFormDetails();
+    if (!(this.props.userDetails &&
+        this.props.userDetails.username != null)) {
+          this.getAuthStatus();
+        }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.userDetails.username !== prevProps.userDetails.username
+    ) {
+      this.getSubmissions();
+    }
   }
 
   updatePagination(newPageSize, filtered) {
@@ -444,7 +452,17 @@ class SubmissionList extends React.Component {
       this.state.page * this.state.pageSize
     );
   }
-
+  getAuthStatus = () => {
+    this.getAuthStatusPromise = cancelablePromise(
+      authStatus()
+    );
+    this.getAuthStatusPromise.promise.then(
+      r => {
+        console.log('response ' + r.auth_enabled);
+        this.setState({ authEnabled: r.auth_enabled });
+      }
+    ).catch(e => console.log(e));
+  }
   getSubmissions = () => {
     this.getSubmissionsPromise = cancelablePromise(
       getSubmissions(
@@ -586,7 +604,8 @@ class SubmissionList extends React.Component {
   }
 
   render() {
-    const isAuthenticated = this.isAuthenticated();
+    const isAuthenticated = (this.props.userDetails &&
+        this.props.userDetails.username != null) || !this.state.authEnabled;
     const filters = {
       deviceId: this.state.filterDeviceId,
       start_date: this.state.startDate,
@@ -667,7 +686,7 @@ class SubmissionList extends React.Component {
               }
 
             </div>
-          : <Redirect to='/login/' />
+          : <LoginPanel />
         }
       </div>
     );
