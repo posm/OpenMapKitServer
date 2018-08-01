@@ -12,6 +12,7 @@ const PythonShell = require('python-shell');
 const tempy = require('tempy');
 
 const settings = require('../../../settings');
+const { syncDataDir } = require('../helpers/aws-sync');
 const { getForms, loadXForm } = require('../../../util/xform');
 
 const formsDir = settings.dataDir + '/forms/';
@@ -221,6 +222,8 @@ module.exports = function (req, res, next) {
                   err: err,
                   msg: `Unable to move ${xform.title} to the forms directory.`
                 });
+              } else {
+                syncDataDir();
               }
 
               cleanup();

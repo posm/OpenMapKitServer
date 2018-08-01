@@ -31,7 +31,7 @@ class SubmissionMenu extends React.Component {
     super(props);
     this.state = {
       activeBlob: '',
-      downloadName:'',
+      downloadName: '',
       openDialog: false,
       formArchivedOrDelete: false
     }
@@ -73,6 +73,7 @@ class SubmissionMenu extends React.Component {
   }
 
   download = (urlEnding, filename) => {
+    this.setState({ downloadName: '' });
     const authBase64 = new Buffer(
       this.props.userDetails.username + ':' + this.props.userDetails.password
     ).toString('base64');
@@ -131,14 +132,20 @@ class SubmissionMenu extends React.Component {
         title="Download file"
       >
         <div className="pt-dialog-body">
-          <p>{this.state.downloadName}</p>
-          <AnchorButton
-            intent={Intent.PRIMARY}
-            className="pt-small"
-            text="Download"
-            download={this.state.downloadName}
-            href={this.state.activeBlob}
-          />
+          {this.state.downloadName
+            ? <div>
+                <p>{this.state.downloadName}</p>
+                <AnchorButton
+                  intent={Intent.PRIMARY}
+                  className="pt-small"
+                  text="Download"
+                  download={this.state.downloadName}
+                  href={this.state.activeBlob}
+                />
+              </div>
+            : <div>Loading data, please wait...</div>
+          }
+
         </div>
       </Dialog>
     );
@@ -189,7 +196,7 @@ class SubmissionMenu extends React.Component {
               {this.isAdmin() &&
                 <Popover content={manageMenu} position={Position.BOTTOM}
                   className="pt-intent-default"
-                  >
+                >
                   <Button icon="cog">Manage <Icon icon="caret-down" /></Button>
                 </Popover>
               }
@@ -213,6 +220,7 @@ class TableItemDownload extends React.Component {
   }
 
   download = (urlEnding, filename) => {
+    this.setState({ downloadName: '' });
     const authBase64 = new Buffer(
       this.props.userDetails.username + ':' + this.props.userDetails.password
     ).toString('base64');
@@ -228,6 +236,9 @@ class TableItemDownload extends React.Component {
       .then(blob => {
         const objURL = URL.createObjectURL(blob);
         this.setState({ activeBlob: objURL });
+        this.setState({
+          downloadName: filename ? filename : urlEnding.split('?')[0]
+        });
       });
   }
 
@@ -247,17 +258,22 @@ class TableItemDownload extends React.Component {
         title="Download file"
       >
         <div className="pt-dialog-body">
-          {(this.props.filename.endsWith('.jpg') || this.props.filename.endsWith('.png'))
-            ? <Image src={this.state.activeBlob} responsive className="preview-submission-img" />
-          : <p>{this.props.filename}</p>
+          {this.state.downloadName
+            ? <div>
+                {(this.props.filename.endsWith('.jpg') || this.props.filename.endsWith('.png'))
+                  ? <Image src={this.state.activeBlob} responsive className="preview-submission-img" />
+                  : <p>{this.props.filename}</p>
+                }
+                <AnchorButton
+                  intent={Intent.PRIMARY}
+                  className="pt-small"
+                  text="Download"
+                  download={this.props.filename}
+                  href={this.state.activeBlob}
+                />
+              </div>
+            : <div>Loading data, please wait...</div>
           }
-          <AnchorButton
-            intent={Intent.PRIMARY}
-            className="pt-small"
-            text="Download"
-            download={this.props.filename}
-            href={this.state.activeBlob}
-          />
         </div>
       </Dialog>
     );
@@ -298,13 +314,18 @@ class SubmissionList extends React.Component {
     this.state = {
       submissions: [],
       filteredSubmissions: [],
+      slicedSubmissions: [],
+      loading: true,
       formName: '',
       totalSubmissions: 0,
       startDate: null,
       endDate: null,
       filterDeviceId: '',
       filterUsername: '',
-      hasUsername: false
+      hasUsername: false,
+      page: 1,
+      pageSize:200,
+      pageCount: 1
     }
   }
 
@@ -322,6 +343,15 @@ class SubmissionList extends React.Component {
   componentDidMount() {
     this.getSubmissions();
     this.getFormDetails();
+  }
+
+  updatePagination(newPageSize, filtered) {
+    if (filtered.length > newPageSize) {
+      const mod = filtered.length % newPageSize;
+      this.setState({'pageCount': ((filtered.length - mod) / newPageSize) + 1});
+    } else {
+      this.setState({'pageCount': 1});
+    }
   }
 
   handleFilterStartDate = (date) => {
@@ -348,7 +378,17 @@ class SubmissionList extends React.Component {
     this.setState({ filterUsername: event.target.value });
   }
 
+  handlePageChange = (event) => {
+    this.setState({ page: event.target.value });
+  }
+
+  handlePageSizeChange = (event) => {
+    this.setState({ pageSize: event.target.value });
+    this.updatePagination(event.target.value, this.state.filteredSubmissions);
+  }
+
   filterSubmissions = () => {
+    this.setState({ loading: true });
     let filtered = this.state.submissions;
     if (this.state.startDate) {
       filtered = filtered.filter(
@@ -371,14 +411,19 @@ class SubmissionList extends React.Component {
       );
     }
     this.setState({ filteredSubmissions: filtered });
+    this.updatePagination(this.state.pageSize, filtered);
+    this.setState({ loading: false });
   }
 
   clearFilter = () => {
+    this.setState({ loading: true });
     this.setState({ filteredSubmissions: this.state.submissions });
     this.setState({ filterStartDate: null });
     this.setState({ filterEndDate: null });
     this.setState({ filterDeviceId: '' });
     this.setState({ filterUsername: '' });
+    this.updatePagination(this.state.pageSize, this.state.submissions)
+    this.setState({ loading: false });
   }
 
   getFormDetails = () => {
@@ -393,6 +438,13 @@ class SubmissionList extends React.Component {
     ).catch(e => console.log(e));
   }
 
+  getPageSlice() {
+    return this.state.filteredSubmissions.slice(
+      (this.state.page - 1) * this.state.pageSize,
+      this.state.page * this.state.pageSize
+    );
+  }
+
   getSubmissions = () => {
     this.getSubmissionsPromise = cancelablePromise(
       getSubmissions(
@@ -401,6 +453,7 @@ class SubmissionList extends React.Component {
         this.props.userDetails.password
       )
     );
+
     this.getSubmissionsPromise.promise.then(
       r => {
         let data = r.map(i => [
@@ -419,36 +472,118 @@ class SubmissionList extends React.Component {
         }
         this.setState({ submissions: data });
         this.setState({ filteredSubmissions: data });
+        this.setState({ loading: false });
+        this.updatePagination(this.state.pageSize, data);
       }
     ).catch(e => console.log(e));
   }
 
   renderCell = (row, column) => <Cell>
-    {this.state.filteredSubmissions[row][column]}
+    {this.getPageSlice()[row][column]}
   </Cell>;
 
   renderDateCell = (row, column) => <Cell>
-    {moment(this.state.filteredSubmissions[row][column]).format('lll')}
+    {moment(this.getPageSlice()[row][column]).format('lll')}
   </Cell>;
 
   renderCellImage = (row, column) => <Cell>
-    {this.state.filteredSubmissions[row][column]
+    {this.getPageSlice()[row][column]
       ? <TableItemDownload
-          urlEnding={`${this.props.formId}/${this.state.filteredSubmissions[row][column+2]}/${this.state.filteredSubmissions[row][column]}`}
-          filename={this.state.filteredSubmissions[row][column]}
+          urlEnding={`${this.props.formId}/${this.getPageSlice()[row][column+2]}/${this.getPageSlice()[row][column]}`}
+          filename={this.getPageSlice()[row][column]}
           userDetails={this.props.userDetails}
         />
       : <span>No image</span>
     }
-
   </Cell>;
+
   renderCellLink = (row, column) => <Cell>
     <TableItemDownload
-      urlEnding={`${this.props.formId}/${this.state.filteredSubmissions[row][column+1]}/${this.state.filteredSubmissions[row][column]}`}
-      filename={this.state.filteredSubmissions[row][column]}
+      urlEnding={`${this.props.formId}/${this.getPageSlice()[row][column+1]}/${this.getPageSlice()[row][column]}`}
+      filename={this.getPageSlice()[row][column]}
       userDetails={this.props.userDetails}
     />
   </Cell>;
+
+  renderFilterSection() {
+    let devices = this.state.submissions.map(item => item[2]);
+    devices = devices.filter((i, k) => devices.indexOf(i) === k);
+    return(
+      <Grid className="filters container">
+        <Row>
+          <Col xs={12} md={2} mdOffset={2} className="pt-input-group">
+            <label htmlFor="start-date" className="display-block">
+              From
+              <Tooltip content="Based on the Submission Time" position={Position.RIGHT}>
+                <Icon icon="help" color="#CED9E0" className="help-icon"/>
+              </Tooltip>
+            </label>
+            <DateInput {...jsDateFormatter}
+              id="start-date"
+              onChange={this.handleFilterStartDate}
+              />
+          </Col>
+          <Col xs={12} md={2} className="pt-input-group">
+            <label htmlFor="end-date" className="display-block">
+              To
+              <Tooltip content="Based on the Submission Time" position={Position.RIGHT}>
+                <Icon icon="help" color="#CED9E0" className="help-icon"/>
+              </Tooltip>
+            </label>
+            <DateInput {...jsDateFormatter}
+              id="end-date"
+              onChange={this.handleFilterEndDate}
+              />
+          </Col>
+          {this.state.hasUsername
+            ? <Col xs={12} md={2} className="pt-input-group">
+                <label htmlFor="filter-username" className="display-block">
+                  Username
+                </label>
+                <div className="pt-select">
+                  <select onChange={this.handleFilterUsernameChange}>
+                    <option value={null} >Choose an item...</option>
+                    {devices.map(
+                      (item, k) =>
+                      <option key={k} value={ `${item}` }>
+                        { item.toString() }
+                      </option>
+                    )}
+                  </select>
+                </div>
+              </Col>
+            : <Col xs={12} md={2} className="pt-input-group">
+                <label htmlFor="filter-deviceid" className="display-block">
+                  Device ID
+                </label>
+                <div className="pt-select">
+                  <select onChange={this.handleFilterDeviceIdChange}>
+                    <option value={null} >Choose an item...</option>
+                    {devices.map(
+                      (item, k) =>
+                      <option key={k} value={ `${item}` }>
+                        { item.toString() }
+                      </option>
+                    )}
+                  </select>
+                </div>
+              </Col>
+            }
+
+          <Col xs={12} md={1} className="pt-input-group">
+            <Button className="pt-intent-success filter-btn"
+              icon="filter" text="Filter" onClick={this.filterSubmissions}
+              />
+          </Col>
+          <Col xs={12} md={1} className="pt-input-group">
+            <Button className="pt-intent-danger filter-btn"
+              icon="filter-remove" text="Clear" onClick={this.clearFilter}
+              />
+          </Col>
+        </Row>
+      </Grid>
+    );
+  }
 
   render() {
     const isAuthenticated = this.isAuthenticated();
@@ -463,8 +598,6 @@ class SubmissionList extends React.Component {
     ).reduce(
       (base, k) => `${base}${k}=${filters[k]}&`,
     '');
-    let devices = this.state.submissions.map(item => item[2]);
-    devices = devices.filter((i, k) => devices.indexOf(i) === k);
 
     return(
       <div>
@@ -480,93 +613,59 @@ class SubmissionList extends React.Component {
                   userDetails={this.props.userDetails}
                   />
               </div>
-              <Grid className="filters container">
+              { this.renderFilterSection() }
+              <Grid className="pagination">
                 <Row>
-                  <Col xs={12} md={2} mdOffset={2} className="pt-input-group">
-                    <label htmlFor="start-date" className="display-block">
-                      From
-                      <Tooltip content="Based on the Submission Time" position={Position.RIGHT}>
-                        <Icon icon="help" color="#CED9E0" className="help-icon"/>
-                      </Tooltip>
-                    </label>
-                    <DateInput {...jsDateFormatter}
-                      id="start-date"
-                      onChange={this.handleFilterStartDate}
-                      />
+                  <Col xs={12} md={2} mdOffset={4} className="pt-input-group">
+                    <label className="display-inline pr-7">Page Size</label>
+                    <div className="pt-select">
+                      <select onChange={this.handlePageSizeChange}>
+                        {[200, 100, 50, 20].map(
+                          (item, k) =>
+                          <option key={k} value={ item }>
+                            { item.toString() }
+                          </option>
+                        )}
+                      </select>
+                    </div>
                   </Col>
                   <Col xs={12} md={2} className="pt-input-group">
-                    <label htmlFor="end-date" className="display-block">
-                      To
-                      <Tooltip content="Based on the Submission Time" position={Position.RIGHT}>
-                        <Icon icon="help" color="#CED9E0" className="help-icon"/>
-                      </Tooltip>
-                    </label>
-                    <DateInput {...jsDateFormatter}
-                      id="end-date"
-                      onChange={this.handleFilterEndDate}
-                      />
-                  </Col>
-                  {this.state.hasUsername
-                    ? <Col xs={12} md={2} className="pt-input-group">
-                        <label htmlFor="filter-username" className="display-block">
-                          Username
-                        </label>
-                        <div className="pt-select">
-                          <select onChange={this.handleFilterUsernameChange}>
-                            <option value={null} >Choose an item...</option>
-                            {devices.map(
-                              (item, k) =>
-                                <option key={k} value={ `${item}` }>
-                                  { item.toString() }
-                                </option>
-                            )}
-                          </select>
-                        </div>
-                      </Col>
-                    : <Col xs={12} md={2} className="pt-input-group">
-                        <label htmlFor="filter-deviceid" className="display-block">
-                          Device ID
-                        </label>
-                        <div className="pt-select">
-                          <select onChange={this.handleFilterDeviceIdChange}>
-                            <option value={null} >Choose an item...</option>
-                            {devices.map(
-                              (item, k) =>
-                                <option key={k} value={ `${item}` }>
-                                  { item.toString() }
-                                </option>
-                            )}
-                          </select>
-                        </div>
-                      </Col>
-                  }
-
-                  <Col xs={12} md={1} className="pt-input-group">
-                    <Button className="pt-intent-success filter-btn"
-                      icon="filter" text="Filter" onClick={this.filterSubmissions}
-                      />
-                  </Col>
-                  <Col xs={12} md={1} className="pt-input-group">
-                    <Button className="pt-intent-danger filter-btn"
-                      icon="filter-remove" text="Clear" onClick={this.clearFilter}
-                      />
+                    <label className="inline horizontal-small-padding pr-7">Page</label>
+                    <div className="pt-select">
+                      <select onChange={this.handlePageChange}>
+                        {Array.apply(null, { length: this.state.pageCount }).map(
+                          Number.call, Number
+                        ).map(
+                          i => i + 1
+                        ).map(
+                          (item, k) =>
+                          <option key={k} value={ item }>
+                            { item.toString() }
+                          </option>
+                        )}
+                      </select>
+                    </div>
                   </Col>
                 </Row>
               </Grid>
-              <Table className="submissions-table center-block"
-                columnWidths={[190,190,190,190,190,190]}
-                numRows={this.state.filteredSubmissions.length}
-              >
-                <Column name="Start" cellRenderer={this.renderDateCell} />
-                <Column name="End" cellRenderer={this.renderDateCell} />
-                {this.state.hasUsername
-                  ? <Column name="Username" cellRenderer={this.renderCell} />
-                  : <Column name="Device ID" cellRenderer={this.renderCell} />
-                }
-                <Column name="Submission Time" cellRenderer={this.renderDateCell} />
-                <Column name="Image" cellRenderer={this.renderCellImage} />
-                <Column name="Download" cellRenderer={this.renderCellLink} />
-              </Table>
+              {this.state.loading
+                ? <div id="loading-msg">Loading data, please wait...</div>
+                : <Table className="submissions-table center-block"
+                    columnWidths={[190,190,190,190,190,190]}
+                    numRows={this.getPageSlice().length}
+                  >
+                    <Column name="Start" cellRenderer={this.renderDateCell} />
+                    <Column name="End" cellRenderer={this.renderDateCell} />
+                    {this.state.hasUsername
+                      ? <Column name="Username" cellRenderer={this.renderCell} />
+                      : <Column name="Device ID" cellRenderer={this.renderCell} />
+                    }
+                    <Column name="Submission Time" cellRenderer={this.renderDateCell} />
+                    <Column name="Image" cellRenderer={this.renderCellImage} />
+                    <Column name="Download" cellRenderer={this.renderCellLink} />
+                  </Table>
+              }
+
             </div>
           : <Redirect to='/login/' />
         }

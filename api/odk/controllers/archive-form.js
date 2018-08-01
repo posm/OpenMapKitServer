@@ -1,6 +1,8 @@
 var fs = require('fs');
 var fse = require('fs-extra');
 var path = require('path');
+
+const { syncDataDir } = require('../helpers/aws-sync');
 var settings = require('../../../settings.js');
 
 
@@ -14,7 +16,11 @@ const moveFiles = (archiveDir, formName) => {
         path.join(settings.dataDir, 'forms', i),
         path.join(archiveDir, 'forms', i),
         renameError => {
-          if (renameError) console.log(`Error when moving file ${i}.`);
+          if (renameError) {
+            console.log(`Error when moving file ${i}.`);
+          } else {
+            syncDataDir();
+          };
         }
       )
     );
@@ -28,7 +34,11 @@ const moveSubmissions = (submissionDir, archiveDir, formName) => {
     submissionDir,
     path.join(archiveDir, 'submissions', formName),
     renameError => {
-      if (renameError) console.log('It was not possible to move the submissions directory.');
+      if (renameError) {
+        console.log('It was not possible to move the submissions directory.');
+      } else {
+        syncDataDir();
+      };
     }
   );
 }

@@ -1,6 +1,8 @@
 var fs = require('fs');
 var fse = require('fs-extra');
 var path = require('path');
+
+const { syncDataDir } = require('../helpers/aws-sync');
 var settings = require('../../../settings.js');
 
 
@@ -37,6 +39,8 @@ module.exports = (req, res, next) => {
                 return res.status(500).json(
                   {detail: "Something went wrong during the restoration process."}
                 );
+              } else {
+                syncDataDir();
               }
             }
           )
@@ -45,7 +49,15 @@ module.exports = (req, res, next) => {
       // move submissions dir
       fs.readdir(path.join(archiveDir, 'submissions', formName), (err, items) => {
         if (!err) {
-          fse.move(path.join(archiveDir, 'submissions', formName), submissionDir);
+          fse.move(
+            path.join(archiveDir, 'submissions', formName),
+            submissionDir,
+            moveError => {
+              if (!moveError) {
+                syncDataDir();
+              }
+            }
+          );
         }
       }
       );
