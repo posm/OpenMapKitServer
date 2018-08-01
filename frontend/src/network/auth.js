@@ -1,7 +1,7 @@
 import { handleErrors } from '../utils/promise';
 
 export function authStatus(): Promise<*> {
-  return fetch(`/auth-status/`, {
+  return fetch(`/omk/auth-status/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'

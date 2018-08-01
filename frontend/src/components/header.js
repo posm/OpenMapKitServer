@@ -3,8 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import {
-  Navbar, NavbarGroup, NavbarHeading, AnchorButton, Button, Popover, Menu,
-  MenuItem, Position
+  Navbar, NavbarGroup, NavbarHeading, Button, Popover, Menu, MenuItem, Position
 } from "@blueprintjs/core";
 
 import { logout } from '../store/actions/auth';
@@ -25,8 +24,7 @@ class Header extends React.Component {
 
   componentDidMount() {
     if (!(this.props.userDetails &&
-        this.props.userDetails.hasOwnProperty('username') &&
-        this.props.userDetails.username !== null)) {
+        this.props.userDetails.username != null)) {
           this.getAuthStatus();
         }
   }
@@ -36,20 +34,17 @@ class Header extends React.Component {
     );
     this.getAuthStatusPromise.promise.then(
       r => {
-        console.log('response ' + r.auth_enabled);
         this.setState({ authEnabled: r.auth_enabled });
       }
     ).catch(e => console.log(e));
   }
   isAuthenticated(){
     return this.props.userDetails &&
-      this.props.userDetails.hasOwnProperty('username') &&
-      this.props.userDetails.username !== null;
+      this.props.userDetails.username != null;
   }
   isAdmin() {
-    return (this.props.userDetails &&
-      this.props.userDetails.hasOwnProperty('role') &&
-      this.props.userDetails.role === 'admin') || !this.state.authEnabled;
+    return (this.props.userDetails && this.props.userDetails.role === 'admin') ||
+      !this.state.authEnabled;
   }
   renderAuthSubMenu() {
     if (this.isAuthenticated()) {
@@ -65,9 +60,9 @@ class Header extends React.Component {
       );
     } else {
       return <Link to="/login">
-        <AnchorButton className="pt-minimal" icon="user">
+        <Button className="pt-minimal" icon="user">
           Log in
-        </AnchorButton>
+        </Button>
       </Link>
     }
   }

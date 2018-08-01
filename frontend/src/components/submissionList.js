@@ -98,9 +98,7 @@ class SubmissionMenu extends React.Component {
   }
 
   isAdmin() {
-    return this.props.userDetails &&
-      this.props.userDetails.hasOwnProperty('role') &&
-      this.props.userDetails.role === 'admin';
+    return this.props.userDetails && this.props.userDetails.role === 'admin';
   }
   downloadCsv = (event) => {
     this.download(`${this.props.formId}.csv?${this.props.filterParams}`);
@@ -343,15 +341,13 @@ class SubmissionList extends React.Component {
     this.getSubmissions();
     this.getFormDetails();
     if (!(this.props.userDetails &&
-        this.props.userDetails.hasOwnProperty('username') &&
-        this.props.userDetails.username !== null)) {
+        this.props.userDetails.username != null)) {
           this.getAuthStatus();
         }
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.userDetails.hasOwnProperty('username') !=
-      prevProps.userDetails.hasOwnProperty('username')
+    if (this.props.userDetails.username !== prevProps.userDetails.username
     ) {
       this.getSubmissions();
     }
@@ -609,8 +605,7 @@ class SubmissionList extends React.Component {
 
   render() {
     const isAuthenticated = (this.props.userDetails &&
-        this.props.userDetails.hasOwnProperty('username') &&
-        this.props.userDetails.username !== null) || !this.state.authEnabled;
+        this.props.userDetails.username != null) || !this.state.authEnabled;
     const filters = {
       deviceId: this.state.filterDeviceId,
       start_date: this.state.startDate,
