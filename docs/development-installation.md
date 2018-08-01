@@ -50,6 +50,14 @@ npm start
 If `npm start` is failing, run `npm start --verbose` to see detailed log execution.
 You might encounter `Error: Could not locate the bindings file`. Run `npm install libxmljs` to fix this.
 
+### Run on development mode
+
+To start the server in the development mode, use `npm startdev`, it will make the React App restart each time the frontend code is updated.
+
+### Updating frontend builds
+
+The frontend builds are ignored by the `master` branch git and available on the `dist` branch. To make a new build and push it to the `dist` branch, use `npm pushbuild`
+
 ### Data Sync
 
 If you want to enable AWS S3 sync, in a way to have a backup of forms and
