@@ -119,7 +119,7 @@ app.get('/omk/auth-status',
   }
 );
 
-app.post('/login', function(req, res, next) {
+app.post('/omk/login', function(req, res, next) {
   console.log(req.body);
   if (req.body.username && req.body.password) {
     authentication.findByUsername(req.body.username, function(err, user) {
@@ -140,7 +140,7 @@ app.post('/login', function(req, res, next) {
   }
 });
 
-app.get('/logout', function(req, res, next) {
+app.get('/omk/logout', function(req, res, next) {
     req.logout();
     res.status(200).json({
       message:'Logged Out',

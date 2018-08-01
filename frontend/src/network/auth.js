@@ -14,7 +14,7 @@ export function authStatus(): Promise<*> {
 }
 
 export function login(username: string, password: string): Promise<*> {
-  return fetch(`/login/`, {
+  return fetch(`/omk/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

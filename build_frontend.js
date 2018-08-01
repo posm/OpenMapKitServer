@@ -1,3 +1,5 @@
-const args = [ 'build' ];
+var spawn = require('child_process').spawnSync;
 const opts = { stdio: 'inherit', cwd: 'frontend', shell: true };
-require('child_process').spawn('yarn', args, opts);
+
+const install = spawn('yarn', [ 'install' ], opts);
+const build = spawn('yarn', [ 'build' ], opts);
