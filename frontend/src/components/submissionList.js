@@ -349,14 +349,10 @@ class SubmissionList extends React.Component {
         }
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.userDetails.username !== prevProps.userDetails.username
-    ) {
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.userDetails.username !== prevProps.userDetails.username) {
       this.getSubmissions();
     }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
     if (prevState.page !== this.state.page || prevState.pageSize !== this.state.pageSize) {
       this.updateFilterParams();
     }
@@ -684,7 +680,6 @@ class SubmissionList extends React.Component {
                     )}
                   </select>
               }
-
             </div>
           </Col>
           <Col xs={12} md={2} className="pt-input-group">
@@ -713,7 +708,6 @@ class SubmissionList extends React.Component {
                   onClick={() => this.setState({activateMap: true})}
                   />
             }
-
           </Col>
         </Row>
       </Grid>
@@ -723,17 +717,6 @@ class SubmissionList extends React.Component {
   render() {
     const isAuthenticated = (this.props.userDetails &&
         this.props.userDetails.username != null) || !this.state.authEnabled;
-    const filters = {
-      deviceId: this.state.filterDeviceId,
-      start_date: this.state.startDate,
-      end_date: this.state.endDate,
-      username: this.state.filterUsername
-    };
-    const filterParams = Object.keys(filters).filter(
-      i => filters[i]
-    ).reduce(
-      (base, k) => `${base}${k}=${filters[k]}&`,
-    '');
 
     return(
       <div>
