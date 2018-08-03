@@ -1,4 +1,4 @@
-var aggregateOsm = require('../osm/aggregate-osm');
+var aggregateOsm = require('../osm/aggregate-osm-to-geojson');
 var getOsmSubmissionsDirs = require('../helpers/get-osm-submissions-dirs');
 var osmtogeojson = require('osmtogeojson');
 var DOMParser = require("xmldom").DOMParser;
