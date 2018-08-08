@@ -10,35 +10,33 @@ OpenMapKit Server is 100% database free! All data is persisted on the file syste
 
 ## [Development Installation](docs/development-installation.md)
 
-These [instructions](docs/development-installation.md) are for setting up 
+These [instructions](docs/development-installation.md) are for setting up
 and running OpenMapKit Server in your development environment.
 
 ## [Production Installation](docs/posm-build-installation.md)
 
-If you want to run OpenMapKit Server for your field mapping survey, use the 
+If you want to run OpenMapKit Server for your field mapping survey, use the
 [POSM Build Installation](docs/posm-build-installation.md) instructions and [POSM documentation](http://posm.io/).
 
 
 ## Project Structure
 
-[__deployments__](deployments) is the OpenMapKit 
-deployment API. This services deployment data in the 
+[__deployments__](deployments) is the OpenMapKit
+deployment API. This services deployment data in the
 [deployments data directory](data/deployments).
 Manifest files in this directory are read by OpenMapKit Android as metadata regarding the deployment
 data provided. Deployments are created by [posm-admin](https://github.com/AmericanRedCross/posm-admin).
 to provision deployment data that is fetched by OpenMapKit Android.
 
-[__odk__](odk) is the OpenMapKit ODK API. 
+[__odk__](odk) is the OpenMapKit ODK API.
 This is a REST API that handles all of the ODK business logic, including communicating with ODK Collect,
 as well as serving and ingesting ODK XForm data.
 
-[__jekyll__](jekyll) is where the front end pages live.
-
-[__pages__](pages) is where the Jekyll project is built. The pages are served from here.
+[__frontend__](frontend) is where the front end code lives.
 
 [__data__](data) is where all of the data is stored on the server's file system.
 
-[__util__](util) has utility functions 
+[__util__](util) has utility functions
 useful to OpenMapKit Server as a whole.
 
 

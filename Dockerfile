@@ -45,6 +45,10 @@ RUN \
 COPY . /app/
 
 RUN \
+  cd frontend && yarn \
+  && yarn build
+
+RUN \
   git submodule update --init \
   && useradd omkserver -m \
   && chown -R omkserver:omkserver /app/data

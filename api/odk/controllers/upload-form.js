@@ -12,6 +12,7 @@ const PythonShell = require('python-shell');
 const tempy = require('tempy');
 
 const settings = require('../../../settings');
+const { syncDataDir } = require('../helpers/aws-sync');
 const { getForms, loadXForm } = require('../../../util/xform');
 const Url = require('../../../util/url');
 
@@ -27,6 +28,7 @@ const xlsToXForm = (xlsPath, callback) => {
   });
 
   return PythonShell.run('xls2xform.py', {
+    pythonPath: 'python2',
     scriptPath: path.join(__dirname, '..', 'pyxform', 'pyxform'),
     args: [xlsPath, xformPath],
     mode: 'text'
@@ -221,6 +223,8 @@ module.exports = function (req, res, next) {
                   err: err,
                   msg: `Unable to move ${xform.title} to the forms directory.`
                 });
+              } else {
+                syncDataDir();
               }
 
               cleanup();
