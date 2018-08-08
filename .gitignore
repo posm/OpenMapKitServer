@@ -33,12 +33,19 @@ pids
 *.seed
 
 ############## OpenMapKit Stuff ##############
+data/archive/*
+data/archive/forms/*
+data/archive/submissions/*
 data/submissions/*
 !data/submissions/README.md
 data/deployments/**/*.osm
 data/deployments/**/*.mbtiles
 data/deployments/**/*.md
 data/forms/*
+frontend/build/static/*
+frontend/build/*.js
+frontend/build/index.html
+frontend/build/asset-*
 
 ############## Jekyll Stuff ##################
 .sass-cache/
