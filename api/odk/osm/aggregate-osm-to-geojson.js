@@ -137,8 +137,8 @@ module.exports = function(files, filter, cb) {
                 // add submission_time and submission_user or submission_deviceid
                 // to each feature with the aim of showing this information on the map
                 osmElement.node('tag').attr({
-                  k: 'submission_time',
-                  v: formData.meta.submissionTime
+                  k: 'submission_date',
+                  v: formData.meta.submissionTime.slice(0,10)
                 });
                 if (formData.username) {
                   osmElement.node('tag').attr({

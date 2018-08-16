@@ -46,8 +46,13 @@ body {
   margin-top: 15px;
 }
 
-.submissions-table {
-  max-width: 90%;
+.filters .pt-input-group {
+  padding-top: 10px;
+}
+
+.filter-btn {
+  position: relative !important;
+  margin-top: 10px;
 }
 
 .display-block {
@@ -59,15 +64,27 @@ body {
 }
 
 .pl-7 {
-  padding-left: 7px;
+  padding-left: 7px !important;
 }
 
 .pr-7 {
-  padding-right: 7px;
+  padding-right: 7px !important;
 }
 
-.filter-btn {
-  margin: 20px 17% 0 17% !important;
+.pr-0 {
+  padding-right: 0px !important;
+}
+
+.pl-0 {
+  padding-left: 0px !important;
+}
+
+.ml-0 {
+  margin-left: 0px !important;
+}
+
+.mr-0 {
+  margin-right: 0px !important;
 }
 
 .pt-dark a {
@@ -110,15 +127,20 @@ body {
   margin-top: 20px;
 }
 
-#map {
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  height: 600px;
+.mapboxgl-canvas {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .mapboxgl-canvas {
   position: relative !important;
+}
+
+.h-100 {
+  height: 100% !important;
 }
 
 .map-info {
@@ -131,6 +153,24 @@ body {
   right: 0;
   z-index: 1;
   display: none;
+  border-radius: 5px;
+}
+
+.color-switch {
+  background-color: #eff0d1;
+  padding: 10px;
+  margin-left: 10px;
+  position: absolute;
+  text-align: left;
+  bottom: 30px;
+  left: 0;
+  z-index: 1;
+  border-radius: 5px;
+}
+
+.color-switch .pt-label {
+  font-size: 14px;
+  margin: 2px 0 10px !important;
 }
 
 .feature-key {

@@ -1,8 +1,17 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
+import { Set } from 'immutable';
 import { extent } from 'geojson-bounds';
+import { array as countPerDay } from 'count-per-day';
+import { RadioGroup, Radio, Icon } from "@blueprintjs/core";
 
 import { getSubmissionsGeojson } from '../network/submissions';
+
+const COLOR_STEPS = [
+  "#29A634", "#1F4B99", "#D99E0B", "#D13913", "#8F398F", "#00B3A4", "#728C23",
+  "#DB2C6F", "#B07B46", "#7157D9", "#B6D94C", "#63411E"
+];
+const OTHER_COLOR = '#4580E6';
 
 function orderKeys(obj) {
   const ordered = {};
@@ -12,6 +21,13 @@ function orderKeys(obj) {
   return ordered;
 }
 
+function sortByKey(array, key) {
+    return array.sort(function(a, b) {
+        var x = a[key]; var y = b[key];
+        return ((x > y) ? -1 : ((x < y) ? 1 : 0));
+    });
+}
+
 export class SubmissionMap extends React.Component {
   constructor(props) {
     super(props);
@@ -19,8 +35,75 @@ export class SubmissionMap extends React.Component {
     this.state = {
       info_content: '',
       display_map_info: 'none',
-      data: {}
+      data: {},
+      showVizTypeSwitch: false,
+      vizType: 'default',
+      legend: []
     };
+  }
+
+  get_paint_property(data) {
+    if (this.state.vizType === 'default') {
+      return OTHER_COLOR;
+    }
+    if (this.state.vizType === 'date') {
+      return this.get_color_steps_by_date(data);
+    }
+    if (this.state.vizType === 'user') {
+      return this.get_color_steps_by_user(data);
+    }
+  }
+
+  get_color_steps_by_date(data) {
+    // set colour features colours
+    let legend = [];
+    const submissionDates = countPerDay(data.features.map(
+      feature => new Date(feature.properties.submission_date)
+    )).filter(item => item.count);
+    const orderedSubmissionDates = sortByKey(submissionDates, 'count');
+    let steps = ['match', ['get', 'submission_date']];
+    orderedSubmissionDates.slice(0, 12)
+      .map((date, n) => {
+        steps = steps.concat([date.day, COLOR_STEPS[n]]);
+        legend.push([date.day, COLOR_STEPS[n]]);
+      }
+    );
+    steps.push(OTHER_COLOR);
+    legend.push(['Others', OTHER_COLOR]);
+    this.setState({'legend': legend});
+    return steps;
+  }
+
+  get_color_steps_by_user(data) {
+    var users, property_key;
+    let legend = [];
+    if (this.props.hasUsername) {
+      users = data.features.map(
+        feature => feature.properties.submission_user
+      );
+      property_key = 'submission_user';
+    } else {
+      users = data.features.map(
+        feature => feature.properties.submission_deviceid
+      );
+      property_key = 'submission_deviceid';
+    }
+    const setUsers = new Set(users);
+    var userCount = [];
+    setUsers.map(user => userCount.push(
+      {'user': user, 'count': users.filter(i => i === user).length}
+    ));
+    userCount = sortByKey(userCount, 'count');
+    let steps = ['match', ['get', property_key]];
+    userCount.slice(0, 12)
+      .map((user, n) => {
+        steps = steps.concat([user.user, COLOR_STEPS[n]]);
+        legend.push([user.user, COLOR_STEPS[n]]);
+      });
+    steps.push(OTHER_COLOR);
+    legend.push(['Others', OTHER_COLOR])
+    this.setState({'legend': legend});
+    return steps;
   }
 
   add_data_to_map() {
@@ -36,7 +119,12 @@ export class SubmissionMap extends React.Component {
       this.props.userDetails.password,
       this.props.filterParams
     ).then(data => {
+      this.setState({'showVizTypeSwitch': true});
+      // exclude nodes that doesn't have OSM tags
+      data['features'] = data.features.filter(i => Object.keys(i.properties).length > 7);
       this.setState({'data': data});
+      const steps = this.get_paint_property(data);
+
       this.map.addSource('submissions', {
         "type": "geojson",
         "data": data
@@ -47,7 +135,7 @@ export class SubmissionMap extends React.Component {
         "source": "submissions",
         "filter": ["==", "$type", "LineString"],
         "paint": {
-          "line-color": "#11b4da",
+          "line-color": steps,
           "line-width": 3
         }
       });
@@ -57,9 +145,9 @@ export class SubmissionMap extends React.Component {
         "source": "submissions",
         "filter": ["in", "$type", "Polygon"],
         "paint": {
-          "fill-color": "#000",
-          "fill-opacity": 0.3,
-          "fill-outline-color": "#11b4da"
+          "fill-color": steps,
+          "fill-opacity": 0.4,
+          "fill-outline-color": "#61FC03"
         }
       });
       this.map.addLayer({
@@ -68,7 +156,7 @@ export class SubmissionMap extends React.Component {
         "source": "submissions",
         "filter": ["==", "$type", "Point"],
         "paint": {
-          "circle-color": "#11b4da",
+          "circle-color": steps,
           "circle-radius": 4,
           "circle-stroke-width": 1,
           "circle-stroke-color": "#fff"
@@ -81,9 +169,21 @@ export class SubmissionMap extends React.Component {
     });
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.props.filterParams !== prevProps.filterParams) {
       this.add_data_to_map();
+    }
+    if (this.state.vizType !== prevState.vizType) {
+      const steps = this.get_paint_property(this.state.data);
+      this.map.setPaintProperty(
+        'submission_lines', 'line-color', steps
+      );
+      this.map.setPaintProperty(
+        'submission_areas', 'fill-color', steps
+      );
+      this.map.setPaintProperty(
+        'submission_points', 'circle-color', steps
+      );
     }
   }
 
@@ -143,9 +243,32 @@ export class SubmissionMap extends React.Component {
     return(
       <div>
         <div id="map">
-            <div className={`map-info ${this.state.info_content && 'display-block'}`}>
+          <div className={`map-info ${this.state.info_content && 'display-block'}`}>
               <table><tbody>{this.state.info_content}</tbody></table>
+          </div>
+          {this.state.showVizTypeSwitch &&
+            <div className="color-switch">
+              <RadioGroup
+                label="Features colouring"
+                onChange={e => this.setState({ vizType: e.target.value })}
+                selectedValue={this.state.vizType}
+                >
+                <Radio label="Default Color" value="default" />
+                <Radio label="By Submission Date" value="date" />
+                <Radio label={`By ${this.props.hasUsername ? 'User' : 'Device ID'}`} value="user" />
+              </RadioGroup>
+              {this.state.vizType !== 'default' &&
+                <div>
+                  <label class="pt-label">Legend</label>
+                  {this.state.legend.map(
+                    (item, n) => <div key={n}>
+                        <Icon icon="full-circle" color={`${item[1]}`} /> <span>{item[0]}</span>
+                      </div>
+                  )}
+                </div>
+              }
             </div>
+          }
         </div>
       </div>
     );

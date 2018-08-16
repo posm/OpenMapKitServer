@@ -9,6 +9,7 @@
     "@blueprintjs/datetime": "^2.0.0-rc.2",
     "@blueprintjs/table": "^2.0.0-rc.2",
     "bootstrap": "3",
+    "count-per-day": "^1.1.0",
     "geojson-bounds": "^1.0.1",
     "history": "^4.7.2",
     "immutable": "^3.8.2",
