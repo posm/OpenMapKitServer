@@ -13,7 +13,7 @@ const syncDataDir = () => {
         secretAccessKey: process.env.AWSSECRETKEY
       }
     });
-    var params = {
+    const params = {
       localDir: settings.dataDir,
       deleteRemoved: true,
       s3Params: {
@@ -23,10 +23,10 @@ const syncDataDir = () => {
     };
     var uploader = client.uploadDir(params);
     uploader.on('error', function(err) {
-      console.error("unable to sync:", err.stack);
+      console.error("Unable to sync:", err.stack);
     });
     uploader.on('end', function() {
-      console.log("done uploading");
+      console.log("Upload to S3 completed.");
     });
   }
 };
@@ -39,7 +39,7 @@ const downloadDataDir = () => {
         secretAccessKey: process.env.AWSSECRETKEY
       }
     });
-    var params = {
+    const params = {
       localDir: settings.dataDir,
       deleteRemoved: true,
       s3Params: {
@@ -47,12 +47,27 @@ const downloadDataDir = () => {
         Prefix: AWSBUCKETPREFIX
       }
     };
-    var uploader = client.downloadDir(params);
-    uploader.on('error', function(err) {
-      console.error("unable to sync:", err.stack);
-    });
-    uploader.on('end', function() {
-      console.log("Download from AWS S3 done");
+    const listParams = {
+      recursive: false,
+      s3Params: {
+        Bucket: process.env.AWSBUCKETNAME,
+        Prefix: AWSBUCKETPREFIX.endsWith('/') ? AWSBUCKETPREFIX : `${AWSBUCKETPREFIX}/`
+      }
+    };
+    var finder = client.listObjects(listParams);
+    finder.on('data', function(data) {
+      if (data.Contents.length >= 4) {
+        var downloader = client.downloadDir(params);
+        downloader.on('error', function(err) {
+          console.error("Unable to sync:", err.stack);
+        });
+        downloader.on('end', function() {
+          console.log("Download from AWS S3 completed");
+        });
+      }
+      else {
+        syncDataDir();
+      }
     });
   }
 };
