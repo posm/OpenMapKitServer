@@ -47,23 +47,25 @@ class Header extends React.Component {
       !this.state.authEnabled;
   }
   renderAuthSubMenu() {
-    if (this.isAuthenticated()) {
-      const menu = <Menu>
-                     <MenuItem className="pt-minimal" icon="log-out" label="Logout"
-                       onClick={this.props.doLogout}
-                     />
-                   </Menu>;
-      return (
-        <Popover content={menu} position={Position.BOTTOM} className="pt-intent-default">
-          <Button icon="user" text={this.props.userDetails.username} />
-        </Popover>
-      );
-    } else {
-      return <Link to="/login">
-        <Button className="pt-minimal" icon="user">
-          Log in
-        </Button>
-      </Link>
+    if (this.state.authEnabled) {
+      if (this.isAuthenticated()) {
+        const menu = <Menu>
+          <MenuItem className="pt-minimal" icon="log-out" label="Logout"
+            onClick={this.props.doLogout}
+            />
+        </Menu>;
+        return (
+          <Popover content={menu} position={Position.BOTTOM} className="pt-intent-default">
+            <Button icon="user" text={this.props.userDetails.username} />
+          </Popover>
+        );
+      } else {
+        return <Link to="/login">
+          <Button className="pt-minimal" icon="user">
+            Log in
+          </Button>
+        </Link>
+      }
     }
   }
   render() {
