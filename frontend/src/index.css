@@ -187,3 +187,7 @@ body {
   padding-left: 10px;
   text-align: left;
 }
+
+.break-all {
+  word-break: break-all;
+}

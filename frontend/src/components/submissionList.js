@@ -733,7 +733,7 @@ class SubmissionList extends React.Component {
               <Row className="ml-0 mr-0">
                 <Col xs={12} md={3}>
                   <div className="submissions-info">
-                    <h4>{ this.state.formName }</h4>
+                    <h4 className="break-all">{ this.state.formName }</h4>
                     <p>Total submissions: { this.state.totalSubmissions }</p>
                     <SubmissionMenu
                       formId={this.props.formId}
