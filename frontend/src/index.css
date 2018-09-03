@@ -52,7 +52,7 @@ body {
 
 .filter-btn {
   position: relative !important;
-  margin-top: 10px;
+  margin-top: 15px !important;
 }
 
 .display-block {
@@ -148,15 +148,16 @@ body {
 }
 
 .map-info {
-  background-color: #eff0d1;
-  padding: 10px;
-  margin-right: 10px;
   position: absolute;
-  text-align: right;
+  display: none;
+  max-width: 344px;
+  padding: 10px;
   bottom: 30px;
   right: 0;
+  margin-right: 10px;
+  text-align: right;
   z-index: 1;
-  display: none;
+  background-color: #eff0d1;
   border-radius: 5px;
 }
 
