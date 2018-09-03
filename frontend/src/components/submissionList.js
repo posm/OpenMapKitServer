@@ -426,16 +426,21 @@ class SubmissionList extends React.Component {
 
   filterSubmissions = () => {
     this.setState({ loading: true });
+    this.updateFilterParams();
     this.setState({ page: 1 });
     let filtered = this.state.submissions;
     if (this.state.startDate) {
       filtered = filtered.filter(
-        item => moment(this.state.startDate).isBefore(item[3], 'day') || moment(this.state.startDate).isSame(item[3], 'day')
+        item =>
+          moment(this.state.startDate).isBefore(item[3], 'day') ||
+          moment(this.state.startDate).isSame(item[3], 'day')
       );
     }
     if (this.state.endDate) {
       filtered = filtered.filter(
-        item => moment(this.state.endDate).isAfter(item[3], 'day') || moment(this.state.endDate).isSame(item[3], 'day')
+        item =>
+          moment(this.state.endDate).isAfter(item[3], 'day') ||
+          moment(this.state.endDate).isSame(item[3], 'day')
       );
     }
     if (this.state.filterDeviceId) {
@@ -460,9 +465,11 @@ class SubmissionList extends React.Component {
     this.setState({ filterEndDate: null });
     this.setState({ filterDeviceId: '' });
     this.setState({ filterUsername: '' });
-    this.updatePagination(this.state.pageSize, this.state.submissions)
+    this.updatePagination(this.state.pageSize, this.state.submissions);
     this.setState({ loading: false });
-    this.updateFilterParams();
+    this.setState({
+      filterParams: `offset=${(this.state.page - 1) * this.state.pageSize || 0}&limit=${this.state.pageSize}`
+    });
   }
 
   getFormDetails = () => {
@@ -561,7 +568,7 @@ class SubmissionList extends React.Component {
           <Col xs={12} md={6} className="pt-input-group">
             <label htmlFor="start-date" className="display-block">
               From
-              <Tooltip content="Based on the Submission Time" position={Position.RIGHT}>
+              <Tooltip content="Based on the Submission Date" position={Position.RIGHT}>
                 <Icon icon="help" color="#CED9E0" className="help-icon"/>
               </Tooltip>
             </label>
@@ -573,7 +580,7 @@ class SubmissionList extends React.Component {
           <Col xs={12} md={6} className="pt-input-group">
             <label htmlFor="end-date" className="display-block">
               To
-              <Tooltip content="Based on the Submission Time" position={Position.RIGHT}>
+              <Tooltip content="Based on the Submission Date" position={Position.RIGHT}>
                 <Icon icon="help" color="#CED9E0" className="help-icon"/>
               </Tooltip>
             </label>
