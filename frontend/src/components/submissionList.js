@@ -531,7 +531,10 @@ class SubmissionList extends React.Component {
         this.setState({ loading: false });
         this.updatePagination(this.state.pageSize, data);
       }
-    ).catch(e => console.log(e));
+    ).catch(e => {
+      console.log(e);
+      this.setState({ loading: false });
+    });
   }
 
   renderCell = (row, column) => <Cell>{ this.getPageSlice()[row][column]}</Cell>;
@@ -646,22 +649,26 @@ class SubmissionList extends React.Component {
     if (this.state.loading) {
       return(<div id="loading-msg">Loading data, please wait...</div>);
     } else {
-      return (
-        <Table className="submissions-table center-block"
-          columnWidths={[170,170,170,170,140,140]}
-          numRows={this.getPageSlice().length}
-          >
-          <Column name="Start" cellRenderer={this.renderDateCell} />
-          <Column name="End" cellRenderer={this.renderDateCell} />
-          {this.state.hasUsername
-            ? <Column name="Username" cellRenderer={this.renderCell} />
-            : <Column name="Device ID" cellRenderer={this.renderCell} />
-          }
-          <Column name="Submission Time" cellRenderer={this.renderDateCell} />
-          <Column name="Image" cellRenderer={this.renderCellImage} />
-          <Column name="Download" cellRenderer={this.renderCellLink} />
-        </Table>
-      );
+      if (this.state.filteredSubmissions.length === 0) {
+        return(<div id="loading-msg">No data was found.</div>);
+      } else {
+        return (
+          <Table className="submissions-table center-block"
+            columnWidths={[170,170,170,170,140,140]}
+            numRows={this.getPageSlice().length}
+            >
+            <Column name="Start" cellRenderer={this.renderDateCell} />
+            <Column name="End" cellRenderer={this.renderDateCell} />
+            {this.state.hasUsername
+              ? <Column name="Username" cellRenderer={this.renderCell} />
+              : <Column name="Device ID" cellRenderer={this.renderCell} />
+            }
+            <Column name="Submission Time" cellRenderer={this.renderDateCell} />
+            <Column name="Image" cellRenderer={this.renderCellImage} />
+            <Column name="Download" cellRenderer={this.renderCellLink} />
+          </Table>
+        );
+      }
     }
   }
 
