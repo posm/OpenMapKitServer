@@ -38,7 +38,8 @@ export class SubmissionMap extends React.Component {
       data: {},
       showVizTypeSwitch: false,
       vizType: 'default',
-      legend: []
+      legend: [],
+      showLegend: true
     };
   }
 
@@ -259,8 +260,14 @@ export class SubmissionMap extends React.Component {
               </RadioGroup>
               {this.state.vizType !== 'default' &&
                 <div>
-                  <label class="pt-label">Legend</label>
-                  {this.state.legend.map(
+                  <label id="legend-label" class="pt-label" onClick={e => this.setState({ showLegend: !this.state.showLegend })}>
+                    {this.state.showLegend
+                      ? <Icon icon="chevron-down" />
+                      : <Icon icon="chevron-right" />
+                    }
+                    Legend
+                  </label>
+                  {this.state.showLegend && this.state.legend.map(
                     (item, n) => <div key={n}>
                         <Icon icon="full-circle" color={`${item[1]}`} /> <span>{item[0]}</span>
                       </div>
