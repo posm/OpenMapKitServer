@@ -13,7 +13,7 @@ module.exports = function(req, res, next) {
     username: req.query.username,
     startDate: req.query.start_date,
     endDate: req.query.end_date
-  }
+  };
 
   getOsmSubmissionsDirs(formName, {
     filters: filters
@@ -40,7 +40,7 @@ function aggregate(osmDirs, req, res) {
   for (var i in osmDirs) {
     osmFiles = osmFiles.concat(osmDirs[i].files);
   }
-  //We filter by the query parameters of the request
+  // We filter by the query parameters of the request
   aggregateOsm(osmFiles, req.query, function(err, osmXml) {
     if (err) {
       if (!res._headerSent) { // prevents trying to send multiple error responses on a single request

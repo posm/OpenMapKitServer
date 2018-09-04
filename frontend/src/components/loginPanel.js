@@ -11,7 +11,8 @@ class LoginPanel extends React.Component {
     super(props);
     this.state = {
       username: props.username ? props.username : '',
-      password: ''
+      password: '',
+      triedToLogin: false
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.changeUsername = this.changeUsername.bind(this);
@@ -27,20 +28,29 @@ class LoginPanel extends React.Component {
   onSubmit = event => {
     event.preventDefault();
     this.props.authenticateUser(this.state.username, this.state.password);
+    this.setState({triedToLogin: true});
   }
 
   render() {
     return(
       <div className="pt-input-group login center-block">
         {!this.props.username
-          ? <form onSubmit={this.onSubmit}>
-              <h2>Sign in</h2>
-              <input type="text" className="pt-input" value={this.state.username}
-                onChange={this.changeUsername} placeholder="Username" />
-              <input type="password" className="pt-input" value={this.state.password}
-                onChange={this.changePassword} placeholder="Enter your password..." />
-              <Button type="submit" className="pt-large" intent="success" icon="log-in" text="Sign In" />
-            </form>
+          ? <div>
+              <form onSubmit={this.onSubmit}>
+                <h2>Sign in</h2>
+                {this.state.triedToLogin &&
+                  <div class="pt-callout pt-intent-danger">
+                    <h4 class="pt-callout-title">Login failed</h4>
+                    Verify your username or password.
+                  </div>
+                }
+                <input type="text" className="pt-input mt-10" value={this.state.username}
+                  onChange={this.changeUsername} placeholder="Username" />
+                <input type="password" className="pt-input mt-10" value={this.state.password}
+                  onChange={this.changePassword} placeholder="Enter your password..." />
+                <Button type="submit" className="pt-large" intent="success" icon="log-in" text="Sign In" />
+              </form>
+            </div>
           : <Redirect to='/' />
       }
       </div>

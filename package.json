@@ -37,6 +37,7 @@
   },
   "homepage": "https://github.com/AmericanRedCross/OpenMapKitServer#readme",
   "dependencies": {
+    "@monolambda/s3": "1.0.2",
     "JSONStream": "^1.3.1",
     "archiver": "^1.3.0",
     "async": "^1.5.2",
@@ -57,11 +58,11 @@
     "morgan": "^1.6.1",
     "multiparty": "^4.1.2",
     "mv": "^2.1.1",
-    "@monolambda/s3": "1.0.2",
     "on-finished": "^2.3.0",
     "openrosa-form-submission-middleware": "^1.0.4",
     "openrosa-formlist": "^1.0.1",
     "openrosa-manifest": "^0.0.1",
+    "osmtogeojson": "^3.0.0-beta.3",
     "passport": "^0.2.2",
     "passport-http": "^0.3.0",
     "passport-local": "^1.0.0",
@@ -78,6 +79,7 @@
     "xml2js": "^0.4.16",
     "xml2js-xpath": "^0.8.0",
     "xmlbuilder": "^8.2.2",
+    "xmldom": "^0.1.27",
     "xtend": "^4.0.1"
   },
   "devDependencies": {

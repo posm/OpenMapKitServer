@@ -123,7 +123,7 @@ app.post('/omk/login', function(req, res, next) {
   console.log(req.body);
   if (req.body.username && req.body.password) {
     authentication.findByUsername(req.body.username, function(err, user) {
-      if ((err || !user) && user.password !== req.body.password) {
+      if ((err || !user) || user.password !== req.body.password) {
         console.log('user: ' + user + '\n '+ req.body);
         err = new Error('Wrong username or password.');
         err.status = 401;

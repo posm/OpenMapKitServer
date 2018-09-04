@@ -49,3 +49,8 @@ frontend/build/asset-*
 
 ############## Jekyll Stuff ##################
 .sass-cache/
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

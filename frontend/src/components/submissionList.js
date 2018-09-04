@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
-import { Redirect } from 'react-router'
+import { Redirect } from 'react-router';
 import moment from 'moment';
 
 import {
@@ -17,6 +17,7 @@ import { handleErrors } from '../utils/promise';
 import { formList } from '../network/formList';
 import { authStatus } from '../network/auth';
 import { cancelablePromise } from '../utils/promise';
+import { SubmissionMap } from './submissionMap';
 import { LoginPanel } from './loginPanel';
 
 
@@ -36,7 +37,7 @@ class SubmissionMenu extends React.Component {
       downloadName: '',
       openDialog: false,
       formArchivedOrDelete: false
-    }
+    };
   }
 
   componentWillUnmount() {
@@ -323,10 +324,12 @@ class SubmissionList extends React.Component {
       endDate: null,
       filterDeviceId: '',
       filterUsername: '',
+      filterParams: 'offset=0&limit=200',
       hasUsername: false,
       page: 1,
-      pageSize:200,
+      pageSize: 200,
       pageCount: 1,
+      activateMap: false,
       authEnabled: true
     }
   }
@@ -346,10 +349,12 @@ class SubmissionList extends React.Component {
         }
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.userDetails.username !== prevProps.userDetails.username
-    ) {
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.userDetails.username !== prevProps.userDetails.username) {
       this.getSubmissions();
+    }
+    if (prevState.page !== this.state.page || prevState.pageSize !== this.state.pageSize) {
+      this.updateFilterParams();
     }
   }
 
@@ -395,17 +400,47 @@ class SubmissionList extends React.Component {
     this.updatePagination(event.target.value, this.state.filteredSubmissions);
   }
 
+  handleActivateMap = (event) => {
+    this.setState({ activateMap: !this.state.activateMap });
+    if (this.state.pageSize > 200) {
+      this.setState({ pageSize: 200 });
+    }
+  }
+
+  updateFilterParams() {
+    const filters = {
+      deviceId: this.state.filterDeviceId,
+      start_date: this.state.startDate,
+      end_date: this.state.endDate,
+      username: this.state.filterUsername,
+      offset: (this.state.page - 1) * this.state.pageSize || 0,
+      limit: this.state.pageSize || 200
+    };
+    const filterParams = Object.keys(filters).filter(
+      i => filters[i]
+    ).reduce(
+      (base, k) => `${base}${k}=${filters[k]}&`,
+    '');
+    this.setState({'filterParams': filterParams});
+  }
+
   filterSubmissions = () => {
     this.setState({ loading: true });
+    this.updateFilterParams();
+    this.setState({ page: 1 });
     let filtered = this.state.submissions;
     if (this.state.startDate) {
       filtered = filtered.filter(
-        item => moment(this.state.startDate).isBefore(item[3], 'day') || moment(this.state.startDate).isSame(item[3], 'day')
+        item =>
+          moment(this.state.startDate).isBefore(item[3], 'day') ||
+          moment(this.state.startDate).isSame(item[3], 'day')
       );
     }
     if (this.state.endDate) {
       filtered = filtered.filter(
-        item => moment(this.state.endDate).isAfter(item[3], 'day') || moment(this.state.endDate).isSame(item[3], 'day')
+        item =>
+          moment(this.state.endDate).isAfter(item[3], 'day') ||
+          moment(this.state.endDate).isSame(item[3], 'day')
       );
     }
     if (this.state.filterDeviceId) {
@@ -430,8 +465,11 @@ class SubmissionList extends React.Component {
     this.setState({ filterEndDate: null });
     this.setState({ filterDeviceId: '' });
     this.setState({ filterUsername: '' });
-    this.updatePagination(this.state.pageSize, this.state.submissions)
+    this.updatePagination(this.state.pageSize, this.state.submissions);
     this.setState({ loading: false });
+    this.setState({
+      filterParams: `offset=${(this.state.page - 1) * this.state.pageSize || 0}&limit=${this.state.pageSize}`
+    });
   }
 
   getFormDetails = () => {
@@ -493,12 +531,13 @@ class SubmissionList extends React.Component {
         this.setState({ loading: false });
         this.updatePagination(this.state.pageSize, data);
       }
-    ).catch(e => console.log(e));
+    ).catch(e => {
+      console.log(e);
+      this.setState({ loading: false });
+    });
   }
 
-  renderCell = (row, column) => <Cell>
-    {this.getPageSlice()[row][column]}
-  </Cell>;
+  renderCell = (row, column) => <Cell>{ this.getPageSlice()[row][column]}</Cell>;
 
   renderDateCell = (row, column) => <Cell>
     {moment(this.getPageSlice()[row][column]).format('lll')}
@@ -527,12 +566,12 @@ class SubmissionList extends React.Component {
     let devices = this.state.submissions.map(item => item[2]);
     devices = devices.filter((i, k) => devices.indexOf(i) === k);
     return(
-      <Grid className="filters container">
-        <Row>
-          <Col xs={12} md={2} mdOffset={2} className="pt-input-group">
+      <Row className="filters ml-0 mr-0">
+        <Row className="ml-0 mr-0">
+          <Col xs={12} md={6} className="pt-input-group">
             <label htmlFor="start-date" className="display-block">
               From
-              <Tooltip content="Based on the Submission Time" position={Position.RIGHT}>
+              <Tooltip content="Based on the Submission Date" position={Position.RIGHT}>
                 <Icon icon="help" color="#CED9E0" className="help-icon"/>
               </Tooltip>
             </label>
@@ -541,10 +580,10 @@ class SubmissionList extends React.Component {
               onChange={this.handleFilterStartDate}
               />
           </Col>
-          <Col xs={12} md={2} className="pt-input-group">
+          <Col xs={12} md={6} className="pt-input-group">
             <label htmlFor="end-date" className="display-block">
               To
-              <Tooltip content="Based on the Submission Time" position={Position.RIGHT}>
+              <Tooltip content="Based on the Submission Date" position={Position.RIGHT}>
                 <Icon icon="help" color="#CED9E0" className="help-icon"/>
               </Tooltip>
             </label>
@@ -553,13 +592,15 @@ class SubmissionList extends React.Component {
               onChange={this.handleFilterEndDate}
               />
           </Col>
+        </Row>
+        <Row className="ml-0 mr-0">
           {this.state.hasUsername
-            ? <Col xs={12} md={2} className="pt-input-group">
+            ? <Col xs={12} className="pt-input-group">
                 <label htmlFor="filter-username" className="display-block">
                   Username
                 </label>
                 <div className="pt-select">
-                  <select onChange={this.handleFilterUsernameChange}>
+                  <select onChange={this.handleFilterUsernameChange} value={this.state.filterUsername}>
                     <option value={null} >Choose an item...</option>
                     {devices.map(
                       (item, k) =>
@@ -570,12 +611,12 @@ class SubmissionList extends React.Component {
                   </select>
                 </div>
               </Col>
-            : <Col xs={12} md={2} className="pt-input-group">
+            : <Col xs={12} className="pt-input-group">
                 <label htmlFor="filter-deviceid" className="display-block">
                   Device ID
                 </label>
                 <div className="pt-select">
-                  <select onChange={this.handleFilterDeviceIdChange}>
+                  <select onChange={this.handleFilterDeviceIdChange} value={this.state.filterDeviceId}>
                     <option value={null} >Choose an item...</option>
                     {devices.map(
                       (item, k) =>
@@ -587,105 +628,151 @@ class SubmissionList extends React.Component {
                 </div>
               </Col>
             }
-
-          <Col xs={12} md={1} className="pt-input-group">
+        </Row>
+        <Row className="ml-0 mr-0">
+          <Col xs={12} md={6} className="pt-input-group">
             <Button className="pt-intent-success filter-btn"
               icon="filter" text="Filter" onClick={this.filterSubmissions}
               />
           </Col>
-          <Col xs={12} md={1} className="pt-input-group">
+          <Col xs={12} md={6} className="pt-input-group">
             <Button className="pt-intent-danger filter-btn"
               icon="filter-remove" text="Clear" onClick={this.clearFilter}
               />
           </Col>
         </Row>
-      </Grid>
+      </Row>
+    );
+  }
+
+  renderTable() {
+    if (this.state.loading) {
+      return(<div id="loading-msg">Loading data, please wait...</div>);
+    } else {
+      if (this.state.filteredSubmissions.length === 0) {
+        return(<div id="loading-msg">No data was found.</div>);
+      } else {
+        return (
+          <Table className="submissions-table center-block"
+            columnWidths={[170,170,170,170,140,140]}
+            numRows={this.getPageSlice().length}
+            >
+            <Column name="Start" cellRenderer={this.renderDateCell} />
+            <Column name="End" cellRenderer={this.renderDateCell} />
+            {this.state.hasUsername
+              ? <Column name="Username" cellRenderer={this.renderCell} />
+              : <Column name="Device ID" cellRenderer={this.renderCell} />
+            }
+            <Column name="Submission Time" cellRenderer={this.renderDateCell} />
+            <Column name="Image" cellRenderer={this.renderCellImage} />
+            <Column name="Download" cellRenderer={this.renderCellLink} />
+          </Table>
+        );
+      }
+    }
+  }
+
+  renderMapSwitchButton() {
+    return(
+      <Row className="ml-0 mr-0">
+        <Col xs={12}>
+          {this.state.activateMap
+            ? <Button className="pt-intent" icon="th" text="Switch to Table view"
+                onClick={() => this.setState({activateMap: false})}
+                />
+            : <Button className="pt-intent" icon="map" text="Switch to Map view"
+                onClick={() => this.setState({activateMap: true})}
+                />
+          }
+        </Col>
+      </Row>
+    );
+  }
+
+  renderPagination() {
+    return(
+      <Row className="pagination pt-input-group ml-0 mr-0">
+        <Col xs={12} md={6} className="pt-input-group">
+          <label className="display-block">Page Size</label>
+          <div className="pt-select">
+            {this.state.activateMap
+              ? <select onChange={this.handlePageSizeChange} value={this.state.pageSize}>
+                  {[1000, 800, 600, 400, 200, 100, 50, 20].map(
+                    (item, k) =>
+                    <option key={k} value={ item }>
+                      { item.toString() }
+                    </option>
+                  )}
+                </select>
+              : <select onChange={this.handlePageSizeChange}>
+                  {[200, 100, 50, 20].map(
+                    (item, k) =>
+                    <option key={k} value={ item }>
+                      { item.toString() }
+                    </option>
+                  )}
+                </select>
+            }
+          </div>
+        </Col>
+        <Col xs={12} md={6} className="pt-input-group">
+          <label className="display-block">Page</label>
+          <div className="pt-select">
+            <select onChange={this.handlePageChange}>
+              {Array.apply(null, { length: this.state.pageCount }).map(
+                Number.call, Number
+              ).map(
+                i => i + 1
+              ).map(
+                (item, k) =>
+                <option key={k} value={ item }>
+                  { item.toString() }
+                </option>
+              )}
+            </select>
+          </div>
+        </Col>
+      </Row>
     );
   }
 
   render() {
     const isAuthenticated = (this.props.userDetails &&
         this.props.userDetails.username != null) || !this.state.authEnabled;
-    const filters = {
-      deviceId: this.state.filterDeviceId,
-      start_date: this.state.startDate,
-      end_date: this.state.endDate,
-      username: this.state.filterUsername
-    };
-    const filterParams = Object.keys(filters).filter(
-      i => filters[i]
-    ).reduce(
-      (base, k) => `${base}${k}=${filters[k]}&`,
-    '');
 
     return(
       <div>
         {isAuthenticated
-          ? <div>
-              <div className="submissions-info">
-                <h2>{ this.state.formName }</h2>
-                <p>Total submissions: { this.state.totalSubmissions }</p>
-                <SubmissionMenu
-                  formId={this.props.formId}
-                  hasSubmissions={this.state.totalSubmissions > 0}
-                  filterParams={filterParams}
-                  userDetails={this.props.userDetails}
-                  />
-              </div>
-              { this.renderFilterSection() }
-              <Grid className="pagination">
-                <Row>
-                  <Col xs={12} md={2} mdOffset={4} className="pt-input-group">
-                    <label className="display-inline pr-7">Page Size</label>
-                    <div className="pt-select">
-                      <select onChange={this.handlePageSizeChange}>
-                        {[200, 100, 50, 20].map(
-                          (item, k) =>
-                          <option key={k} value={ item }>
-                            { item.toString() }
-                          </option>
-                        )}
-                      </select>
-                    </div>
-                  </Col>
-                  <Col xs={12} md={2} className="pt-input-group">
-                    <label className="inline horizontal-small-padding pr-7">Page</label>
-                    <div className="pt-select">
-                      <select onChange={this.handlePageChange}>
-                        {Array.apply(null, { length: this.state.pageCount }).map(
-                          Number.call, Number
-                        ).map(
-                          i => i + 1
-                        ).map(
-                          (item, k) =>
-                          <option key={k} value={ item }>
-                            { item.toString() }
-                          </option>
-                        )}
-                      </select>
-                    </div>
-                  </Col>
-                </Row>
-              </Grid>
-              {this.state.loading
-                ? <div id="loading-msg">Loading data, please wait...</div>
-                : <Table className="submissions-table center-block"
-                    columnWidths={[190,190,190,190,190,190]}
-                    numRows={this.getPageSlice().length}
-                  >
-                    <Column name="Start" cellRenderer={this.renderDateCell} />
-                    <Column name="End" cellRenderer={this.renderDateCell} />
-                    {this.state.hasUsername
-                      ? <Column name="Username" cellRenderer={this.renderCell} />
-                      : <Column name="Device ID" cellRenderer={this.renderCell} />
-                    }
-                    <Column name="Submission Time" cellRenderer={this.renderDateCell} />
-                    <Column name="Image" cellRenderer={this.renderCellImage} />
-                    <Column name="Download" cellRenderer={this.renderCellLink} />
-                  </Table>
-              }
-
-            </div>
+          ? <Grid fluid={true} className="pl-0 pr-0">
+              <Row className="ml-0 mr-0">
+                <Col xs={12} md={3}>
+                  <div className="submissions-info">
+                    <h4 className="break-all">{ this.state.formName }</h4>
+                    <p>Total submissions: { this.state.totalSubmissions }</p>
+                    <SubmissionMenu
+                      formId={this.props.formId}
+                      hasSubmissions={this.state.totalSubmissions > 0}
+                      filterParams={this.state.filterParams}
+                      userDetails={this.props.userDetails}
+                      />
+                  </div>
+                  { this.renderFilterSection() }
+                  { this.renderPagination() }
+                  { this.renderMapSwitchButton() }
+                </Col>
+                <Col xs={12} md={9} className="ml-0 mr-0 pr-0">
+                  {this.state.activateMap
+                    ? <SubmissionMap
+                        userDetails={this.props.userDetails}
+                        formId={this.props.formId}
+                        filterParams={this.state.filterParams}
+                        hasUsername={this.state.hasUsername}
+                      />
+                    : this.renderTable()
+                  }
+                </Col>
+              </Row>
+            </Grid>
           : <LoginPanel />
         }
       </div>

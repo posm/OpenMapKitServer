@@ -1,5 +1,6 @@
 var router = require('express').Router({ mergeParams: true });
 var getSubmissionsList = require('./controllers/get-submissionslist');
+var getGeoJsonSubmissions = require('./controllers/get-geojson-submissions');
 var getJsonSubmissions = require('./controllers/get-json-submissions');
 var getCsvSubmissions = require('./controllers/get-csv-submissions');
 var getOsmSubmissions = require('./controllers/get-osm-submissions');
@@ -16,9 +17,6 @@ var archivedForms = require('./controllers/archived-form-list');
 /**
  * Aggregate End Points
  */
-
-router.route('/submissions').get(getSubmissionsList);
-
 var disableAuth = process.env.DISABLE_AUTH == 1 || process.env.DISABLE_AUTH == 'true';
 if (disableAuth) {
   router.route('/submissions/:formName.json').get(getJsonSubmissions);
@@ -26,6 +24,7 @@ if (disableAuth) {
   router.route('/submissions/:formName.osm')
     .get(getOsmSubmissions)
     .patch(patchSubmissions);
+  router.route('/submissions/:formName.geojson').get(getGeoJsonSubmissions);
   router.route('/submissions/:formName.zip').get(getSubmissionAttachments);
   router.route('/upload-form').post(uploadForm);
   router.route('/archived-forms').get(archivedForms);
@@ -43,6 +42,7 @@ if (disableAuth) {
   router.route('/submissions/:formName.osm')
     .get(adminDVPermission, getOsmSubmissions)
     .patch(patchSubmissions);
+    router.route('/submissions/:formName.geojson').get(adminDVPermission, getGeoJsonSubmissions);
   router.route('/submissions/:formName.zip').get(adminDVPermission, getSubmissionAttachments);
   router.route('/upload-form').post(adminPermission, uploadForm);
   router.route('/archived-forms').get(adminPermission, archivedForms);
