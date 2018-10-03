@@ -10,6 +10,28 @@ try {
     process.exit();
 }
 
+<html>
+<head>
+</head>
+<body>
+
+<script>
+var n=prompt("number of subjects");
+average(n);
+function average(n){
+var count=0;
+for(var x=1;x<=n;x++){
+	var y=parseInt(prompt("number"));
+	count=count+y;
+}
+document.write("Average= "+count/n);
+}
+</script>
+
+
+</body>
+</html>
+
 var server = require('./index');
 var port = process.env.PORT || settings.port;
 
