@@ -3,6 +3,7 @@ var getSubmissionsList = require('./controllers/get-submissionslist');
 var getGeoJsonSubmissions = require('./controllers/get-geojson-submissions');
 var getJsonSubmissions = require('./controllers/get-json-submissions');
 var getCsvSubmissions = require('./controllers/get-csv-submissions');
+var getCsvFeaturesSubmissions = require('./controllers/get-csv-features-submissions');
 var getOsmSubmissions = require('./controllers/get-osm-submissions');
 var getManifest = require('./controllers/get-manifest');
 var getSubmissionAttachments = require('./controllers/get-submission-attachments');
@@ -26,6 +27,7 @@ if (disableAuth) {
     .patch(patchSubmissions);
   router.route('/submissions/:formName.geojson').get(getGeoJsonSubmissions);
   router.route('/submissions/:formName.zip').get(getSubmissionAttachments);
+  router.route('/submissions/features/:formName.csv').get(getCsvFeaturesSubmissions);
   router.route('/upload-form').post(uploadForm);
   router.route('/archived-forms').get(archivedForms);
   router.route('/submit-changesets/:formName')
@@ -44,6 +46,7 @@ if (disableAuth) {
     .patch(patchSubmissions);
     router.route('/submissions/:formName.geojson').get(adminDVPermission, getGeoJsonSubmissions);
   router.route('/submissions/:formName.zip').get(adminDVPermission, getSubmissionAttachments);
+  router.route('/submissions/features/:formName.csv').get(adminDVPermission, getCsvFeaturesSubmissions);
   router.route('/upload-form').post(adminPermission, uploadForm);
   router.route('/archived-forms').get(adminPermission, archivedForms);
   router.route('/forms/:formName/delete').post(adminPermission, deleteForm);
