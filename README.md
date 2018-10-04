@@ -21,14 +21,14 @@ If you want to run OpenMapKit Server for your field mapping survey, use the
 
 ## Project Structure
 
-[__deployments__](deployments) is the OpenMapKit
+[__deployments__](api/deployments) is the OpenMapKit
 deployment API. This services deployment data in the
 [deployments data directory](data/deployments).
 Manifest files in this directory are read by OpenMapKit Android as metadata regarding the deployment
 data provided. Deployments are created by [posm-admin](https://github.com/AmericanRedCross/posm-admin).
 to provision deployment data that is fetched by OpenMapKit Android.
 
-[__odk__](odk) is the OpenMapKit ODK API.
+[__odk__](api/odk) is the OpenMapKit ODK API.
 This is a REST API that handles all of the ODK business logic, including communicating with ODK Collect,
 as well as serving and ingesting ODK XForm data.
 
