@@ -62,10 +62,9 @@ function aggregate(osmDirs, req, res) {
     }
     var xmlObj = (new DOMParser()).parseFromString(osmXml, 'text/xml');
     var geojson = osmtogeojson(xmlObj);
-    // var geojson = JSON.parse(geojsonData);
     var csv = '';
 
-    // add headers
+    // add headers (list all properties keys of the geojson file)
     var properties = geojson.features.reduce(
       (props, item) =>
         props.concat(
@@ -75,11 +74,11 @@ function aggregate(osmDirs, req, res) {
     );
 
     _.each(properties, function(property) {
-      csv += property +',';
+      csv += `${property},`;
     });
     csv += '\n';
 
-    // add data
+    // add data (if a feature has not a property, add a empty space)
     _.each(geojson.features, function(feature){
       _.each(properties, function(key, i) {
         let value = feature.properties[key] ? feature.properties[key] : ' ';
@@ -87,8 +86,9 @@ function aggregate(osmDirs, req, res) {
       });
       csv += '\n';
     });
+
     res.status(200)
-    .set('Content-Type', 'text/csv')
-    .send(csv);
+      .set('Content-Type', 'text/csv')
+      .send(csv);
   });
 }
