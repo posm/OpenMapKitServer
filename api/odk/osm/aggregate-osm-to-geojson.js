@@ -121,6 +121,13 @@ module.exports = function(files, filter, cb) {
                   'utf8'
                 )
               );
+              var unusefulKeys = [
+                'start', 'end', 'today', 'simserial', 'meta', 'deviceid',
+                'username'
+              ];
+              var usefulKeys = Object.keys(formData).filter(
+                key => !unusefulKeys.includes(key) && !key.startsWith('osm_')
+              );
 
               var osmElements = rootEl.childNodes();
               for (var j = 0, len = osmElements.length; j < len; j++) {
@@ -136,19 +143,29 @@ module.exports = function(files, filter, cb) {
                 }
                 // add submission_time and submission_user or submission_deviceid
                 // to each feature with the aim of showing this information on the map
-                osmElement.node('tag').attr({
-                  k: 'submission_date',
-                  v: formData.meta.submissionTime.slice(0,10)
-                });
-                if (formData.username) {
+                if (['way', 'relation'].includes(elementName) ||
+                    (elementName === 'node' && checkNodeIsRelevant(osmElement))
+                ) {
                   osmElement.node('tag').attr({
-                    k: 'submission_user',
-                    v: formData.username
+                    k: 'submission_date',
+                    v: formData.meta.submissionTime.slice(0,10)
                   });
-                } else {
-                  osmElement.node('tag').attr({
-                    k: 'submission_deviceid',
-                    v: formData.deviceid
+                  if (formData.username) {
+                    osmElement.node('tag').attr({
+                      k: 'submission_user',
+                      v: formData.username
+                    });
+                  } else {
+                    osmElement.node('tag').attr({
+                      k: 'submission_deviceid',
+                      v: formData.deviceid
+                    });
+                  }
+                  usefulKeys.map(key => {
+                    osmElement.node('tag').attr({
+                      k: key,
+                      v: typeof(formData[key]) === 'object' ? JSON.stringify(formData[key]) : formData[key]
+                    });
                   });
                 }
                 mainOsmElement.addChild(osmElement);
@@ -168,8 +185,19 @@ module.exports = function(files, filter, cb) {
   }
 
   processChunksOfFiles(files.slice(0, CHUNK_SIZE), files.slice(CHUNK_SIZE));
-
 };
+
+
+function checkNodeIsRelevant(element) {
+  var commonAttrs = [
+    'id', 'changeset', 'version', 'user', 'timestamp', 'lat', 'lon'
+  ];
+  return element.attrs().map(
+    attr => attr.name()
+  ).filter(
+    attr => !commonAttrs.includes(attr)
+  ).length;
+}
 
 /**
  * Rewrites the id attribute with a fresh negative ID for

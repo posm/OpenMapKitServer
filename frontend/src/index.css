@@ -150,8 +150,10 @@ body {
 .map-info {
   position: absolute;
   display: none;
-  max-width: 344px;
-  padding: 10px;
+  max-width: 350px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 7px;
   bottom: 30px;
   right: 0;
   margin-right: 10px;
