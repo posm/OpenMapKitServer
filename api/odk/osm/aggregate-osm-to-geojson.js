@@ -143,27 +143,31 @@ module.exports = function(files, filter, cb) {
                 }
                 // add submission_time and submission_user or submission_deviceid
                 // to each feature with the aim of showing this information on the map
-                osmElement.node('tag').attr({
-                  k: 'submission_date',
-                  v: formData.meta.submissionTime.slice(0,10)
-                });
-                if (formData.username) {
+                if (['way', 'relation'].includes(elementName) ||
+                    (elementName === 'node' && checkNodeIsRelevant(osmElement))
+                ) {
                   osmElement.node('tag').attr({
-                    k: 'submission_user',
-                    v: formData.username
+                    k: 'submission_date',
+                    v: formData.meta.submissionTime.slice(0,10)
                   });
-                } else {
-                  osmElement.node('tag').attr({
-                    k: 'submission_deviceid',
-                    v: formData.deviceid
+                  if (formData.username) {
+                    osmElement.node('tag').attr({
+                      k: 'submission_user',
+                      v: formData.username
+                    });
+                  } else {
+                    osmElement.node('tag').attr({
+                      k: 'submission_deviceid',
+                      v: formData.deviceid
+                    });
+                  }
+                  usefulKeys.map(key => {
+                    osmElement.node('tag').attr({
+                      k: key,
+                      v: typeof(formData[key]) === 'object' ? JSON.stringify(formData[key]) : formData[key]
+                    });
                   });
                 }
-                usefulKeys.map(key => {
-                  osmElement.node('tag').attr({
-                    k: key,
-                    v: typeof(formData[key]) === 'object' ? JSON.stringify(formData[key]) : formData[key]
-                  });
-                });
                 mainOsmElement.addChild(osmElement);
               }
               ++filesUsed;
@@ -181,8 +185,19 @@ module.exports = function(files, filter, cb) {
   }
 
   processChunksOfFiles(files.slice(0, CHUNK_SIZE), files.slice(CHUNK_SIZE));
-
 };
+
+
+function checkNodeIsRelevant(element) {
+  var commonAttrs = [
+    'id', 'changeset', 'version', 'user', 'timestamp', 'lat', 'lon'
+  ];
+  return element.attrs().map(
+    attr => attr.name()
+  ).filter(
+    attr => !commonAttrs.includes(attr)
+  ).length;
+}
 
 /**
  * Rewrites the id attribute with a fresh negative ID for
