@@ -60,6 +60,14 @@ function aggregate(osmDirs, req, res) {
       return;
     }
     var xmlObj = (new DOMParser()).parseFromString(osmXml, 'text/xml');
-    res.status(200).json(osmtogeojson(xmlObj));
+    var geojson = osmtogeojson(xmlObj);
+    geojson.features.map((feature, n) =>
+      Object.keys(geojson.features[n].properties).map(key => {
+        try {
+          geojson.features[n].properties[key] = JSON.parse(geojson.features[n].properties[key]);
+        } catch(err) {}
+      })
+    );
+    res.status(200).json(geojson);
   });
 }

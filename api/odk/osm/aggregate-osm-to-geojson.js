@@ -121,6 +121,13 @@ module.exports = function(files, filter, cb) {
                   'utf8'
                 )
               );
+              var unusefulKeys = [
+                'start', 'end', 'today', 'simserial', 'meta', 'deviceid',
+                'username'
+              ];
+              var usefulKeys = Object.keys(formData).filter(
+                key => !unusefulKeys.includes(key) && !key.startsWith('osm_')
+              );
 
               var osmElements = rootEl.childNodes();
               for (var j = 0, len = osmElements.length; j < len; j++) {
@@ -151,6 +158,12 @@ module.exports = function(files, filter, cb) {
                     v: formData.deviceid
                   });
                 }
+                usefulKeys.map(key => {
+                  osmElement.node('tag').attr({
+                    k: key,
+                    v: typeof(formData[key]) === 'object' ? JSON.stringify(formData[key]) : formData[key]
+                  });
+                });
                 mainOsmElement.addChild(osmElement);
               }
               ++filesUsed;
