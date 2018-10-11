@@ -129,6 +129,14 @@ class SubmissionMenu extends React.Component {
     this.download(`${this.props.formId}.geojson?${this.props.filterParams}`);
     this.toggleDialog();
   }
+  downloadCsv = (event) => {
+    this.download(`${this.props.formId}.csv`);
+    this.toggleDialog();
+  }
+  downloadFilteredCsv = (event) => {
+    this.download(`${this.props.formId}.csv?${this.props.filterParams}`);
+    this.toggleDialog();
+  }
 
   toggleDialog = () => this.setState({ openDialog: !this.state.openDialog });
 
@@ -173,20 +181,27 @@ class SubmissionMenu extends React.Component {
         />
     </Menu>;
     const osmMenu = <Menu>
-        <MenuItem className="pt-minimal" label="Data as .osm"
+        <MenuItem className="pt-minimal" label="Data as OSM"
           onClick={this.downloadAllOsm}
           />
-        {this.props.filterParams &&
-          <MenuItem className="pt-minimal" label="Filtered data as .osm"
-            onClick={this.downloadFilteredOsm}
-            />
-        }
         <MenuItem className="pt-minimal" label="Data as GeoJSON"
           onClick={this.downloadGeojson}
           />
-        <MenuItem className="pt-minimal" label="Filtered data as GeoJSON"
-          onClick={this.downloadFilteredGeojson}
+        <MenuItem className="pt-minimal" label="Data as CSV"
+          onClick={this.downloadCsv}
           />
+        {this.props.filterParams && <Menu>
+            <MenuItem className="pt-minimal" label="Filtered data as OSM"
+              onClick={this.downloadFilteredOsm}
+              />
+            <MenuItem className="pt-minimal" label="Filtered data as GeoJSON"
+              onClick={this.downloadFilteredGeojson}
+              />
+            <MenuItem className="pt-minimal" label="Filtered data as CSV"
+              onClick={this.downloadFilteredCsv}
+              />
+          </Menu>
+        }
       </Menu>;
     const manageMenu = <Menu>
         <MenuItem className="pt-minimal" icon="add-to-folder" label="Archive Form"
