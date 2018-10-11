@@ -121,6 +121,14 @@ class SubmissionMenu extends React.Component {
     this.download(`${this.props.formId}.osm?${this.props.filterParams}`);
     this.toggleDialog();
   }
+  downloadGeojson = (event) => {
+    this.download(`${this.props.formId}.geojson`);
+    this.toggleDialog();
+  }
+  downloadFilteredGeojson = (event) => {
+    this.download(`${this.props.formId}.geojson?${this.props.filterParams}`);
+    this.toggleDialog();
+  }
 
   toggleDialog = () => this.setState({ openDialog: !this.state.openDialog });
 
@@ -165,14 +173,20 @@ class SubmissionMenu extends React.Component {
         />
     </Menu>;
     const osmMenu = <Menu>
-        <MenuItem className="pt-minimal" label="All OSM data"
+        <MenuItem className="pt-minimal" label="Data as .osm"
           onClick={this.downloadAllOsm}
           />
         {this.props.filterParams &&
-          <MenuItem className="pt-minimal" label="Filtered OSM data"
+          <MenuItem className="pt-minimal" label="Filtered data as .osm"
             onClick={this.downloadFilteredOsm}
             />
         }
+        <MenuItem className="pt-minimal" label="Data as GeoJSON"
+          onClick={this.downloadGeojson}
+          />
+        <MenuItem className="pt-minimal" label="Filtered data as GeoJSON"
+          onClick={this.downloadFilteredGeojson}
+          />
       </Menu>;
     const manageMenu = <Menu>
         <MenuItem className="pt-minimal" icon="add-to-folder" label="Archive Form"
