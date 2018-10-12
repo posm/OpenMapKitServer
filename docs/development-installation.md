@@ -58,6 +58,18 @@ by setting the environment variable `DISABLE_AUTH` as `1` or as `true`.
 ```sh
 export DISABLE_AUTH=1
 ```
+
+### Users and roles
+
+You can edit the [util/users.json](../util/users.json) file to set the users,
+passwords and roles. We have two main user roles:
+
+* `dataviewer` - can see the submissions and download submissions data.
+* `admin` - have all `dataviewer` permissions and can upload forms and archive/unarchive/delete forms.
+
+Anonymous and other user roles can see the formList, download forms, but does not
+have access to submissions.
+
 ### Run on development mode
 
 To start the server in the development mode, use `npm startdev`, it will make the React App restart each time the frontend code is updated.

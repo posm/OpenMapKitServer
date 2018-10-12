@@ -44,7 +44,7 @@ useful to OpenMapKit Server as a whole.
 
 #### After your installation is done, you can see if the server is alive at:
 
-    http://{{your_host_url}}/info
+    http://{{your_host_url}}/omk/info
 
 #### To get forms and send submissions in ODK Collect set:
 
@@ -54,11 +54,11 @@ __ODK Collect__ > __General Settings__ > __Configure platform settings__ > __URL
 
 #### See all of the pages on your server:
 
-    http://{{your_host_url}}/pages/
+    http://{{your_host_url}}/
 
 #### Upload an XLS Form:
 
-    http://{{your_host_url}}/pages/upload-form/
+    http://{{your_host_url}}/omk/pages/#/upload-form
 
 
 ## API
