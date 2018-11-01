@@ -129,12 +129,12 @@ class SubmissionMenu extends React.Component {
     this.download(`${this.props.formId}.geojson?${this.props.filterParams}`);
     this.toggleDialog();
   }
-  downloadCsv = (event) => {
-    this.download(`${this.props.formId}.csv`);
+  downloadFeaturesCsv = (event) => {
+    this.download(`features/${this.props.formId}.csv`);
     this.toggleDialog();
   }
-  downloadFilteredCsv = (event) => {
-    this.download(`${this.props.formId}.csv?${this.props.filterParams}`);
+  downloadFilteredFeaturesCsv = (event) => {
+    this.download(`features/${this.props.formId}.csv?${this.props.filterParams}`);
     this.toggleDialog();
   }
 
@@ -188,7 +188,7 @@ class SubmissionMenu extends React.Component {
           onClick={this.downloadGeojson}
           />
         <MenuItem className="pt-minimal" label="Data as CSV"
-          onClick={this.downloadCsv}
+          onClick={this.downloadFeaturesCsv}
           />
         {this.props.filterParams && <Menu>
             <MenuItem className="pt-minimal" label="Filtered data as OSM"
@@ -198,7 +198,7 @@ class SubmissionMenu extends React.Component {
               onClick={this.downloadFilteredGeojson}
               />
             <MenuItem className="pt-minimal" label="Filtered data as CSV"
-              onClick={this.downloadFilteredCsv}
+              onClick={this.downloadFilteredFeaturesCsv}
               />
           </Menu>
         }
