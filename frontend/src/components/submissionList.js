@@ -102,15 +102,23 @@ class SubmissionMenu extends React.Component {
     return this.props.userDetails && this.props.userDetails.role === 'admin';
   }
   downloadCsv = (event) => {
-    this.download(`${this.props.formId}.csv?${this.props.filterParams}`);
+    this.download(`${this.props.formId}.csv`);
     this.toggleDialog();
   }
   downloadJson = (event) => {
-    this.download(`${this.props.formId}.json?${this.props.filterParams}`);
+    this.download(`${this.props.formId}.json`);
     this.toggleDialog();
   }
   downloadAttachments = (event) => {
-    this.download(`${this.props.formId}.zip?${this.props.filterParams}`);
+    this.download(`${this.props.formId}.zip`);
+    this.toggleDialog();
+  }
+  downloadFilteredCsv = (event) => {
+    this.download(`${this.props.formId}.csv?${this.props.filterParams}`);
+    this.toggleDialog();
+  }
+  downloadFilteredJson = (event) => {
+    this.download(`${this.props.formId}.json?${this.props.filterParams}`);
     this.toggleDialog();
   }
   downloadAllOsm = (event) => {
@@ -178,6 +186,12 @@ class SubmissionMenu extends React.Component {
         />
       <MenuItem className="pt-minimal" icon="compressed" label="Download Attachments"
         onClick={this.downloadAttachments}
+        />
+      <MenuItem className="pt-minimal" icon="th" label="Download Filtered CSV"
+        onClick={this.downloadFilteredCsv}
+        />
+      <MenuItem className="pt-minimal" icon="code" label="Download Filtered JSON"
+        onClick={this.downloadFilteredJson}
         />
     </Menu>;
     const osmMenu = <Menu>
