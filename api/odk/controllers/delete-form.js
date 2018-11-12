@@ -11,6 +11,7 @@ module.exports = (req, res, next) => {
   const submissionDir = path.join(settings.dataDir, 'submissions', formName);
   let errors = [];
 
+  // check if the form has submissions
   fs.readdir(submissionDir, (err, items) => {
     if (!err && items.length > 0) {
       return res.status(403).json(
@@ -40,7 +41,7 @@ module.exports = (req, res, next) => {
           {detail: "It was not possible to find or delete the form files"}
         );
       } else {
-        syncDataDir();
+        syncDataDir('forms');
         res.status(200).json({detail: "Form deleted successfully"});
       }
     }

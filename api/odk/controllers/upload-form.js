@@ -35,7 +35,6 @@ const xlsToXForm = (xlsPath, callback) => {
     if (err) {
       return callback(err);
     }
-
     return callback(null, xformPath);
   });
 };
@@ -223,7 +222,7 @@ module.exports = function (req, res, next) {
                   msg: `Unable to move ${xform.title} to the forms directory.`
                 });
               } else {
-                syncDataDir();
+                syncDataDir('forms');
               }
 
               cleanup();

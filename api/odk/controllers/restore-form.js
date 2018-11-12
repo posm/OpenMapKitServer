@@ -12,18 +12,13 @@ module.exports = (req, res, next) => {
   const archiveDir = path.join(settings.dataDir, 'archive');
   let movedFiles = [];
 
-  fs.readdir(submissionDir, (err, items) => {
-    if (!err && items.length > 0) {
-      return res.status(403).json({detail: "There is already an active form with this name"});
-    }
-  });
-
   // check if there is already an active form with the same name
   fs.readdir(path.join(settings.dataDir, 'forms'), (err, items) => {
     const filtered = items.filter(
       i => [`${formName}.xls`, `${formName}.xlsx`, `${formName}.xml`].includes(i)
     );
     if (filtered.length > 0) {
+      console.log('entrou');
       return res.status(403).json({detail: "There is already an active form with this name"});
     } else {
       fs.readdir(path.join(archiveDir, 'forms'), (err, items) => {
@@ -40,27 +35,14 @@ module.exports = (req, res, next) => {
                   {detail: "Something went wrong during the restoration process."}
                 );
               } else {
-                syncDataDir();
+                console.log(path.join(settings.dataDir, 'archive/forms'));
+                syncDataDir('forms');
+                syncDataDir('archive/forms');
               }
             }
           )
         );
       });
-      // move submissions dir
-      fs.readdir(path.join(archiveDir, 'submissions', formName), (err, items) => {
-        if (!err) {
-          fse.move(
-            path.join(archiveDir, 'submissions', formName),
-            submissionDir,
-            moveError => {
-              if (!moveError) {
-                syncDataDir();
-              }
-            }
-          );
-        }
-      }
-      );
       return res.status(200).json({detail: "Form restored successfully."});
     }
   });
