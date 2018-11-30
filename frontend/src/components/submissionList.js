@@ -607,7 +607,7 @@ class SubmissionList extends React.Component {
 
   renderFilterSection() {
     let devices = this.state.submissions.map(item => item[2]);
-    devices = devices.filter((i, k) => devices.indexOf(i) === k);
+    devices = devices.filter(i => i !== undefined).filter((i, k) => devices.indexOf(i) === k);
     return(
       <Row className="filters ml-0 mr-0">
         <Row className="ml-0 mr-0">
