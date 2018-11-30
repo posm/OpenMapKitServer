@@ -102,15 +102,23 @@ class SubmissionMenu extends React.Component {
     return this.props.userDetails && this.props.userDetails.role === 'admin';
   }
   downloadCsv = (event) => {
-    this.download(`${this.props.formId}.csv?${this.props.filterParams}`);
+    this.download(`${this.props.formId}.csv`);
     this.toggleDialog();
   }
   downloadJson = (event) => {
-    this.download(`${this.props.formId}.json?${this.props.filterParams}`);
+    this.download(`${this.props.formId}.json`);
     this.toggleDialog();
   }
   downloadAttachments = (event) => {
-    this.download(`${this.props.formId}.zip?${this.props.filterParams}`);
+    this.download(`${this.props.formId}.zip`);
+    this.toggleDialog();
+  }
+  downloadFilteredCsv = (event) => {
+    this.download(`${this.props.formId}.csv?${this.props.filterParams}`);
+    this.toggleDialog();
+  }
+  downloadFilteredJson = (event) => {
+    this.download(`${this.props.formId}.json?${this.props.filterParams}`);
     this.toggleDialog();
   }
   downloadAllOsm = (event) => {
@@ -129,12 +137,12 @@ class SubmissionMenu extends React.Component {
     this.download(`${this.props.formId}.geojson?${this.props.filterParams}`);
     this.toggleDialog();
   }
-  downloadCsv = (event) => {
-    this.download(`${this.props.formId}.csv`);
+  downloadFeaturesCsv = (event) => {
+    this.download(`features/${this.props.formId}.csv`);
     this.toggleDialog();
   }
-  downloadFilteredCsv = (event) => {
-    this.download(`${this.props.formId}.csv?${this.props.filterParams}`);
+  downloadFilteredFeaturesCsv = (event) => {
+    this.download(`features/${this.props.formId}.csv?${this.props.filterParams}`);
     this.toggleDialog();
   }
 
@@ -179,6 +187,12 @@ class SubmissionMenu extends React.Component {
       <MenuItem className="pt-minimal" icon="compressed" label="Download Attachments"
         onClick={this.downloadAttachments}
         />
+      <MenuItem className="pt-minimal" icon="th" label="Download Filtered CSV"
+        onClick={this.downloadFilteredCsv}
+        />
+      <MenuItem className="pt-minimal" icon="code" label="Download Filtered JSON"
+        onClick={this.downloadFilteredJson}
+        />
     </Menu>;
     const osmMenu = <Menu>
         <MenuItem className="pt-minimal" label="Data as OSM"
@@ -188,7 +202,7 @@ class SubmissionMenu extends React.Component {
           onClick={this.downloadGeojson}
           />
         <MenuItem className="pt-minimal" label="Data as CSV"
-          onClick={this.downloadCsv}
+          onClick={this.downloadFeaturesCsv}
           />
         {this.props.filterParams && <Menu>
             <MenuItem className="pt-minimal" label="Filtered data as OSM"
@@ -198,7 +212,7 @@ class SubmissionMenu extends React.Component {
               onClick={this.downloadFilteredGeojson}
               />
             <MenuItem className="pt-minimal" label="Filtered data as CSV"
-              onClick={this.downloadFilteredCsv}
+              onClick={this.downloadFilteredFeaturesCsv}
               />
           </Menu>
         }
@@ -593,7 +607,7 @@ class SubmissionList extends React.Component {
 
   renderFilterSection() {
     let devices = this.state.submissions.map(item => item[2]);
-    devices = devices.filter((i, k) => devices.indexOf(i) === k);
+    devices = devices.filter(i => i !== undefined).filter((i, k) => devices.indexOf(i) === k);
     return(
       <Row className="filters ml-0 mr-0">
         <Row className="ml-0 mr-0">

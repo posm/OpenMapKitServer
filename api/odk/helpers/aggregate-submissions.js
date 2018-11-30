@@ -117,7 +117,14 @@ module.exports = (opts, callback) => {
               obj[k] = data[k];
 
               if (meta.fields[k] === 'select') {
-                const values = data[k].split(' ');
+                var values;
+                try {
+                  values = data[k].split(' ');
+                } catch (err) {
+                  if (err instanceof TypeError) {
+                    values = `${data[k]}`.split(' ');
+                  }
+                }
 
                 Object.keys(selectItems[k]).forEach(itemKey => {
                   obj[`${k}/${selectItems[k][itemKey]}`] = values.indexOf(selectItems[k][itemKey]) >= 0;
