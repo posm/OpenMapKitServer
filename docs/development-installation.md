@@ -85,8 +85,8 @@ submissions files in a S3 bucket, set the following environment variables:
 
 ```sh
 export ENABLES3SYNC=1
-export AWSKEYID=<your AWS access key ID>
-export AWSSECRETKEY=<your AWS secret access key>
+export AWS_ACCESS_KEY_ID=<your AWS access key ID>
+export AWS_SECRET_ACCESS_KEY=<your AWS secret access key>
 export AWSBUCKETNAME=<a S3 bucket name>
 export AWSBUCKETPREFIX=<(optional, bucket root is the default prefix) subdirectory where the files should be stored in the S3 bucket>
 ```
