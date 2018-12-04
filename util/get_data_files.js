@@ -6,6 +6,7 @@ const AWSBUCKETPREFIX = process.env.AWSBUCKETPREFIX ? process.env.AWSBUCKETPREFI
 
 child = exec(
   `aws s3 sync s3://${process.env.AWSBUCKETNAME}/${AWSBUCKETPREFIX}/ ${settings.dataDir}`,
+  {maxBuffer: 1024 * 5000},
   function (error, stdout, stderr) {
     console.log('stdout: ' + stdout);
     console.log('stderr: ' + stderr);
