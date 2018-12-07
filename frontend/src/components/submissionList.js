@@ -488,12 +488,12 @@ class SubmissionList extends React.Component {
     }
     if (this.state.filterDeviceId) {
       filtered = filtered.filter(
-        item => item[2].toString().includes(this.state.filterDeviceId)
+        item => item[2] && item[2].toString().includes(this.state.filterDeviceId)
       );
     }
     if (this.state.filterUsername) {
       filtered = filtered.filter(
-        item => item[2].toString().includes(this.state.filterUsername)
+        item => item[2] && item[2].toString().includes(this.state.filterUsername)
       );
     }
     this.setState({ filteredSubmissions: filtered });
