@@ -20,6 +20,7 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var odkOpenRosa = require('./api/odk/odk-openrosa-routes');
 var odkAggregate = require('./api/odk/odk-aggregate-routes');
+var odkData = require('./api/odk/odk-data');
 var deployments = require('./api/deployments/deployment-routes');
 var error = require('./api/odk/controllers/error-handler');
 var pkg = require('./package');
@@ -178,9 +179,8 @@ app.use('/omk/odk', odkAggregate);
 app.use('/omk/deployments', deployments);
 
 // Public Data & Static Assets
-app.use('/omk/data', express.static(settings.dataDir));
-app.use('/omk/data', directory(settings.dataDir));
-app.use('/omk/data/submissions', adminDVPermission);
+app.use('/omk/data/submissions', auth);
+app.use('/omk/data', odkData);
 app.use('/omk/pages', express.static(settings.pagesDir));
 app.use('/omk/pages', directory(settings.pagesDir));
 // Handle errors
