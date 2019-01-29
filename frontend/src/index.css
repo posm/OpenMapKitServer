@@ -63,6 +63,7 @@ body {
   display: inline;
 }
 
+
 .pl-7 {
   padding-left: 7px !important;
 }
@@ -85,6 +86,10 @@ body {
 
 .mr-0 {
   margin-right: 0px !important;
+}
+
+.mb-10 {
+  margin-bottom: 10px !important;
 }
 
 .mt-10 {
@@ -202,4 +207,18 @@ body {
 
 .break-all {
   word-break: break-all;
+}
+
+.deployments-list li {
+  cursor: pointer;
+}
+
+.deployments-list li:hover {
+  background-color: #ddd;
+}
+
+.deployment-alert {
+  color: red;
+  font-size: 9pt;
+  padding-top: 1rem;
 }
