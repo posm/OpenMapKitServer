@@ -15,7 +15,7 @@ class Form extends React.Component {
   }
 
   componentWillUnmount() {
-      this.restoreFormPromise && this.restoreFormPromise.cancel();
+    this.restoreFormPromise && this.restoreFormPromise.cancel();
   }
 
   restoreForm = (event) => {

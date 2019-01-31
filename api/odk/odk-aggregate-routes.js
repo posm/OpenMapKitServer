@@ -15,6 +15,7 @@ var archiveForm = require('./controllers/archive-form');
 var restoreForm = require('./controllers/restore-form');
 var archivedForms = require('./controllers/archived-form-list');
 var createDeploymentFolder = require('./controllers/create-deployment-folder');
+var uploadDeployment = require('./controllers/upload-deployment');
 
 /**
  * Aggregate End Points
@@ -57,6 +58,7 @@ if (disableAuth) {
     .get(adminPermission, submitChangesets)
     .put(adminPermission, submitChangesets);
   router.route('/deployments').post(adminPermission, createDeploymentFolder);
+  router.route('/deployments/:deployment').post(adminPermission, uploadDeployment);
 }
 
 router.route('/manifest/:formName.xml').get(getManifest);

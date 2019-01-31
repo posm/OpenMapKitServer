@@ -14,7 +14,9 @@ class UploadForm extends React.Component {
     }
     this.authBase64 = null;
     if (this.props.userDetails && this.props.userDetails.hasOwnProperty('username') && this.props.userDetails.username !== null) {
-      this.authBase64 = new Buffer(this.props.userDetails.username + ':' + this.props.userDetails.password).toString('base64');
+      this.authBase64 = new Buffer(
+        `${this.props.userDetails.username}:${this.props.userDetails.password}`
+      ).toString('base64');
     }
   }
 

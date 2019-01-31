@@ -145,7 +145,7 @@ class UploadDeployment extends React.Component {
 
   render() {
     const uploaderProps = {
-      action: '/omk/odk/upload-deployment',
+      action: `/omk/odk/deployments/${this.state.selectedDeployment}`,
       headers: {
         Authorization: `Basic ${this.authBase64}`
       },
@@ -173,7 +173,6 @@ class UploadDeployment extends React.Component {
     };
     return (
       <div className="container">
-
         {
           this.state.success &&
           <Callout title="Success!" intent="success" className="upload-result">
