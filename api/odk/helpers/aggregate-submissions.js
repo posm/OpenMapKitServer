@@ -135,12 +135,19 @@ module.exports = (opts, callback) => {
             }, {});
 
             let filtered = true;
-            if (startDate && moment(startDate).isAfter(submission.meta.submissionTime)) {
+            // if startDate is after the submission date, exclude that submission
+            if (
+              startDate && moment(startDate).isAfter(submission.meta.submissionTime, 'day')
+            ) {
               filtered = false;
             }
-            if (endDate && moment(endDate).isBefore(submission.meta.submissionTime)) {
+            // if endDate is before the submission date, exclude that submission
+            if (
+              endDate && moment(endDate).isBefore(submission.meta.submissionTime, 'day')
+            ) {
               filtered = false;
             }
+            // deviceId or username filters
             if (deviceId && !submission.deviceid.toString().includes(deviceId)) {
               filtered = false;
             }
