@@ -63,7 +63,6 @@ body {
   display: inline;
 }
 
-
 .pl-7 {
   padding-left: 7px !important;
 }
@@ -80,6 +79,14 @@ body {
   padding-left: 0px !important;
 }
 
+.pt-10 {
+  padding-top: 10px !important;
+}
+
+.pb-10 {
+  padding-bottom: 10px !important;
+}
+
 .ml-0 {
   margin-left: 0px !important;
 }
@@ -92,8 +99,16 @@ body {
   margin-bottom: 10px !important;
 }
 
+.mb-20 {
+  margin-bottom: 20px !important;
+}
+
 .mt-10 {
   margin-top: 10px !important;
+}
+
+.mt-20 {
+  margin-top: 20px !important;
 }
 
 .pt-dark a {
@@ -215,6 +230,14 @@ body {
 
 .deployments-list li:hover {
   background-color: #ddd;
+  text-decoration: none;
+}
+.deployments-list a:hover {
+  text-decoration: none;
+}
+
+.light-gray-5 {
+  background-color: #F5F8FA;
 }
 
 .deployment-alert {

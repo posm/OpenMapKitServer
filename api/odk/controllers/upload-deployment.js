@@ -34,20 +34,31 @@ module.exports = function (req, res, next) {
       var targetPath = path.join(deploymentDir, file.originalFilename);
       fs.copyFile(file.path, targetPath, (err) => {
         if (err) {
-          fs.unlinkSync(file.path);
+          if (fs.statSync(file.path)) {
+            fs.unlinkSync(file.path);
+          }
           return res.status(400).json({
             status: 400,
-            msg: `Error when copying ${targetPath}.`
+            msg: `Error when copying ${file.originalFilename}.`
           });
         }
+        if (fs.statSync(file.path)) {
+          fs.unlinkSync(file.path);
+        }
+        return res.status(201).json({
+          status: 201,
+          msg: `File correctly uploaded to ${req.params.deployment}.`
+        });
+      });
+    } else {
+      if (fs.statSync(file.path)) {
+        fs.unlinkSync(file.path);
+      }
+      return res.status(400).json({
+        status: 400,
+        msg: `The extension of the file ${file.originalFilename} is not allowed to be uploaded to deployments.`
       });
     }
-    fs.unlinkSync(file.path);
   });
   form.parse(req);
-
-  return res.status(201).json({
-    status: 201,
-    msg: `File ${req.params.deployment} correctly uploaded.`
-  });
-}
+};
