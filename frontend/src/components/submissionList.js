@@ -121,6 +121,10 @@ class SubmissionMenu extends React.Component {
     this.download(`${this.props.formId}.json?${this.props.filterParams}`);
     this.toggleDialog();
   }
+  downloadFilteredAttachments = (event) => {
+    this.download(`${this.props.formId}.zip?${this.props.filterParams}`);
+    this.toggleDialog();
+  }
   downloadAllOsm = (event) => {
     this.download(`${this.props.formId}.osm`);
     this.toggleDialog();
@@ -192,6 +196,9 @@ class SubmissionMenu extends React.Component {
         />
       <MenuItem className="pt-minimal" icon="code" label="Download Filtered JSON"
         onClick={this.downloadFilteredJson}
+        />
+      <MenuItem className="pt-minimal" icon="compressed" label="Download Filtered Attachments"
+        onClick={this.downloadFilteredAttachments}
         />
     </Menu>;
     const osmMenu = <Menu>
