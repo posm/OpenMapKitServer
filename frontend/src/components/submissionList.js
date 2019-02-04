@@ -197,7 +197,7 @@ class SubmissionMenu extends React.Component {
       <MenuItem className="pt-minimal" icon="code" label="Download Filtered JSON"
         onClick={this.downloadFilteredJson}
         />
-      <MenuItem className="pt-minimal" icon="code" label="Download Filtered Attachments"
+      <MenuItem className="pt-minimal" icon="compresed" label="Download Filtered Attachments"
         onClick={this.downloadFilteredAttachments}
         />
     </Menu>;
