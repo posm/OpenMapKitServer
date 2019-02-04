@@ -45,6 +45,13 @@ class UploadDeployment extends React.Component {
       ).catch(e => console.log(e));
   }
 
+  bytesToSize = bytes => {
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes == 0) return '0 Byte';
+    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+  };
+
   render() {
     const uploaderProps = {
       action: `/omk/odk/deployments/${this.props.deployment}`,
@@ -90,7 +97,7 @@ class UploadDeployment extends React.Component {
           </Callout>
         }
         <div className="deployments mt-20">
-          <h3>Deployment: <i>{this.props.deployment}</i></h3>
+          <h3>Deployment - <i>{this.props.deployment}</i></h3>
           <hr />
           <Row className="ml-0 mr-0 mt-20 pt-10 pb-10 light-gray-5">
             <h4>Current files</h4>
@@ -98,35 +105,35 @@ class UploadDeployment extends React.Component {
               <p><b>.geojson</b></p>
               {(this.state.files && this.state.files.geojson) &&
                 this.state.files.geojson.map(
-                  file => <p><a href={file.url} target="_blank">{file.name}</a> <i>({file.size} bytes)</i></p>)
+                  file => <p><a href={file.url} target="_blank">{file.name}</a> <i>({this.bytesToSize(file.size)})</i></p>)
               }
             </Col>
             <Col xs={12} md={4} className="pt-input-group">
               <p><b>.mbtiles</b></p>
               {(this.state.files && this.state.files.mbtiles) &&
                 this.state.files.mbtiles.map(
-                  file => <p><a href={file.url}>{file.name}</a> <i>({file.size} bytes)</i></p>)
+                  file => <p><a href={file.url}>{file.name}</a> <i>({this.bytesToSize(file.size)})</i></p>)
               }
             </Col>
             <Col xs={12} md={4} className="pt-input-group">
               <p><b>.osm</b></p>
               {(this.state.files && this.state.files.osm) &&
                 this.state.files.osm.map(
-                  file => <p><a href={file.url} target="_blank">{file.name}</a> <i>({file.size} bytes)</i></p>)
+                  file => <p><a href={file.url} target="_blank">{file.name}</a> <i>({this.bytesToSize(file.size)})</i></p>)
               }
             </Col>
           </Row>
           <hr />
           <Upload {...uploaderProps} ref="inner">
             <Callout title={"Upload new files"} className="upload-area">
-              Drag and drop here your deployment files.<br />
-            Accepted formats: <i>.geojson, .mbtiles, .osm</i>.
+              Drag and drop here new deployment files.<br />
+            Accepted formats: <code>.geojson</code>, <code>.mbtiles</code>, <code>.osm</code>
             </Callout>
           </Upload>
           <Link to="/deployments">
             <Button className="pt-button pt-intent-warning mt-10">
               <span className="pt-icon-standard pt-icon-arrow-left pt-align-left"></span>
-              Select other folder
+              Select another folder
             </Button>
           </Link>
         </div>
