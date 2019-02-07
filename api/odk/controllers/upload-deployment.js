@@ -45,6 +45,7 @@ module.exports = function (req, res, next) {
         if (fs.statSync(file.path)) {
           fs.unlinkSync(file.path);
         }
+        syncDataDir(path.join('deployments', req.params.deployment));
         return res.status(201).json({
           status: 201,
           msg: `File correctly uploaded to ${req.params.deployment}.`
