@@ -9,7 +9,7 @@ Install dependencies:
 ```
 sudo apt-get install default-jre-headless
 sudo apt-get install build-essential python-pip git
-curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/node_8.x | sudo -E bash -
 sudo apt-get install nodejs
 ```
 
