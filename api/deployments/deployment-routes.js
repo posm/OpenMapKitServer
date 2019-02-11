@@ -1,10 +1,12 @@
 var router = require('express').Router({ mergeParams: true });
+
 var getDeployments = require('./controllers/deployments');
 
 /**
  * Retrieve the list of deployment areas of interest.
  */
-router.route('/').get(getDeployments.getAll);
+router.route('/')
+  .get(getDeployments.getAll);
 
 /**
  * Retrieve meta-data for a given deployment.

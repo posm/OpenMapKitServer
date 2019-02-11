@@ -11,6 +11,9 @@ function getFile(req, res, next) {
   if (req.params.prefix === 'submissions') {
     filePath = `${settings.dataDir}/${req.params.prefix}/${req.params.formName}/${req.params.submission}/${req.params.file}`;
   }
+  if (req.params.prefix === 'deployments') {
+    filePath = `${settings.dataDir}/${req.params.prefix}/${req.params.deployment}/${req.params.file}`;
+  }
   fs.readFile(filePath, (err, data) => {
     if (err) {
       console.log(err);
@@ -20,10 +23,18 @@ function getFile(req, res, next) {
       return res.status(200).set('Content-Type', 'text/csv').send(data);
     }
     if (req.params.file.endsWith('json')) {
-      return res.status(200).json(JSON.parse(data));
+      try {
+        const jsonData = JSON.parse(data);
+        return res.status(200).json(jsonData);
+      } catch (e) {
+        return res.status(200).json(data);
+      }
     }
     if (req.params.file.endsWith('xml') || req.params.file.endsWith('osm')) {
       return res.set('Content-Type', 'application/xml').status(200).send(data);
+    }
+    if (req.params.file.endsWith('mbtiles')) {
+      return res.set('Content-Type', 'application/vnd.mapbox-vector-tile').status(200).send(data);
     }
     if (req.params.file.endsWith('xlsx')) {
       return res.set(
@@ -44,5 +55,6 @@ if (disableAuth) {
 }
 // /forms/* URL endpoint
 router.route('/:prefix/:file').get(getFile);
+router.route('/:prefix/:deployment/:file').get(getFile);
 
 module.exports = router;

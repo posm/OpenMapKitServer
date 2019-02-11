@@ -84,6 +84,13 @@ class Header extends React.Component {
               </Button>
             </Link>
             { this.isAdmin() &&
+              <Link to="/deployments">
+                <Button className="pt-minimal pt-white" icon="cloud-upload">
+                  Deployments
+                </Button>
+              </Link>
+            }
+            { this.isAdmin() &&
               <Link to="/upload-form">
                 <Button className="pt-minimal pt-white" icon="cloud-upload">
                   Upload Form
