@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from "react-redux";
 import Upload from 'rc-upload';
 
-import {Callout} from '@blueprintjs/core';
+import { Callout, Icon } from '@blueprintjs/core';
 
 
 class UploadForm extends React.Component {
@@ -11,6 +11,7 @@ class UploadForm extends React.Component {
     this.state = {
       success: false,
       error: false,
+      loadingIndicator: false
     }
     this.authBase64 = null;
     if (this.props.userDetails && this.props.userDetails.hasOwnProperty('username') && this.props.userDetails.username !== null) {
@@ -31,21 +32,18 @@ class UploadForm extends React.Component {
         console.log('beforeUpload', file.name);
       },
       onStart: (file) => {
-        this.setState({error: false});
-        this.setState({success: false});
+        this.setState({loadingIndicator: true, error: false, success: false});
         console.log('onStart', file.name);
       },
       onSuccess: (file) => {
-        this.setState({success: true});
-        this.setState({error: false});
+        this.setState({loadingIndicator: false, error: false, success: true});
         console.log('onSuccess', file);
       },
       onProgress(step, file) {
         console.log('onProgress', Math.round(step.percent), file.name);
       },
       onError: (err) => {
-        this.setState({error: true});
-        this.setState({success: false});
+        this.setState({loadingIndicator: false, error: true, success: false});
       }
     };
     return (<div className="container">
@@ -60,8 +58,17 @@ class UploadForm extends React.Component {
           </Callout>
       }
       <Upload {...uploaderProps} ref="inner">
-        <Callout title={"Upload Form"} className="upload-area">
-          Drag and drop here your XSL or XSLX files to upload to OpenMapKit Server.
+        <Callout title={this.state.loadingIndicator ? "Uploading..." : "Upload Form"}
+          className={`upload-area ${this.state.loadingIndicator && 'loading-upload-area'}`}
+        >
+          <p className="pt-10">
+            {this.state.loadingIndicator
+              ? <Icon icon="refresh" className="spinning" iconSize={60} title="Uploading..."/>
+              : <p>
+                  Drag and drop here your XSL or XSLX files to upload to OpenMapKit Server.
+                </p>
+            }
+        </p>
         </Callout>
       </Upload>
     </div>);
