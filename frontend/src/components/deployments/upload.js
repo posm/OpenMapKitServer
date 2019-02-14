@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from "react-redux";
 import { Link } from "react-router-dom";
 import Upload from 'rc-upload';
-import { Callout, Button, Colors } from '@blueprintjs/core';
+import { Callout, Button, Colors, Icon } from '@blueprintjs/core';
 import { Grid, Row, Col } from 'react-bootstrap';
 
 import { cancelablePromise } from '../../utils/promise';
@@ -17,7 +17,8 @@ class UploadDeployment extends React.Component {
     this.state = {
       success: false,
       error: false,
-      files: []
+      files: [],
+      loadingIndicator: false
     }
     this.authBase64 = null;
     if (this.props.userDetails && this.props.userDetails.hasOwnProperty('username') && this.props.userDetails.username !== null) {
@@ -63,13 +64,11 @@ class UploadDeployment extends React.Component {
         console.log('beforeUpload', file.name);
       },
       onStart: (file) => {
-        this.setState({error: false});
-        this.setState({success: false});
+        this.setState({loadingIndicator: true, error: false, success: false});
         console.log('onStart', file.name);
       },
       onSuccess: (file) => {
-        this.setState({success: true});
-        this.setState({error: false});
+        this.setState({loadingIndicator: false, error: false, success: true});
         this.getDeployments();
         console.log('onSuccess', file);
       },
@@ -77,8 +76,7 @@ class UploadDeployment extends React.Component {
         console.log('onProgress', Math.round(step.percent), file.name);
       },
       onError: (err) => {
-        this.setState({error: true});
-        this.setState({success: false});
+        this.setState({loadingIndicator: false, error: true, success: false});
       }
     };
 
@@ -125,9 +123,18 @@ class UploadDeployment extends React.Component {
           </Row>
           <hr />
           <Upload {...uploaderProps} ref="inner">
-            <Callout title={"Upload new files"} className="upload-area">
-              Drag and drop here new deployment files.<br />
-            Accepted formats: <code>.geojson</code>, <code>.mbtiles</code>, <code>.osm</code>
+            <Callout title={this.state.loadingIndicator ? "Uploading..." : "Upload Form"}
+              className={`upload-area ${this.state.loadingIndicator && 'loading-upload-area'}`}
+            >
+              <p className="pt-10">
+                {this.state.loadingIndicator
+                  ? <Icon icon="refresh" className="spinning" iconSize={60} title="Uploading..."/>
+                  : <p>
+                      Drag and drop here new deployment files.<br />
+                      Accepted formats: <code>.geojson</code>, <code>.mbtiles</code>, <code>.osm</code>
+                    </p>
+                }
+              </p>
             </Callout>
           </Upload>
           <Link to="/deployments">
