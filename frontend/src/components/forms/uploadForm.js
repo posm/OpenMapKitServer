@@ -61,14 +61,14 @@ class UploadForm extends React.Component {
         <Callout title={this.state.loadingIndicator ? "Uploading..." : "Upload Form"}
           className={`upload-area ${this.state.loadingIndicator && 'loading-upload-area'}`}
         >
-          <p className="pt-10">
+          <div className="pt-10">
             {this.state.loadingIndicator
               ? <Icon icon="refresh" className="spinning" iconSize={60} title="Uploading..."/>
               : <p>
                   Drag and drop here your XSL or XSLX files to upload to OpenMapKit Server.
                 </p>
             }
-        </p>
+          </div>
         </Callout>
       </Upload>
     </div>);

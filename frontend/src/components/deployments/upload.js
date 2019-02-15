@@ -2,8 +2,8 @@ import React from 'react';
 import {connect} from "react-redux";
 import { Link } from "react-router-dom";
 import Upload from 'rc-upload';
-import { Callout, Button, Colors, Icon } from '@blueprintjs/core';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Callout, Button, Icon } from '@blueprintjs/core';
+import { Row, Col } from 'react-bootstrap';
 
 import { cancelablePromise } from '../../utils/promise';
 import { deploymentList } from '../../network/deployments';
@@ -48,7 +48,7 @@ class UploadDeployment extends React.Component {
 
   bytesToSize = bytes => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    if (bytes == 0) return '0 Byte';
+    if (!bytes) return '0 Byte';
     var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
     return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
   };
@@ -103,7 +103,10 @@ class UploadDeployment extends React.Component {
               <p><b>.geojson</b></p>
               {(this.state.files && this.state.files.geojson) &&
                 this.state.files.geojson.map(
-                  file => <p><a href={file.url} target="_blank">{file.name}</a> <i>({this.bytesToSize(file.size)})</i></p>)
+                  file => <p>
+                            <a href={file.url} target="_blank" rel="noopener noreferrer">{file.name}</a>
+                            <i>({this.bytesToSize(file.size)})</i>
+                          </p>)
               }
             </Col>
             <Col xs={12} md={4} className="pt-input-group">
@@ -117,7 +120,10 @@ class UploadDeployment extends React.Component {
               <p><b>.osm</b></p>
               {(this.state.files && this.state.files.osm) &&
                 this.state.files.osm.map(
-                  file => <p><a href={file.url} target="_blank">{file.name}</a> <i>({this.bytesToSize(file.size)})</i></p>)
+                  file => <p>
+                            <a href={file.url} target="_blank" rel="noopener noreferrer">{file.name}</a>
+                            <i>({this.bytesToSize(file.size)})</i>
+                          </p>)
               }
             </Col>
           </Row>
@@ -126,7 +132,7 @@ class UploadDeployment extends React.Component {
             <Callout title={this.state.loadingIndicator ? "Uploading..." : "Upload Form"}
               className={`upload-area ${this.state.loadingIndicator && 'loading-upload-area'}`}
             >
-              <p className="pt-10">
+              <div className="pt-10">
                 {this.state.loadingIndicator
                   ? <Icon icon="refresh" className="spinning" iconSize={60} title="Uploading..."/>
                   : <p>
@@ -134,7 +140,7 @@ class UploadDeployment extends React.Component {
                       Accepted formats: <code>.geojson</code>, <code>.mbtiles</code>, <code>.osm</code>
                     </p>
                 }
-              </p>
+              </div>
             </Callout>
           </Upload>
           <Link to="/deployments">
