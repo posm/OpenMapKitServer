@@ -18,7 +18,8 @@ class UploadDeployment extends React.Component {
       success: false,
       error: false,
       files: [],
-      loadingIndicator: false
+      loadingIndicator: false,
+      errorMessage: ''
     }
     this.authBase64 = null;
     if (this.props.userDetails && this.props.userDetails.hasOwnProperty('username') && this.props.userDetails.username !== null) {
@@ -75,8 +76,13 @@ class UploadDeployment extends React.Component {
       onProgress(step, file) {
         console.log('onProgress', Math.round(step.percent), file.name);
       },
-      onError: (err) => {
-        this.setState({loadingIndicator: false, error: true, success: false});
+      onError: (err, response) => {
+        this.setState({
+          loadingIndicator: false,
+          error: true,
+          success: false,
+          errorMessage: response.msg
+        });
       }
     };
 
@@ -91,7 +97,10 @@ class UploadDeployment extends React.Component {
         {
           this.state.error &&
           <Callout title="Error!" intent="danger" className="upload-result">
-            Some error occurred while uploading your file(s).
+            {this.state.errorMessage
+              ? this.state.errorMessage
+              : 'Some error occurred while uploading your file(s)'
+            }
           </Callout>
         }
         <div className="deployments mt-20">
