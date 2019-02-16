@@ -44,7 +44,6 @@ class UploadForm extends React.Component {
         console.log('onProgress', Math.round(step.percent), file.name);
       },
       onError: (err, response) => {
-        console.log(err);
         this.setState({
           loadingIndicator: false,
           error: true,
@@ -60,7 +59,8 @@ class UploadForm extends React.Component {
           </Callout>
       }
       {
-        this.state.error && <Callout title="Error!" intent="danger" className="upload-result">
+        this.state.error &&
+          <Callout title="Error!" intent="danger" className="upload-result">
             {this.state.errorMessage
               ? this.state.errorMessage
               : 'Some error occurred while uploading your file(s)'

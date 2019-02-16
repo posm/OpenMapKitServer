@@ -90,9 +90,10 @@ module.exports = function (req, res, next) {
     if (xls == null) {
       return showError({
         status: 400,
-        msg: 'You must upload an XLSForm.'
+        msg: 'You must upload a .xls or xlsx file.'
       });
     }
+
 
     // pyxform defaults to using the filename as its ID if none was otherwise provided, so preserve it (replacing spaces with _s)
     const xlsPath = path.join(os.tmpdir(), xls.originalFilename.replace(' ', '_'));
@@ -108,6 +109,14 @@ module.exports = function (req, res, next) {
         });
       }
 
+      // verify filename for special characters
+      if (/[^a-zA-Z0-9\-\/ _.]/.test(xls.originalFilename)) {
+        return showError({
+          status: 400,
+          msg: 'The filename contains special characters. Please rename it and upload again.'
+        });
+      }
+
       return xlsToXForm(xlsPath, (err, xformPath) => {
         filesToRemove.push(xformPath);
         if (err) {
@@ -115,7 +124,7 @@ module.exports = function (req, res, next) {
           return showError({
             status: 400,
             err,
-            msg: 'XLSForm failed to parse.'
+            msg: 'XLSForm failed to parse. Verify if your xls(x) file is correct.'
           });
         }
 
@@ -177,7 +186,6 @@ module.exports = function (req, res, next) {
             }
 
             // validate the list of assets against what the form references
-
             const assetFilenames = assets.map(x => x.originalFilename);
 
             const extraAssets = assetFilenames
