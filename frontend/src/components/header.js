@@ -70,7 +70,7 @@ class Header extends React.Component {
   }
   render() {
     return(
-      <Navbar className="default-green-bg pt-dark">
+      <Navbar className="default-green-bg pt-dark" fixedToTop={true} >
         <NavbarGroup>
             <img className="pt-icon main-logo pt-align-left" src={logo} alt="omk logo" />
             <NavbarHeading>

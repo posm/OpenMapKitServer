@@ -19,6 +19,7 @@ import { authStatus } from '../network/auth';
 import { cancelablePromise } from '../utils/promise';
 import { SubmissionMap } from './submissionMap';
 import { LoginPanel } from './loginPanel';
+import { setDataView, setPageSize } from '../store/actions/displayPreferences';
 
 
 const jsDateFormatter: IDateFormatProps = {
@@ -376,10 +377,10 @@ class SubmissionList extends React.Component {
       filterUsername: '',
       filterParams: 'offset=0&limit=200',
       hasUsername: false,
+      dataView: props.dataView || 'map',
       page: 1,
-      pageSize: 200,
+      pageSize: props.pageSize || 200,
       pageCount: 1,
-      activateMap: false,
       authEnabled: true
     }
   }
@@ -393,17 +394,16 @@ class SubmissionList extends React.Component {
   componentDidMount() {
     this.getSubmissions();
     this.getFormDetails();
-    if (!(this.props.userDetails &&
-        this.props.userDetails.username != null)) {
-          this.getAuthStatus();
-        }
+    if (!(this.props.userDetails && this.props.userDetails.username != null)) {
+      this.getAuthStatus();
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.userDetails.username !== prevProps.userDetails.username) {
       this.getSubmissions();
     }
-    if (prevState.page !== this.state.page || prevState.pageSize !== this.state.pageSize) {
+    if (prevState.page !== this.state.page || prevProps.pageSize !== this.props.pageSize) {
       this.updateFilterParams();
     }
   }
@@ -442,19 +442,26 @@ class SubmissionList extends React.Component {
   }
 
   handlePageChange = (event) => {
+    this.setState({ loading: true });
     this.setState({ page: event.target.value });
+    setTimeout(() => {
+      this.setState({ loading: false });
+    }, 10);
   }
 
   handlePageSizeChange = (event) => {
+    this.setState({ loading: true });
+    this.props.updatePageSize(event.target.value);
     this.setState({ pageSize: event.target.value });
     this.updatePagination(event.target.value, this.state.filteredSubmissions);
+    setTimeout(() => {
+      this.setState({ loading: false });
+    }, 10);
   }
 
-  handleActivateMap = (event) => {
-    this.setState({ activateMap: !this.state.activateMap });
-    if (this.state.pageSize > 200) {
-      this.setState({ pageSize: 200 });
-    }
+  handleDataViewChange = (option) => {
+    this.props.updateDataView(option);
+    this.setState({ dataView: option });
   }
 
   updateFilterParams() {
@@ -587,30 +594,22 @@ class SubmissionList extends React.Component {
     });
   }
 
-  renderCell = (row, column) => <Cell>{ this.getPageSlice()[row][column]}</Cell>;
+  renderDateCell = (data) => moment(data).format('lll');
 
-  renderDateCell = (row, column) => <Cell>
-    {moment(this.getPageSlice()[row][column]).format('lll')}
-  </Cell>;
+  renderCellImage = (line, column) => line[column]
+    ? <TableItemDownload
+        urlEnding={`${this.props.formId}/${line[column+2]}/${line[column]}`}
+        filename={line[column]}
+        userDetails={this.props.userDetails}
+      />
+    : <span>No image</span>
+  ;
 
-  renderCellImage = (row, column) => <Cell>
-    {this.getPageSlice()[row][column]
-      ? <TableItemDownload
-          urlEnding={`${this.props.formId}/${this.getPageSlice()[row][column+2]}/${this.getPageSlice()[row][column]}`}
-          filename={this.getPageSlice()[row][column]}
-          userDetails={this.props.userDetails}
-        />
-      : <span>No image</span>
-    }
-  </Cell>;
-
-  renderCellLink = (row, column) => <Cell>
-    <TableItemDownload
-      urlEnding={`${this.props.formId}/${this.getPageSlice()[row][column+1]}/${this.getPageSlice()[row][column]}`}
-      filename={this.getPageSlice()[row][column]}
+  renderCellLink = (line, column) => <TableItemDownload
+      urlEnding={`${this.props.formId}/${line[column+1]}/${line[column]}`}
+      filename={line[column]}
       userDetails={this.props.userDetails}
-    />
-  </Cell>;
+  />;
 
   renderFilterSection() {
     let devices = this.state.submissions.map(item => item[2]);
@@ -703,20 +702,34 @@ class SubmissionList extends React.Component {
         return(<div id="loading-msg">No data was found.</div>);
       } else {
         return (
-          <Table className="submissions-table center-block"
-            columnWidths={[170,170,170,170,140,140]}
-            numRows={this.getPageSlice().length}
-            >
-            <Column name="Start" cellRenderer={this.renderDateCell} />
-            <Column name="End" cellRenderer={this.renderDateCell} />
-            {this.state.hasUsername
-              ? <Column name="Username" cellRenderer={this.renderCell} />
-              : <Column name="Device ID" cellRenderer={this.renderCell} />
-            }
-            <Column name="Submission Time" cellRenderer={this.renderDateCell} />
-            <Column name="Image" cellRenderer={this.renderCellImage} />
-            <Column name="Download" cellRenderer={this.renderCellLink} />
-          </Table>
+          <table class="pt-html-table pt-html-table-bordered pt-interactive mb-20 mt-10">
+            <thead>
+              <tr>
+                <th>Start</th>
+                <th>End</th>
+                {this.state.hasUsername
+                  ? <th>Username</th>
+                  : <th>Device ID</th>
+                }
+                <th>Submission Time</th>
+                <th>Image</th>
+                <th>Download</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.getPageSlice().map(line =>
+                  <tr>
+                    <td>{this.renderDateCell(line[0])}</td>
+                    <td>{this.renderDateCell(line[1])}</td>
+                    <td>{line[2]}</td>
+                    <td>{this.renderDateCell(line[3])}</td>
+                    <td>{this.renderCellImage(line, 4)}</td>
+                    <td>{this.renderCellLink(line, 5)}</td>
+                  </tr>
+                )
+              }
+            </tbody>
+          </table>
         );
       }
     }
@@ -726,12 +739,12 @@ class SubmissionList extends React.Component {
     return(
       <Row className="ml-0 mr-0">
         <Col xs={12}>
-          {this.state.activateMap
+          {this.state.dataView === 'map'
             ? <Button className="pt-intent" icon="th" text="Switch to Table view"
-                onClick={() => this.setState({activateMap: false})}
+                onClick={() => this.handleDataViewChange('table')}
                 />
             : <Button className="pt-intent" icon="map" text="Switch to Map view"
-                onClick={() => this.setState({activateMap: true})}
+                onClick={() => this.handleDataViewChange('map')}
                 />
           }
         </Col>
@@ -745,24 +758,14 @@ class SubmissionList extends React.Component {
         <Col xs={12} md={6} className="pt-input-group">
           <label className="display-block">Page Size</label>
           <div className="pt-select">
-            {this.state.activateMap
-              ? <select onChange={this.handlePageSizeChange} value={this.state.pageSize}>
-                  {[1000, 800, 600, 400, 200, 100, 50, 20].map(
-                    (item, k) =>
-                    <option key={k} value={ item }>
-                      { item.toString() }
-                    </option>
-                  )}
-                </select>
-              : <select onChange={this.handlePageSizeChange}>
-                  {[200, 100, 50, 20].map(
-                    (item, k) =>
-                    <option key={k} value={ item }>
-                      { item.toString() }
-                    </option>
-                  )}
-                </select>
-            }
+            <select onChange={this.handlePageSizeChange} value={this.state.pageSize}>
+                {[1000, 800, 600, 400, 200, 100, 50, 20].map(
+                  (item, k) =>
+                  <option key={k} value={ item }>
+                    { item.toString() }
+                  </option>
+                )}
+              </select>
           </div>
         </Col>
         <Col xs={12} md={6} className="pt-input-group">
@@ -795,7 +798,7 @@ class SubmissionList extends React.Component {
         {isAuthenticated
           ? <Grid fluid={true} className="pl-0 pr-0">
               <Row className="ml-0 mr-0">
-                <Col xs={12} md={3}>
+                <Col xs={12} md={3} className="sticky">
                   <div className="submissions-info">
                     <h4 className="break-all">{ this.state.formName }</h4>
                     <p>Total submissions: { this.state.totalSubmissions }</p>
@@ -811,7 +814,7 @@ class SubmissionList extends React.Component {
                   { this.renderMapSwitchButton() }
                 </Col>
                 <Col xs={12} md={9} className="ml-0 mr-0 pr-0">
-                  {this.state.activateMap
+                  {this.state.dataView === 'map'
                     ? <SubmissionMap
                         userDetails={this.props.userDetails}
                         formId={this.props.formId}
@@ -830,11 +833,22 @@ class SubmissionList extends React.Component {
   }
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateDataView: (option) => dispatch(setDataView(option)),
+    updatePageSize: (option) => dispatch(setPageSize(option))
+  };
+};
+
+
 SubmissionList = connect(
   (state, props) => ({
     userDetails: state.auth.userDetails,
-    formId: props.match.params.formId
-  })
+    formId: props.match.params.formId,
+    dataView: state.preferences.dataView,
+    pageSize: state.preferences.pageSize
+  }),
+  mapDispatchToProps
 )(SubmissionList)
 
 export {SubmissionList};

@@ -2,8 +2,8 @@ import React from 'react';
 import {connect} from "react-redux";
 import { Link } from "react-router-dom";
 import Upload from 'rc-upload';
-import { Callout, Button, Colors, Icon } from '@blueprintjs/core';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Callout, Button, Icon } from '@blueprintjs/core';
+import { Row, Col } from 'react-bootstrap';
 
 import { cancelablePromise } from '../../utils/promise';
 import { deploymentList } from '../../network/deployments';
@@ -103,7 +103,12 @@ class UploadDeployment extends React.Component {
               <p><b>.geojson</b></p>
               {(this.state.files && this.state.files.geojson) &&
                 this.state.files.geojson.map(
-                  file => <p><a href={file.url} target="_blank">{file.name}</a> <i>({this.bytesToSize(file.size)})</i></p>)
+                  file => <p>
+                    <a href={file.url} target="_blank" rel="noopener noreferrer">
+                      {file.name}
+                    </a> <i>({this.bytesToSize(file.size)})</i>
+                  </p>
+                )
               }
             </Col>
             <Col xs={12} md={4} className="pt-input-group">
@@ -117,7 +122,12 @@ class UploadDeployment extends React.Component {
               <p><b>.osm</b></p>
               {(this.state.files && this.state.files.osm) &&
                 this.state.files.osm.map(
-                  file => <p><a href={file.url} target="_blank">{file.name}</a> <i>({this.bytesToSize(file.size)})</i></p>)
+                  file => <p>
+                    <a href={file.url} target="_blank" rel="noopener noreferrer">
+                      {file.name}
+                    </a> <i>({this.bytesToSize(file.size)})</i>
+                  </p>
+                )
               }
             </Col>
           </Row>

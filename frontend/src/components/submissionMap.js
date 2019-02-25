@@ -168,6 +168,7 @@ export class SubmissionMap extends React.Component {
         {"padding": {top: 80, bottom: 35, left: 35, right: 35}, "linear": true}
       );
     });
+    this.map.resize();
   }
 
   componentDidUpdate(prevProps, prevState) {
