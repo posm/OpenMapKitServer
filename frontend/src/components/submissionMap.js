@@ -245,9 +245,11 @@ export class SubmissionMap extends React.Component {
     return(
       <div>
         <div id="map">
-          <div className={`map-info ${this.state.info_content && 'display-block'}`}>
+          {this.state.info_content &&
+            <div className={'map-info display-block'}>
               <table><tbody>{this.state.info_content}</tbody></table>
-          </div>
+            </div>
+          }
           {this.state.showVizTypeSwitch &&
             <div className="color-switch">
               <RadioGroup
@@ -261,7 +263,7 @@ export class SubmissionMap extends React.Component {
               </RadioGroup>
               {this.state.vizType !== 'default' &&
                 <div>
-                  <label id="legend-label" class="pt-label" onClick={e => this.setState({ showLegend: !this.state.showLegend })}>
+                  <label id="legend-label" className="pt-label" onClick={e => this.setState({ showLegend: !this.state.showLegend })}>
                     {this.state.showLegend
                       ? <Icon icon="chevron-down" />
                       : <Icon icon="chevron-right" />
@@ -277,8 +279,8 @@ export class SubmissionMap extends React.Component {
               }
             </div>
           }
-        </div>
       </div>
-    );
+    </div>
+  );
   }
 }

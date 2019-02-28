@@ -17,7 +17,7 @@ class App extends Component {
     return (
       <div className="App">
         <Header />
-        <div class="top-50">
+        <div className="top-50">
           <Route exact path="/" component={FormList} />
           <Route exact path="/login" component={LoginPanel} />
           <Route exact path="/upload-form" component={UploadForm} />
