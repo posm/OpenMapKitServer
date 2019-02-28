@@ -8,5 +8,5 @@ import { preferencesReducer } from './displayPreferences';
 export default combineReducers({
   auth: authReducer,
   preferences: preferencesReducer,
-  router: routerReducer,
+  router: routerReducer
 });

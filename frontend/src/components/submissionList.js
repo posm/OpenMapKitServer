@@ -7,7 +7,6 @@ import {
   AnchorButton, Button, Popover, Menu, MenuItem, Position, Icon, Dialog, Intent,
   Tooltip
 } from "@blueprintjs/core";
-import { Cell, Column, Table } from "@blueprintjs/table";
 import { DateInput, IDateFormatProps } from "@blueprintjs/datetime";
 import { Grid, Row, Col, Image } from 'react-bootstrap';
 
@@ -403,7 +402,7 @@ class SubmissionList extends React.Component {
     if (this.props.userDetails.username !== prevProps.userDetails.username) {
       this.getSubmissions();
     }
-    if (prevState.page !== this.state.page || prevProps.pageSize !== this.props.pageSize) {
+    if (prevState.page !== this.state.page || prevState.pageSize !== this.state.pageSize) {
       this.updateFilterParams();
     }
   }
@@ -450,9 +449,9 @@ class SubmissionList extends React.Component {
   }
 
   handlePageSizeChange = (event) => {
-    this.setState({ loading: true });
-    this.props.updatePageSize(event.target.value);
+    this.setState({ loading: true, page: 1 });
     this.setState({ pageSize: event.target.value });
+    this.props.updatePageSize(event.target.value);
     this.updatePagination(event.target.value, this.state.filteredSubmissions);
     setTimeout(() => {
       this.setState({ loading: false });
@@ -583,10 +582,12 @@ class SubmissionList extends React.Component {
         if (r.length > 0 && r[0].hasOwnProperty('username')) {
           this.setState({ hasUsername: true });
         }
-        this.setState({ submissions: data });
-        this.setState({ filteredSubmissions: data });
-        this.setState({ loading: false });
         this.updatePagination(this.state.pageSize, data);
+        this.setState({
+          submissions: data,
+          filteredSubmissions: data,
+          loading: false
+        });
       }
     ).catch(e => {
       console.log(e);
@@ -702,7 +703,7 @@ class SubmissionList extends React.Component {
         return(<div id="loading-msg">No data was found.</div>);
       } else {
         return (
-          <table class="pt-html-table pt-html-table-bordered pt-interactive mb-20 mt-10">
+          <table className="pt-html-table pt-html-table-bordered pt-interactive mb-20 mt-10">
             <thead>
               <tr>
                 <th>Start</th>
@@ -717,8 +718,8 @@ class SubmissionList extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {this.getPageSlice().map(line =>
-                  <tr>
+              {this.getPageSlice().map((line, k) =>
+                  <tr key={k}>
                     <td>{this.renderDateCell(line[0])}</td>
                     <td>{this.renderDateCell(line[1])}</td>
                     <td>{line[2]}</td>
@@ -759,7 +760,7 @@ class SubmissionList extends React.Component {
           <label className="display-block">Page Size</label>
           <div className="pt-select">
             <select onChange={this.handlePageSizeChange} value={this.state.pageSize}>
-                {[1000, 800, 600, 400, 200, 100, 50, 20].map(
+                {[5000, 1000, 800, 600, 400, 200, 100, 50, 20].map(
                   (item, k) =>
                   <option key={k} value={ item }>
                     { item.toString() }
@@ -807,7 +808,7 @@ class SubmissionList extends React.Component {
                       hasSubmissions={this.state.totalSubmissions > 0}
                       filterParams={this.state.filterParams}
                       userDetails={this.props.userDetails}
-                      />
+                    />
                   </div>
                   { this.renderFilterSection() }
                   { this.renderPagination() }

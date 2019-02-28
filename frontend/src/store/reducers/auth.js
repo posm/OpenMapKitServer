@@ -12,4 +12,4 @@ export function authReducer(state = initialState, action) {
     default:
       return state;
   }
-};
+}
