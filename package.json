@@ -74,6 +74,8 @@
     "serve-index": "^1.7.2",
     "tempy": "^0.1.0",
     "traverse": "^0.6.6",
+    "turf-featurecollection": "^1.0.1",
+    "turf-point": "^2.0.1",
     "type-is": "^1.6.10",
     "xform-to-json": "^1.2.1",
     "xml2js": "^0.4.16",
@@ -84,8 +86,8 @@
   },
   "devDependencies": {
     "faucet": "0.0.1",
-    "supertest": "^3.3.0",
     "gh-pages": "^2.0.1",
+    "supertest": "^3.3.0",
     "tape": "^4.9.2"
   }
 }

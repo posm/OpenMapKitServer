@@ -1,6 +1,9 @@
 var aggregateOsm = require('../osm/aggregate-osm-to-geojson');
 var getOsmSubmissionsDirs = require('../helpers/get-osm-submissions-dirs');
+var aggregateSubmissions = require('../helpers/aggregate-submissions');
 var osmtogeojson = require('osmtogeojson');
+var point = require('turf-point');
+var featureCollection = require("turf-featurecollection");
 var DOMParser = require("xmldom").DOMParser;
 /**
  * Aggregates together all of the OSM submissions
@@ -25,9 +28,31 @@ module.exports = function(req, res, next) {
       res.status(err.status || 500).json(err);
       return;
     }
-    aggregate(osmDirs, req, res);
+    return aggregate(osmDirs, req, res, filters);
   });
 };
+
+function aggregateODKjson(formName, filters, res) {
+  filters.formName = formName;
+  aggregateSubmissions(
+    filters,
+    (err, data) => {
+      if (err) {
+        console.warn(err.stack);
+        res.status(err.status).json(err);
+      } else {
+        const fc = featureCollection(
+          data.map(i => {
+            const coords = [i.gps_location.longitude, i.gps_location.latitude];
+            delete i['gps_location'];
+            return point(coords, i);
+          })
+        );
+        return res.status(200).json(fc);
+      }
+    }
+  );
+}
 
 /**
  * Calls aggregate-osm middleware to read OSM edit files
@@ -37,7 +62,7 @@ module.exports = function(req, res, next) {
  * @param req       - the http request
  * @param res       - the http response
  */
-function aggregate(osmDirs, req, res) {
+function aggregate(osmDirs, req, res, filters) {
   var osmFiles = [];
   for (var i in osmDirs) {
     osmFiles = osmFiles.concat(osmDirs[i].files);
@@ -61,13 +86,17 @@ function aggregate(osmDirs, req, res) {
     }
     var xmlObj = (new DOMParser()).parseFromString(osmXml, 'text/xml');
     var geojson = osmtogeojson(xmlObj);
-    geojson.features.map((feature, n) =>
-      Object.keys(geojson.features[n].properties).map(key => {
-        try {
-          geojson.features[n].properties[key] = JSON.parse(geojson.features[n].properties[key]);
-        } catch(err) {}
-      })
-    );
-    res.status(200).json(geojson);
+    if (geojson && geojson.features && geojson.features.length) {
+      geojson.features.map((feature, n) =>
+        Object.keys(geojson.features[n].properties).map(key => {
+          try {
+            geojson.features[n].properties[key] = JSON.parse(geojson.features[n].properties[key]);
+          } catch(err) {}
+        })
+      );
+    return res.status(200).json(geojson);
+    } else {
+      return aggregateODKjson(req.params.formName, filters, res);
+    }
   });
 }
