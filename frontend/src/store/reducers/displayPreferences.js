@@ -1,4 +1,4 @@
-import { types } from '../actions/auth';
+import { types } from '../actions/displayPreferences';
 
 const initialState = {
   pageSize: 200,
@@ -8,10 +8,16 @@ const initialState = {
 export function preferencesReducer(state = initialState, action) {
   switch (action.type) {
     case types.SET_PAGE_SIZE: {
-      return state.set('pageSize', action.pageSize);
+      return {
+        'pageSize': action.pageSize,
+        'dataView': state.dataView
+      };
     }
     case types.SET_DATA_VIEW: {
-      return state.set('dataView', action.dataView);
+      return {
+        'pageSize': state.pageSize,
+        'dataView': action.dataView
+      };
     }
     default:
       return state;
