@@ -42,7 +42,7 @@ function aggregateODKjson(formName, filters, res) {
         res.status(err.status).json(err);
       } else {
         const fc = featureCollection(
-          data.map(i => {
+          data.filter(i => i.hasOwnProperty('gps_location')).map(i => {
             const coords = [i.gps_location.longitude, i.gps_location.latitude];
             delete i['gps_location'];
             return point(coords, i);
