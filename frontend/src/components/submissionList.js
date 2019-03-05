@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import {
   AnchorButton, Button, Popover, Menu, MenuItem, Position, Icon, Dialog, Intent,
-  Tooltip
+  Tooltip, IPopoverProps
 } from "@blueprintjs/core";
 import { DateInput, IDateFormatProps } from "@blueprintjs/datetime";
 import { Grid, Row, Col, Image } from 'react-bootstrap';
@@ -27,6 +27,9 @@ const jsDateFormatter: IDateFormatProps = {
     parseDate: str => new Date(str),
     placeholder: "YYYY-MM-DD",
 };
+const datePopoverProps: IPopoverProps = {
+  usePortal: true
+}
 
 class SubmissionMenu extends React.Component {
   archiveFormPromise;
@@ -628,6 +631,7 @@ class SubmissionList extends React.Component {
             <DateInput {...jsDateFormatter}
               id="start-date"
               onChange={this.handleFilterStartDate}
+              popoverProps={datePopoverProps}
               />
           </Col>
           <Col xs={12} md={6} className="pt-input-group">
@@ -640,6 +644,7 @@ class SubmissionList extends React.Component {
             <DateInput {...jsDateFormatter}
               id="end-date"
               onChange={this.handleFilterEndDate}
+              popoverProps={datePopoverProps}
               />
           </Col>
         </Row>

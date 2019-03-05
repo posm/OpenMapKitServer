@@ -42,7 +42,7 @@ body {
   max-width: 70%;
 }
 
-.submissions-table, .submissions-info, .filters {
+.submissions-info, .filters {
   margin-top: 15px;
 }
 
@@ -145,7 +145,7 @@ body {
   word-wrap: break-word;
 }
 
-.pt-table-container, .mb20 {
+.mb20 {
   margin-bottom: 20px;
   position: fixed;
 }
