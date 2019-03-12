@@ -5,9 +5,12 @@ module.exports = {
     dataDir: __dirname + '/data',
     pagesDir: __dirname + '/frontend/build',
     hostUrl: 'http://posm.io',
-    osmApi: {
-        server: 'http://osm.posm.io',
-        user: 'POSM',
-        pass: ''
-    }
+    osmApi: {}
 };
+
+// osmApi setup example:
+// osmApi: {
+//     server: 'http://osm.posm.io',
+//     user: 'POSM',
+//     pass: ''
+// }
