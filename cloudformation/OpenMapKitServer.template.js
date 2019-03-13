@@ -123,7 +123,7 @@ const Resources = {
           'apt install -y --no-install-recommends build-essential default-jre-headless git nodejs python python-dev python-pip python-setuptools python-wheel s3cmd',
           'apt-get clean',
           'rm -rf /var/lib/apt/lists/*',
-          'npm install -g yarn',
+          'npm install -g yarn pm2',
           cf.sub('export AWSBUCKETNAME=${S3Bucket}'),
           cf.sub('export AWSBUCKETPREFIX=${S3Prefix}'),
           cf.sub('export ENABLES3SYNC=${EnableS3Sync}'),
@@ -141,7 +141,7 @@ const Resources = {
           cf.sub('tar -xvzf /tmp/${OpenMapKitVersion}-frontend.tar.gz -C frontend/build/ --strip 1'),
           'git submodule update --init',
           'yarn get_from_s3',
-          'node server.js &'
+          'pm2 start server.js &'
         ]),
         KeyName: 'mbtiles'
       }
