@@ -5,16 +5,8 @@ const Parameters = {
     Description: 'Repository GitSha',
     Type: 'String'
   },
-  ELBSecurityGroup: {
-    Description: 'Security Group for the ELB',
-    Type: 'String'
-  },
   ELBSubnets: {
     Description: 'ELB subnets',
-    Type: 'String'
-  },
-  EC2SecurityGroup: {
-    Description: 'EC2 security group',
     Type: 'String'
   },
   S3Bucket: {
@@ -53,10 +45,6 @@ const Parameters = {
   },
   UsersS3Bucket: {
     Description: 'Bucket with login details. Logins are stored at S3://<UsersS3Bucket>/settings/<OMK_stack_name>/users.json',
-    Type: 'String'
-  },
-  VpcId: {
-    Description: 'Default VPC ID',
     Type: 'String'
   }
 };
@@ -98,7 +86,7 @@ const Resources = {
         IamInstanceProfile: cf.ref('OpenMapKitServerEC2InstanceProfile'),
         ImageId: 'ami-0565af6e282977273',
         InstanceType: 'c5d.large',
-        SecurityGroups: [cf.ref('EC2SecurityGroup')],
+        SecurityGroups: [cf.importValue(cf.join('-', ['hotosm-network-production', cf.ref('NodeEnvironment'), 'ec2s-security-group', cf.region]))],
         UserData: cf.userData([
           '#!/bin/bash',
           'set -x',
@@ -210,7 +198,7 @@ const Resources = {
     Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer',
     Properties: {
       Name: cf.stackName,
-      SecurityGroups: [cf.ref('ELBSecurityGroup')],
+      SecurityGroups: [[cf.importValue(cf.join('-', ['hotosm-network-production', cf.ref('NodeEnvironment'), 'elbs-security-group', cf.region]))]],
       Subnets: cf.split(',', cf.ref('ELBSubnets')),
       Type: 'application'
     }
@@ -226,7 +214,7 @@ const Resources = {
       UnhealthyThresholdCount: 3,
       Port: 3210,
       Protocol: 'HTTP',
-      VpcId: cf.ref('VpcId'),
+      VpcId: [cf.importValue(cf.join('-', ['hotosm-network-production', 'default-vpc', cf.region]))],
       Matcher: {
         HttpCode: '200,202,302,304'
       }
