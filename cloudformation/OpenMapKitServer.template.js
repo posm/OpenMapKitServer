@@ -198,7 +198,7 @@ const Resources = {
     Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer',
     Properties: {
       Name: cf.stackName,
-      SecurityGroups: [[cf.importValue(cf.join('-', ['hotosm-network-production', cf.ref('NodeEnvironment'), 'elbs-security-group', cf.region]))]],
+      SecurityGroups: [cf.importValue(cf.join('-', ['hotosm-network-production', cf.ref('NodeEnvironment'), 'elbs-security-group', cf.region]))],
       Subnets: cf.split(',', cf.ref('ELBSubnets')),
       Type: 'application'
     }
@@ -214,7 +214,7 @@ const Resources = {
       UnhealthyThresholdCount: 3,
       Port: 3210,
       Protocol: 'HTTP',
-      VpcId: [cf.importValue(cf.join('-', ['hotosm-network-production', 'default-vpc', cf.region]))],
+      VpcId: cf.importValue(cf.join('-', ['hotosm-network-production', 'default-vpc', cf.region])),
       Matcher: {
         HttpCode: '200,202,302,304'
       }
