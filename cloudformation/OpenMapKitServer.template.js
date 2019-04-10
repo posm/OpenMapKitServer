@@ -64,6 +64,12 @@ const Resources = {
       HealthCheckType: 'EC2',
       AvailabilityZones: cf.getAzs(cf.region),
       TargetGroupARNs: [cf.ref('OpenMapKitServerTargetGroup')]
+    },
+    UpdatePolicy: {
+      AutoScalingRollingUpdate: {
+        PauseTime: 'PT60M',
+        WaitOnResourceSignals: true
+      }
     }
   },
   OpenMapKitServerScaleUp: {
@@ -124,12 +130,15 @@ const Resources = {
           'pip install -r requirements.txt',
           cf.sub('aws s3 cp s3://${UsersS3Bucket}/settings/OpenMapKitServer-${S3Prefix}/users.json /app/util/users.json'),
           'yarn && rm -rf /root/.cache/yarn',
+          'export LC_ALL=C',
+          'wget https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz && pip2 install aws-cfn-bootstrap-latest.tar.gz',
           cf.sub('wget https://github.com/hotosm/OpenMapKitServer/archive/${OpenMapKitVersion}-frontend.tar.gz -P /tmp/'),
           'rm frontend/build/* -R',
           cf.sub('tar -xvzf /tmp/${OpenMapKitVersion}-frontend.tar.gz -C frontend/build/ --strip 1'),
           'git submodule update --init',
           'yarn get_from_s3',
-          'pm2 start server.js &'
+          'pm2 start server.js &',
+          cf.sub('cfn-signal --exit-code $? --region ${AWS::Region} --resource OpenMapKitServerASG --stack ${AWS::StackName}')
         ]),
         KeyName: 'mbtiles'
       }
@@ -182,6 +191,19 @@ const Resources = {
                cf.join('/', [cf.sub('arn:aws:s3:::${UsersS3Bucket}/settings'), cf.stackName, 'users.json'])
            ]
          }]
+        }
+      }, {
+        PolicyName: "CloudFormationPermissions",
+        PolicyDocument: {
+          Version: "2012-10-17",
+          Statement:[{
+            Action: [
+              'cloudformation:SignalResource',
+              'cloudformation:DescribeStackResource'
+            ],
+            Effect: 'Allow',
+            Resource: ['arn:aws:cloudformation:*']
+          }]
         }
       }],
       RoleName: cf.join('-', [cf.stackName, 'ec2', 'role'])
