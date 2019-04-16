@@ -18,7 +18,7 @@ router.route('/formList')
     .get(getFormlist);
 
 router.route('/submission')
-    .all(FormSubmissionMiddleware())
+    .all(FormSubmissionMiddleware({secure: true}))
     .post(ProcessSubmission())
     .post(SaveMedia({store: 'odk'}))
     .post(saveForm);
