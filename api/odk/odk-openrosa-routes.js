@@ -10,6 +10,9 @@ var getFormlist = require('./controllers/get-formlist');
 var getSubmissionList = require('./controllers/get-submission-list');
 var downloadSubmission = require('./controllers/download-submission');
 
+// read ENABLE_HTTPS env var to switch the secure option on openrosa middleware
+var enableHttps = process.env.ENABLE_HTTPS ? true : false;
+
 /**
  * OpenRosa Endpoints that ODK Collect uses.
  */
@@ -18,7 +21,7 @@ router.route('/formList')
     .get(getFormlist);
 
 router.route('/submission')
-    .all(FormSubmissionMiddleware({secure: true}))
+    .all(FormSubmissionMiddleware({secure: enableHttps}))
     .post(ProcessSubmission())
     .post(SaveMedia({store: 'odk'}))
     .post(saveForm);
