@@ -18,7 +18,8 @@ class UploadDeployment extends React.Component {
       success: false,
       error: false,
       files: [],
-      loadingIndicator: false
+      loadingIndicator: false,
+      errorMessage: ''
     }
     this.authBase64 = null;
     if (this.props.userDetails && this.props.userDetails.hasOwnProperty('username') && this.props.userDetails.username !== null) {
@@ -48,7 +49,7 @@ class UploadDeployment extends React.Component {
 
   bytesToSize = bytes => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    if (bytes == 0) return '0 Byte';
+    if (!bytes) return '0 Byte';
     var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
     return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
   };
@@ -75,8 +76,13 @@ class UploadDeployment extends React.Component {
       onProgress(step, file) {
         console.log('onProgress', Math.round(step.percent), file.name);
       },
-      onError: (err) => {
-        this.setState({loadingIndicator: false, error: true, success: false});
+      onError: (err, response) => {
+        this.setState({
+          loadingIndicator: false,
+          error: true,
+          success: false,
+          errorMessage: response.msg
+        });
       }
     };
 
@@ -91,7 +97,10 @@ class UploadDeployment extends React.Component {
         {
           this.state.error &&
           <Callout title="Error!" intent="danger" className="upload-result">
-            Some error occurred while uploading your file(s).
+            {this.state.errorMessage
+              ? this.state.errorMessage
+              : 'Some error occurred while uploading your file(s)'
+            }
           </Callout>
         }
         <div className="deployments mt-20">
@@ -136,7 +145,7 @@ class UploadDeployment extends React.Component {
             <Callout title={this.state.loadingIndicator ? "Uploading..." : "Upload Form"}
               className={`upload-area ${this.state.loadingIndicator && 'loading-upload-area'}`}
             >
-              <p className="pt-10">
+              <div className="pt-10">
                 {this.state.loadingIndicator
                   ? <Icon icon="refresh" className="spinning" iconSize={60} title="Uploading..."/>
                   : <p>
@@ -144,7 +153,7 @@ class UploadDeployment extends React.Component {
                       Accepted formats: <code>.geojson</code>, <code>.mbtiles</code>, <code>.osm</code>
                     </p>
                 }
-              </p>
+              </div>
             </Callout>
           </Upload>
           <Link to="/deployments">

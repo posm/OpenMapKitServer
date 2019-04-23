@@ -17,7 +17,7 @@ function getFile(req, res, next) {
   fs.readFile(filePath, (err, data) => {
     if (err) {
       console.log(err);
-      return res.status(err.status).json(err);
+      return res.status(404).json({detail: `Form ${req.params.file} not found`});
     }
     if (req.params.file.endsWith('csv')) {
       return res.status(200).set('Content-Type', 'text/csv').send(data);
