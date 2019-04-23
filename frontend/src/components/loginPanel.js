@@ -39,8 +39,8 @@ class LoginPanel extends React.Component {
               <form onSubmit={this.onSubmit}>
                 <h2>Sign in</h2>
                 {this.state.triedToLogin &&
-                  <div class="pt-callout pt-intent-danger">
-                    <h4 class="pt-callout-title">Login failed</h4>
+                  <div className="pt-callout pt-intent-danger">
+                    <h4 className="pt-callout-title">Login failed</h4>
                     Verify your username or password.
                   </div>
                 }

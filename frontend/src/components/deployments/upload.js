@@ -113,9 +113,11 @@ class UploadDeployment extends React.Component {
               {(this.state.files && this.state.files.geojson) &&
                 this.state.files.geojson.map(
                   file => <p>
-                            <a href={file.url} target="_blank" rel="noopener noreferrer">{file.name}</a>
-                            <i>({this.bytesToSize(file.size)})</i>
-                          </p>)
+                    <a href={file.url} target="_blank" rel="noopener noreferrer">
+                      {file.name}
+                    </a> <i>({this.bytesToSize(file.size)})</i>
+                  </p>
+                )
               }
             </Col>
             <Col xs={12} md={4} className="pt-input-group">
@@ -130,9 +132,11 @@ class UploadDeployment extends React.Component {
               {(this.state.files && this.state.files.osm) &&
                 this.state.files.osm.map(
                   file => <p>
-                            <a href={file.url} target="_blank" rel="noopener noreferrer">{file.name}</a>
-                            <i>({this.bytesToSize(file.size)})</i>
-                          </p>)
+                    <a href={file.url} target="_blank" rel="noopener noreferrer">
+                      {file.name}
+                    </a> <i>({this.bytesToSize(file.size)})</i>
+                  </p>
+                )
               }
             </Col>
           </Row>

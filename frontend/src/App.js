@@ -17,13 +17,15 @@ class App extends Component {
     return (
       <div className="App">
         <Header />
-        <Route exact path="/" component={FormList} />
-        <Route exact path="/login" component={LoginPanel} />
-        <Route exact path="/upload-form" component={UploadForm} />
-        <Route exact path="/archived-forms" component={ArchivedForms} />
-        <Route exact path="/deployments" component={SelectCreateDeployment} />
-        <Route exact path="/deployments/:deployment" component={UploadDeployment} />
-        <Route exact path="/submissions/:formId" component={SubmissionList} />
+        <div className="top-50">
+          <Route exact path="/" component={FormList} />
+          <Route exact path="/login" component={LoginPanel} />
+          <Route exact path="/upload-form" component={UploadForm} />
+          <Route exact path="/archived-forms" component={ArchivedForms} />
+          <Route exact path="/deployments" component={SelectCreateDeployment} />
+          <Route exact path="/deployments/:deployment" component={UploadDeployment} />
+          <Route exact path="/submissions/:formId" component={SubmissionList} />
+        </div>
       </div>
     );
   }

@@ -13,7 +13,11 @@ const persistedState = {
     username: safeStorage.getItem('username'),
     password: safeStorage.getItem('password'),
     role: safeStorage.getItem('role'),
-  }}
+  }},
+  preferences: {
+    dataView: safeStorage.getItem('dataView'),
+    pageSize: safeStorage.getItem('pageSize')
+  }
 };
 
 export const history = createHistory()
