@@ -101,6 +101,15 @@ execute: `npm get_from_s3`.
 To assure that the files were synced to AWS before turning off a server, execute
 `npm send_to_s3`
 
+### Enabling HTTPS
+
+If you want to deploy OpenMapKit-Server using `https`, you need to set an environment
+variable in order to configure the OpenRosa middleware to support https requests:
+
+```sh
+export ENABLE_HTTPS=1
+```
+
 ### NodeJS Version Problems
 
 We are using node version 4.*. If you are having problems with another

@@ -30,6 +30,15 @@ const Parameters = {
     Description: 'Enable S3 sync',
     Type: 'String'
   },
+  EnableHTTPS: {
+    AllowedValues: [
+     'true',
+     'false'
+    ],
+    Default: 'true',
+    Description: 'Enable HTTPS (required to setup the form submission endpoint)',
+    Type: 'String'
+  },
   NodeEnvironment: {
     AllowedValues: [
      'production',
@@ -121,6 +130,7 @@ const Resources = {
           cf.sub('export AWSBUCKETNAME=${S3Bucket}'),
           cf.sub('export AWSBUCKETPREFIX=${S3Prefix}'),
           cf.sub('export ENABLES3SYNC=${EnableS3Sync}'),
+          cf.sub('export ENABLE_HTTPS=${EnableHTTPS}'),
           cf.sub('export NODE_ENV=${NodeEnvironment}'),
           'export HOME="/root"',
           'cd /app && git clone https://github.com/hotosm/OpenMapKitServer.git .',
