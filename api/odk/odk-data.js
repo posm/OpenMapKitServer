@@ -36,6 +36,12 @@ function getFile(req, res, next) {
     if (req.params.file.endsWith('mbtiles')) {
       return res.set('Content-Type', 'application/vnd.mapbox-vector-tile').status(200).send(data);
     }
+    if (req.params.file.endsWith('jpg') || req.params.file.endsWith('jpg')) {
+      return res.set('Content-Type', 'image/jpeg').status(200).send(data);
+    }
+    if (req.params.file.endsWith('png')) {
+      return res.set('Content-Type', 'image/png').status(200).send(data);
+    }
     if (req.params.file.endsWith('xlsx')) {
       return res.set(
         'Content-Type',
@@ -50,7 +56,6 @@ if (disableAuth) {
   router.route('/:prefix/:formName/:submission/:file').get(getFile);
 } else {
   var adminDVPermission = require('permission')(['admin', 'data-viewer']);
-  var adminPermission = require('permission')(['admin']);
   router.route('/:prefix/:formName/:submission/:file').get(adminDVPermission, getFile);
 }
 // /forms/* URL endpoint
