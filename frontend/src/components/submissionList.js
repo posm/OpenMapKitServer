@@ -269,7 +269,7 @@ class TableItemDownload extends React.Component {
     super(props);
     this.state = {
       activeBlob: '',
-      openDialog: false
+      isOpen: false
     }
   }
 
@@ -301,13 +301,13 @@ class TableItemDownload extends React.Component {
     this.toggleDialog();
   }
 
-  toggleDialog = () => this.setState({ openDialog: !this.state.openDialog });
+  toggleDialog = () => this.setState({ isOpen: !this.state.isOpen });
 
   renderDialog() {
     return (
       <Dialog
         icon="cloud-download"
-        isOpen={this.state.openDialog}
+        isOpen={this.state.isOpen}
         onClose={this.toggleDialog}
         title="Download file"
       >
@@ -560,6 +560,31 @@ class SubmissionList extends React.Component {
       }
     ).catch(e => console.log(e));
   }
+  findImageValue = (entry) => {
+    if (entry.image) return entry.image;
+    // try to find an image in the first level string values
+    var image = Object.values(entry).filter(
+      i => typeof(i) === 'string'
+    ).filter(
+      i => i.endsWith('.jpg') || i.endsWith('.jpeg') || i.endsWith('.png')
+    )[0];
+    if (image) {
+      return image;
+    } else {
+      // try to find an image value inside an object
+      return Object.values(entry).filter(
+        i => typeof(i) === 'object'
+      ).map(
+        i => Object.values(i)
+      ).reduce(
+        (i, n) => n.concat(i), []
+      ).filter(
+        i => typeof(i) === 'string'
+      ).filter(
+        i => i.endsWith('.jpg') || i.endsWith('.jpeg') || i.endsWith('.png')
+      )[0];
+    }
+  }
   getSubmissions = () => {
     this.getSubmissionsPromise = cancelablePromise(
       getSubmissions(
@@ -576,7 +601,7 @@ class SubmissionList extends React.Component {
           i.end ? i.end : i.meta.submissionTime,
           i.username ? i.username : i.deviceid,
           i.meta.submissionTime,
-          i.image,
+          this.findImageValue(i),
           Object.values(i).filter(
             entry => typeof(entry) === 'string' && entry.endsWith('.osm')
           )[0],
