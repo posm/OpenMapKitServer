@@ -145,7 +145,6 @@ const Resources = {
           cf.sub('wget https://github.com/hotosm/OpenMapKitServer/archive/${OpenMapKitVersion}-frontend.tar.gz -P /tmp/'),
           'rm frontend/build/* -R',
           cf.sub('tar -xvzf /tmp/${OpenMapKitVersion}-frontend.tar.gz -C frontend/build/ --strip 1'),
-          'git submodule update --init',
           'yarn get_from_s3',
           'pm2 start server.js &',
           cf.sub('cfn-signal --exit-code $? --region ${AWS::Region} --resource OpenMapKitServerASG --stack ${AWS::StackName}')
