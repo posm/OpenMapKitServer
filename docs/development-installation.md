@@ -35,8 +35,6 @@ Also make sure you have installed [NodeJS](https://nodejs.org/) and [git](https:
 Install project dependencies.
 
 ```sh
-git submodule init
-git submodule update
 sudo pip install -r requirements.txt
 npm install
 ```

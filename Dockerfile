@@ -49,8 +49,7 @@ RUN \
   && yarn build
 
 RUN \
-  git submodule update --init \
-  && useradd omkserver -m \
+  useradd omkserver -m \
   && chown -R omkserver:omkserver /app/data
 
 USER omkserver

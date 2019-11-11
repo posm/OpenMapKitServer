@@ -8,7 +8,6 @@ const async = require('async');
 const mkdirp = require('mkdirp');
 const multiparty = require('multiparty');
 const mv = require('mv');
-const PythonShell = require('python-shell');
 const tempy = require('tempy');
 
 const settings = require('../../../settings');

@@ -3,12 +3,12 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const exec = require('child_process').exec;
 
 const async = require('async');
 const mkdirp = require('mkdirp');
 const multiparty = require('multiparty');
 const mv = require('mv');
-const PythonShell = require('python-shell');
 const tempy = require('tempy');
 
 const settings = require('../../../settings');
@@ -26,17 +26,19 @@ const xlsToXForm = (xlsPath, callback) => {
     extension: 'xml'
   });
 
-  return PythonShell.run('xls2xform.py', {
-    pythonPath: 'python2',
-    scriptPath: path.join(__dirname, '..', 'pyxform', 'pyxform'),
-    args: [xlsPath, xformPath],
-    mode: 'text'
-  }, (err, results) => {
-    if (err) {
-      return callback(err);
+  return exec(
+    `xls2xform ${xlsPath} ${xformPath}`,
+    {maxBuffer: 1024 * 5000},
+    function (error, stdout, stderr) {
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+      if (error !== null) {
+        console.log('exec error: ' + error);
+        return callback(err);
+      }
+      return callback(null, xformPath);
     }
-    return callback(null, xformPath);
-  });
+  );
 };
 
 /**
