@@ -30,7 +30,7 @@ have to throw much hardware at it.
 1. Download and extract posm-build.
 
         sudo -s
-        wget -q -O - https://github.com/AmericanRedCross/posm-build/archive/master.tar.gz | tar -zxf - -C /root --strip=2
+        wget -q -O - https://github.com/posm/posm-build/archive/master.zip | tar -zxf - -C /root --strip=2
 
 2. Create a `settings.local` file in `/root/etc` with the following content:
 
